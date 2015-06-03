@@ -25,7 +25,7 @@ set(PYTHON_BIN ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/python3)
 
 ExternalProject_Add(Qt 
     URL http://download.qt.io/official_releases/qt/5.4/5.4.1/single/qt-everywhere-opensource-src-5.4.1.tar.gz
-    CONFIGURE_COMMAND ./configure -release -prefix ${EXTERNALPROJECT_INSTALL_PREFIX} -archdatadir ${CMAKE_INSTALL_PREFIX}/lib -datadir ${CMAKE_INSTALL_PREFIX}/share -opensource -confirm-license -no-framework -nomake examples -nomake tests -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtlocation -skip qtmultimedia -skip qtquick1 -skip qtscript -skip qtscript -skip qtsensors -skip qtwebchannel -skip qtwebengine -skip qtwebkit -skip qtwebsockets -skip qtx11extras -skip qtandroidextras -skip qtactiveqt -skip qttools -skip qtwinextras -skip qtxmlpatterns
+    CONFIGURE_COMMAND ./configure -release -prefix ${EXTERNALPROJECT_INSTALL_PREFIX} -archdatadir ${EXTERNALPROJECT_INSTALL_PREFIX}/lib -datadir ${EXTERNALPROJECT_INSTALL_PREFIX}/share -opensource -confirm-license -no-framework -nomake examples -nomake tests -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtlocation -skip qtmultimedia -skip qtquick1 -skip qtscript -skip qtscript -skip qtsensors -skip qtwebchannel -skip qtwebengine -skip qtwebkit -skip qtwebsockets -skip qtx11extras -skip qtandroidextras -skip qtactiveqt -skip qttools -skip qtwinextras -skip qtxmlpatterns
     BUILD_IN_SOURCE 1
 )
 
