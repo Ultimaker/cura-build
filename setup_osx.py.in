@@ -14,7 +14,7 @@ import glob
 import shutil
 
 OPTIONS = {
-	"argv_emulation": True, 
+	"argv_emulation": False, 
 	"includes": [
 		"sip",
 		"ctypes", 
