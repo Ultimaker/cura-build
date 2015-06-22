@@ -38,7 +38,8 @@ OPTIONS = {
 		"inst/share/cura",
 		"inst/share/uranium",
 		"inst/lib/python3.4/site-packages/UM/Qt/qml",
-	]
+	],
+        "iconfile": "@CMAKE_SOURCE_DIR@/cura.icns"
 }
 
 # Extend options.includes to include all files from the UM package.
