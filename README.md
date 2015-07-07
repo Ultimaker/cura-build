@@ -18,4 +18,4 @@ make
 
 ## Ubuntu
 
-See [ubuntu-15.04-build-script.txt](ubuntu-15.04-build-script.txt) for building under Ubuntu 15.04.
+See [ubuntu-15.04-build-script.sh](ubuntu-15.04-build-script.sh) for building under Ubuntu 15.04.
