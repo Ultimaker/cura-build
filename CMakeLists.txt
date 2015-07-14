@@ -97,7 +97,7 @@ endif()
 
 ExternalProject_Add(Protobuf 
     GIT_REPOSITORY https://github.com/ultimaker/protobuf
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DINSTALL_PYTHON=OFF
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DINSTALL_PYTHON=OFF -DBUILD_STATIC=ON
 )
 
 ExternalProject_Add(Protobuf-python
@@ -178,7 +178,6 @@ else()
         "${CMAKE_BINARY_DIR}/CuraEngine-prefix/src/CuraEngine-build;CuraEngine;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Uranium-prefix/src/Uranium-build;Uranium;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Cura-prefix/src/Cura-build;Cura;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/Protobuf-prefix/src/Protobuf-build;Protobuf;ALL;/usr"
     )
     set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages/google;/usr/lib/python3/dist-packages/google")
 endif()
