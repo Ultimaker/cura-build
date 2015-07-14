@@ -25,7 +25,7 @@ endif()
 
 set(CURA_MAJOR_VERSION "15")
 set(CURA_MINOR_VERSION "06")
-set(CURA_PATCH_VERSION "01")
+set(CURA_PATCH_VERSION "02")
 
 set(TAG_OR_BRANCH "15.06" CACHE STRING "The name of the tag or branch to build")
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
