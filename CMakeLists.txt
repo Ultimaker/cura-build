@@ -137,6 +137,13 @@ ExternalProject_Add(Cura
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DURANIUM_SCRIPTS_DIR=
 )
 
+ExternalProject_Add(cura-binary-data
+    DEPENDS Cura
+    GIT_REPOSITORY https://github.com/ultimaker/Cura
+    GIT_TAG ${TAG_OR_BRANCH}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
+)
+
 if(APPLE)
     ExternalProject_Add(Py2App
         DEPENDS Python
@@ -178,6 +185,7 @@ else()
         "${CMAKE_BINARY_DIR}/CuraEngine-prefix/src/CuraEngine-build;CuraEngine;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Uranium-prefix/src/Uranium-build;Uranium;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Cura-prefix/src/Cura-build;Cura;ALL;/usr"
+        "${CMAKE_BINARY_DIR}/cura-binary-data-prefix/src/cura-binary-data-build;cura-binary-data;ALL;/usr"
     )
     set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages/google;/usr/lib/python3/dist-packages/google")
 endif()
