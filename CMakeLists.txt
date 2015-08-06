@@ -181,13 +181,15 @@ else()
     set(CPACK_GENERATOR "DEB")
 
     set(CPACK_INSTALL_CMAKE_PROJECTS
-        "${CMAKE_BINARY_DIR}/Arcus-prefix/src/Arcus-build;Arcus;ALL;/usr"
         "${CMAKE_BINARY_DIR}/CuraEngine-prefix/src/CuraEngine-build;CuraEngine;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Uranium-prefix/src/Uranium-build;Uranium;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Cura-prefix/src/Cura-build;Cura;ALL;/usr"
         "${CMAKE_BINARY_DIR}/cura-binary-data-prefix/src/cura-binary-data-build;cura-binary-data;ALL;/usr"
     )
-    set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages/google;/usr/lib/python3/dist-packages/google")
+    set(CPACK_INSTALLED_DIRECTORIES
+        "${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages/google;/usr/lib/python3/dist-packages/google"
+        "${CMAKE_BINARY_DIR}/inst/lib/python3/dist-packages/Arcus;/usr/lib/python3/dist-packages/Arcus"
+    )
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
