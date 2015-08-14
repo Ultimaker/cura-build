@@ -20,6 +20,7 @@ OPTIONS = {
 		"ctypes", 
 	    "UM",
 	    "cura",
+            "cura.OneAtATimeIterator",
 	    "PyQt5.QtNetwork", 
 	    "PyQt5._QOpenGLFunctions_2_0", 
 	    "serial", 
