@@ -95,9 +95,9 @@ endif()
 if(BUILD_PYQT)
     set(sip_command "")
     if(WIN32)
-        set(sip_command "${PYTHON_EXECUTABLE} configure.py --platform win32-g++")
+        set(sip_command ${PYTHON_EXECUTABLE} configure.py --platform win32-g++)
     else()
-        set(sip_command "${PYTHON_EXECUTABLE} configure.py --sysroot=${EXTERNALPROJECT_INSTALL_PREFIX}")
+        set(sip_command ${PYTHON_EXECUTABLE} configure.py --sysroot=${EXTERNALPROJECT_INSTALL_PREFIX})
     endif()
 
     ExternalProject_Add(Sip
