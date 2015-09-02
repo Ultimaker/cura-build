@@ -77,6 +77,8 @@ if(BUILD_QT)
 
     if(APPLE)
         list(APPEND qt_options -no-framework)
+    elseif(WIN32)
+        list(APPEND qt_options -opengl desktop)
     endif()
 
     ExternalProject_Add(Qt
