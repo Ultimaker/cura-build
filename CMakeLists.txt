@@ -6,7 +6,7 @@ include(ExternalProject)
 include(GNUInstallDirs)
 
 if(APPLE)
-   set(CMAKE_OSX_DEPLOYMENT_TARGET "10.7")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.7")
 endif()
 
 option(BUILD_PYTHON "Include Python" ON)
@@ -15,7 +15,9 @@ option(BUILD_PYQT "Include PyQt" ON)
 option(BUILD_NUMPY "Include Numpy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
 
-if(NOT APPLE AND NOT WIN32)
+if(WIN32)
+    set(BUILD_PYTHON OFF)
+elseif(NOT APPLE)
     set(BUILD_PYTHON OFF)
     set(BUILD_QT OFF)
     set(BUILD_PYQT OFF)
@@ -40,14 +42,47 @@ if(BUILD_PYTHON)
 
     set(PYTHON_EXECUTABLE ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/python3)
 else()
-    find_package(PythonInterp 3.0.0 REQUIRED)
+    find_package(PythonInterp 3.4.0 REQUIRED)
     add_custom_target(Python)
 endif()
 
 if(BUILD_QT)
+    set(qt_options
+        -release
+        -prefix ${EXTERNALPROJECT_INSTALL_PREFIX}
+        -archdatadir ${EXTERNALPROJECT_INSTALL_PREFIX}/lib
+        -datadir ${EXTERNALPROJECT_INSTALL_PREFIX}/share
+        -opensource
+        -confirm-license
+        -nomake examples
+        -nomake tests
+        -skip qtconnectivity
+        -skip qtdoc
+        -skip qtenginio
+        -skip qtlocation
+        -skip qtmultimedia
+        -skip qtquick1
+        -skip qtscript
+        -skip qtsensors
+        -skip qtwebchannel
+        -skip qtwebengine
+        -skip qtwebkit
+        -skip qtwebsockets
+        -skip qtx11extras
+        -skip qtandroidextras
+        -skip qtactiveqt
+        -skip qttools
+        -skip qtxmlpatterns
+    )
+
+    if(APPLE)
+        list(APPEND qt_options -no-framework)
+    endif()
+
     ExternalProject_Add(Qt
-        URL http://download.qt.io/official_releases/qt/5.4/5.4.1/single/qt-everywhere-opensource-src-5.4.1.tar.gz
-        CONFIGURE_COMMAND ./configure -release -prefix ${EXTERNALPROJECT_INSTALL_PREFIX} -archdatadir ${EXTERNALPROJECT_INSTALL_PREFIX}/lib -datadir ${EXTERNALPROJECT_INSTALL_PREFIX}/share -opensource -confirm-license -no-framework -nomake examples -nomake tests -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtlocation -skip qtmultimedia -skip qtquick1 -skip qtscript -skip qtscript -skip qtsensors -skip qtwebchannel -skip qtwebengine -skip qtwebkit -skip qtwebsockets -skip qtx11extras -skip qtandroidextras -skip qtactiveqt -skip qttools -skip qtwinextras -skip qtxmlpatterns
+        URL http://download.qt.io/official_releases/qt/5.4/5.4.2/single/qt-everywhere-opensource-src-5.4.2.zip
+        URL_MD5 b6a099fff154fcb0a0127619623d412f
+        CONFIGURE_COMMAND ./configure ${qt_options}
         BUILD_IN_SOURCE 1
     )
 else()
@@ -56,10 +91,17 @@ else()
 endif()
 
 if(BUILD_PYQT)
+    set(sip_command "")
+    if(WIN32)
+        set(sip_command "${PYTHON_EXECUTABLE} configure.py --platform win32-g++")
+    else()
+        set(sip_command "${PYTHON_EXECUTABLE} configure.py --sysroot=${EXTERNALPROJECT_INSTALL_PREFIX}")
+    endif()
+
     ExternalProject_Add(Sip
         DEPENDS Python
-        URL http://downloads.sourceforge.net/project/pyqt/sip/sip-4.16.7/sip-4.16.7.tar.gz
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} configure.py --sysroot ${EXTERNALPROJECT_INSTALL_PREFIX}
+        URL http://downloads.sourceforge.net/project/pyqt/sip/sip-4.16.9/sip-4.16.9.zip
+        CONFIGURE_COMMAND ${sip_command}
         BUILD_IN_SOURCE 1
     )
 
@@ -130,7 +172,7 @@ ExternalProject_Add(Uranium
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
-ExternalProject_Add(Cura 
+ExternalProject_Add(Cura
     DEPENDS Uranium CuraEngine
     GIT_REPOSITORY https://github.com/ultimaker/Cura
     GIT_TAG ${TAG_OR_BRANCH}
@@ -149,6 +191,11 @@ if(APPLE)
 elseif(WIN32)
     ExternalProject_Add(Py2Exe
         DEPENDS Python
+        URL https://pypi.python.org/packages/source/p/py2exe/py2exe-0.9.2.0.zip
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install
+        BUILD_IN_SOURCE 1
     )
 endif()
 
