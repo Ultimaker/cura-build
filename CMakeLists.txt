@@ -247,8 +247,20 @@ if(APPLE)
 
     set(CPACK_GENERATOR "DragNDrop")
 elseif(WIN32)
-    set(CPACK_GENERATOR "NSIS")
+    configure_file(setup_win32.py.in setup_win32.py @ONLY)
 
+    add_custom_command(
+        OUTPUT ${CMAKE_BINARY_DIR}/dist/Cura.exe
+        COMMAND ${PYTHON_EXECUTABLE}
+        ARGS setup_win32.py py2exe
+        COMMENT "Running py2exe"
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
+
+    add_custom_target(build_exe ALL DEPENDS ${CMAKE_BINARY_DIR}/dist/Cura.exe)
+    #install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/Cura.app DESTINATION "." USE_SOURCE_PERMISSIONS)
+
+    set(CPACK_GENERATOR "NSIS")
 else()
     set(CPACK_GENERATOR "DEB")
 
