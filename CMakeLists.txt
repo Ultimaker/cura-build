@@ -150,6 +150,7 @@ if(BUILD_NUMPY)
     ExternalProject_Add(Numpy
         DEPENDS Python
         URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
+        URL_MD5 a1ed53432dbcd256398898d35bc8e645
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install
