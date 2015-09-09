@@ -138,8 +138,7 @@ if(BUILD_PYQT)
 
     ExternalProject_Add(PyQt
         DEPENDS Python Qt Sip
-        URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.4.1/PyQt-gpl-5.4.1.tar.gz
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} configure.py --sysroot ${EXTERNALPROJECT_INSTALL_PREFIX} --qmake ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/qmake --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip --confirm-license
+        URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.4.2/PyQt-gpl-5.4.2.tar.gz
         CONFIGURE_COMMAND ${pyqt_command}
         BUILD_IN_SOURCE 1
     )
