@@ -95,7 +95,15 @@ endif()
 if(BUILD_PYQT)
     set(sip_command "")
     if(WIN32)
-        set(sip_command ${PYTHON_EXECUTABLE} configure.py --platform win32-g++)
+        set(sip_command
+            ${PYTHON_EXECUTABLE}
+            configure.py
+            --platform win32-g++
+            --bindir=${EXTERNALPROJECT_INSTALL_PREFIX}/bin
+            --destdir=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages
+            --incdir=${EXTERNALPROJECT_INSTALL_PREFIX}/include
+            --sipdir=${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
+        )
     else()
         set(sip_command ${PYTHON_EXECUTABLE} configure.py --sysroot=${EXTERNALPROJECT_INSTALL_PREFIX})
     endif()
@@ -107,10 +115,32 @@ if(BUILD_PYQT)
         BUILD_IN_SOURCE 1
     )
 
+    set(pyqt_command "")
+    if(WIN32)
+        set(pyqt_command
+            ${PYTHON_EXECUTABLE} configure.py
+            --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip.exe
+            --confirm-license
+            --spec win32-g++
+            --destdir ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages
+            --bindir ${EXTERNALPROJECT_INSTALL_PREFIX}/bin
+            --sipdir ${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
+        )
+    else()
+        set(pyqt_command
+             ${PYTHON_EXECUTABLE} configure.py
+            --sysroot ${EXTERNALPROJECT_INSTALL_PREFIX}
+            --qmake ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/qmake
+            --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip
+            --confirm-license
+        )
+    endif()
+
     ExternalProject_Add(PyQt
         DEPENDS Python Qt Sip
         URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.4.1/PyQt-gpl-5.4.1.tar.gz
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} configure.py --sysroot ${EXTERNALPROJECT_INSTALL_PREFIX} --qmake ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/qmake --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip --confirm-license
+        CONFIGURE_COMMAND ${pyqt_command}
         BUILD_IN_SOURCE 1
     )
 else()
