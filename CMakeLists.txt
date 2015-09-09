@@ -146,14 +146,19 @@ else()
     add_custom_target(PyQt)
 endif()
 
+set(pysetup_options )
+if(WIN32)
+    set(pysetup_options --compiler=mingw32)
+endif()
+
 if(BUILD_NUMPY)
     ExternalProject_Add(Numpy
         DEPENDS Python
         URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
         URL_MD5 a1ed53432dbcd256398898d35bc8e645
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build ${pysetup_options}
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install --root=${EXTERNALPROJECT_INSTALL_PREFIX}
         BUILD_IN_SOURCE 1
     )
 endif()
@@ -163,8 +168,8 @@ if(BUILD_PYSERIAL)
         DEPENDS Python
         URL https://pypi.python.org/packages/source/p/pyserial/pyserial-2.7.tar.gz
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build ${pysetup_options}
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install --root=${EXTERNALPROJECT_INSTALL_PREFIX}
         BUILD_IN_SOURCE 1
     )
 endif()
@@ -225,7 +230,7 @@ elseif(WIN32)
         DEPENDS Python
         URL https://pypi.python.org/packages/source/p/py2exe/py2exe-0.9.2.0.zip
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build ${pysetup_options}
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install
         BUILD_IN_SOURCE 1
     )
