@@ -2,6 +2,8 @@ project(cura-build)
 
 cmake_minimum_required(VERSION 2.8.12)
 
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
 include(ExternalProject)
 include(GNUInstallDirs)
 
@@ -41,12 +43,21 @@ if(BUILD_PYTHON)
     )
 
     set(PYTHON_EXECUTABLE ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/python3)
+    set(PYTHON_VERSION_MAJOR 3)
+    set(PYTHON_VERSION_MINOR 4)
 else()
     find_package(PythonInterp 3.4.0 REQUIRED)
     add_custom_target(Python)
 endif()
 
 if(BUILD_QT)
+    set(qt_url http://download.qt.io/archive/qt/5.4/5.4.2/single/qt-everywhere-opensource-src-5.4.2.tar.gz)
+    set(qt_md5 fa1c4d819b401b267eb246a543a63ea5)
+    if(WIN32)
+        set(qt_url http://download.qt.io/archive/qt/5.4/5.4.2/single/qt-everywhere-opensource-src-5.4.2.zip)
+        set(qt_md5 b6a099fff154fcb0a0127619623d412f)
+    endif()
+
     set(qt_options
         -release
         -prefix ${EXTERNALPROJECT_INSTALL_PREFIX}
@@ -82,8 +93,8 @@ if(BUILD_QT)
     endif()
 
     ExternalProject_Add(Qt
-        URL http://download.qt.io/official_releases/qt/5.4/5.4.2/single/qt-everywhere-opensource-src-5.4.2.zip
-        URL_MD5 b6a099fff154fcb0a0127619623d412f
+        URL ${qt_url}
+        URL_MD5 ${qt_md5}
         CONFIGURE_COMMAND ./configure ${qt_options}
         BUILD_IN_SOURCE 1
     )
@@ -146,9 +157,14 @@ else()
     add_custom_target(PyQt)
 endif()
 
-set(pysetup_options )
 if(WIN32)
-    set(pysetup_options --compiler=mingw32)
+    # Because setuptools is stupid and will interpret "C:/..." as a relative path
+    string(REPLACE "/" "\\" native_prefix ${EXTERNALPROJECT_INSTALL_PREFIX})
+    set(python_install
+        --install-lib=${native_prefix}\\lib\\python3.4\\site-packages 
+        --install-data=${native_prefix}\\share
+        --install-scripts=${native_prefix}\\bin
+    )
 endif()
 
 if(BUILD_NUMPY)
@@ -157,8 +173,8 @@ if(BUILD_NUMPY)
         URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
         URL_MD5 a1ed53432dbcd256398898d35bc8e645
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build ${pysetup_options}
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install --root=${EXTERNALPROJECT_INSTALL_PREFIX}
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
         BUILD_IN_SOURCE 1
     )
 endif()
@@ -167,25 +183,19 @@ if(BUILD_PYSERIAL)
     ExternalProject_Add(PySerial
         DEPENDS Python
         URL https://pypi.python.org/packages/source/p/pyserial/pyserial-2.7.tar.gz
+        URL_MD5 794506184df83ef2290de0d18803dd11
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build ${pysetup_options}
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install --root=${EXTERNALPROJECT_INSTALL_PREFIX}
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
         BUILD_IN_SOURCE 1
     )
 endif()
 
 ExternalProject_Add(Protobuf 
+    DEPENDS Python
     GIT_REPOSITORY https://github.com/ultimaker/protobuf
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DINSTALL_PYTHON=OFF -DBUILD_STATIC=ON
-)
-
-ExternalProject_Add(Protobuf-python
-    DEPENDS Python Protobuf
-    GIT_REPOSITORY https://github.com/ultimaker/protobuf
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND cd python && PROTOC=${EXTERNALPROJECT_INSTALL_PREFIX}/bin/protoc ${PYTHON_EXECUTABLE} setup.py build
-    INSTALL_COMMAND cd python && export PYTHONPATH=${EXTERNALPROJECT_SITEPACKAGES_DIR} && ${PYTHON_EXECUTABLE} setup.py install --single-version-externally-managed --prefix=${EXTERNALPROJECT_INSTALL_PREFIX} --record=${CMAKE_BINARY_DIR}/protobuf.log
-    BUILD_IN_SOURCE 1
+    GIT_TAG ${TAG_OR_BRANCH}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DINSTALL_PYTHON=ON -DBUILD_STATIC=ON
 )
 
 ExternalProject_Add(Arcus 
@@ -232,14 +242,17 @@ if(APPLE)
         BUILD_IN_SOURCE 1
     )
 elseif(WIN32)
-    ExternalProject_Add(Py2Exe
-        DEPENDS Python
-        URL https://pypi.python.org/packages/source/p/py2exe/py2exe-0.9.2.0.zip
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build ${pysetup_options}
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install
-        BUILD_IN_SOURCE 1
-    )
+    # Currently, py2exe can not be built with MinGW since the code apparently uses
+    # a lot of MSVC-isms. So instead, install py2exe in your Python installation and
+    # use that.
+    # ExternalProject_Add(Py2Exe
+        # DEPENDS Python
+        # URL https://pypi.python.org/packages/source/p/py2exe/py2exe-0.9.2.0.zip
+        # CONFIGURE_COMMAND ""
+        # BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        # INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        # BUILD_IN_SOURCE 1
+    # )
 endif()
 
 if(APPLE)
@@ -269,7 +282,13 @@ elseif(WIN32)
     )
 
     add_custom_target(build_exe ALL DEPENDS ${CMAKE_BINARY_DIR}/dist/Cura.exe)
-    #install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/Cura.app DESTINATION "." USE_SOURCE_PERMISSIONS)
+    install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/ DESTINATION "." USE_SOURCE_PERMISSIONS COMPONENT "cura")
+    # Get the VCRedist from http://www.microsoft.com/en-us/download/details.aspx?id=26999
+    install(FILES vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
+
+    include(CPackComponent)
+    cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
+    cpack_add_component(vcredist DISPLAY_NAME "Install Visual Studio 2010 Redistributable")
 
     set(CPACK_GENERATOR "NSIS")
 else()
@@ -292,6 +311,10 @@ set(CPACK_PACKAGE_VERSION_MINOR ${CURA_MINOR_VERSION})
 set(CPACK_PACKAGE_VERSION_PATCH ${CURA_PATCH_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cura 3D Printing Software")
 set(CPACK_PACKAGE_CONTACT "Arjen Hiemstra <a.hiemstra@ultimaker.com>")
+set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
+set(CPACK_RESOURCE_FILE_README ${CMAKE_BINARY_DIR}/inst/lib/cura/plugins/ChangeLogPlugin/ChangeLog.txt)
+set(CPACK_PACKAGE_EXECUTABLES Cura "Cura ${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cura ${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}")
 
 set(RPM_REQUIRES
     "python3 >= 3.4.0"
@@ -320,5 +343,13 @@ set(DEB_DEPENDS
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS ${DEB_DEPENDS})
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
+
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
+set(CPACK_NSIS_MUI_FINISHPAGE_RUN "Cura.exe")
+set(CPACK_NSIS_MENU_LINKS
+    "https://ultimaker.com/en/support/software" "Cura Online Documentation"
+    "https://github.com/ultimaker/cura" "Cura Development Resources"
+)
 
 include(CPack)
