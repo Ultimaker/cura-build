@@ -18,7 +18,18 @@ option(BUILD_NUMPY "Include Numpy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
 
 if(WIN32)
-    set(BUILD_PYTHON OFF)
+    option(BUILD_64BIT "Create a 64-bit build" OFF)
+endif()
+
+if(WIN32)
+    if (BUILD_64BIT)
+        set(BUILD_PYTHON OFF)
+        set(BUILD_QT OFF)
+        set(BUILD_PYQT OFF) #PyQt Fails to properly build with MinGW 64-bit
+        set(BUILD_NUMPY OFF) #Numpy also fails
+    else()
+        set(BUILD_PYTHON OFF)
+    endif()
 elseif(NOT APPLE)
     set(BUILD_PYTHON OFF)
     set(BUILD_QT OFF)
@@ -29,7 +40,7 @@ endif()
 
 set(CURA_MAJOR_VERSION "15")
 set(CURA_MINOR_VERSION "09")
-set(CURA_PATCH_VERSION "83")
+set(CURA_PATCH_VERSION "84")
 
 set(TAG_OR_BRANCH "15.10" CACHE STRING "The name of the tag or branch to build")
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
@@ -99,7 +110,6 @@ if(BUILD_QT)
         BUILD_IN_SOURCE 1
     )
 else()
-    find_package(Qt5 5.4 REQUIRED COMPONENTS Core Gui Widgets Quick)
     add_custom_target(Qt)
 endif()
 
@@ -114,6 +124,8 @@ if(BUILD_PYQT)
             --destdir=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages
             --incdir=${EXTERNALPROJECT_INSTALL_PREFIX}/include
             --sipdir=${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
+            "CFLAGS+=${CMAKE_C_FLAGS}"
+            "CXXFLAGS+=${CMAKE_CXX_FLAGS}"
         )
     else()
         set(sip_command ${PYTHON_EXECUTABLE} configure.py --sysroot=${EXTERNALPROJECT_INSTALL_PREFIX})
@@ -136,6 +148,8 @@ if(BUILD_PYQT)
             --destdir ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages
             --bindir ${EXTERNALPROJECT_INSTALL_PREFIX}/bin
             --sipdir ${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
+            "CFLAGS+=${CMAKE_C_FLAGS}"
+            "CXXFLAGS+=${CMAKE_CXX_FLAGS}"
         )
     else()
         set(pyqt_command
@@ -271,6 +285,7 @@ if(APPLE)
 
     set(CPACK_GENERATOR "DragNDrop")
 elseif(WIN32)
+    get_filename_component(compiler_dir ${CMAKE_CXX_COMPILER} DIRECTORY)
     configure_file(setup_win32.py.in setup_win32.py @ONLY)
 
     add_custom_command(
@@ -284,7 +299,11 @@ elseif(WIN32)
     add_custom_target(build_exe ALL DEPENDS ${CMAKE_BINARY_DIR}/dist/Cura.exe)
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/ DESTINATION "." USE_SOURCE_PERMISSIONS COMPONENT "cura")
     # Get the VCRedist from http://www.microsoft.com/en-us/download/details.aspx?id=26999
-    install(FILES vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
+    if(BUILD_64BIT)
+        install(FILES vcredist_x64.exe DESTINATION "." COMPONENT "vcredist")
+    else()
+        install(FILES vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
+    endif()
 
     include(CPackComponent)
     cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
@@ -312,7 +331,6 @@ set(CPACK_PACKAGE_VERSION_PATCH ${CURA_PATCH_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cura 3D Printing Software")
 set(CPACK_PACKAGE_CONTACT "Arjen Hiemstra <a.hiemstra@ultimaker.com>")
 set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
-set(CPACK_RESOURCE_FILE_README ${CMAKE_BINARY_DIR}/inst/lib/cura/plugins/ChangeLogPlugin/ChangeLog.txt)
 set(CPACK_PACKAGE_EXECUTABLES Cura "Cura ${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cura ${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}")
 

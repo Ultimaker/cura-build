@@ -71,7 +71,7 @@ setup(
 )
 
 print("Copying Cura plugins.")
-copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", "dist/plugins", ignore = shutil.ignore_patterns("ConsoleLogger", "OBJWriter", "MLPWriter", "MLPReader"))
+copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", "dist/plugins", ignore = shutil.ignore_patterns("OBJWriter", "MLPWriter", "MLPReader"))
 copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura/plugins", "dist/plugins")
 
 print("Copying resources.")
@@ -81,11 +81,27 @@ copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "dist/resource
 print("Coping Uranium QML.")
 copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.4/site-packages/UM/Qt/qml/UM", "dist/qml/UM")
 
+qt_lib_dir = None
+qt_bin_dir = None
+if os.path.exists("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/plugins"):
+    qt_lib_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib"
+    qt_bin_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/bin"
+else:
+    import PyQt5.QtCore
+    qt_lib_dir = os.path.dirname(PyQt5.QtCore.__file__)
+    qt_bin_dir = os.path.dirname(PyQt5.QtCore.__file__)
+
 print("Copying Qt5 plugins")
-copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/plugins", "dist/qt/plugins")
+copytree(os.path.join(qt_lib_dir, "plugins"), "dist/PyQt5/plugins")
 print("Copying QtQuick plugins")
-copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/qml", "dist/qml")
+copytree(os.path.join(qt_lib_dir, "qml"), "dist/qml")
 print("Copying Qt5 svg library")
-shutil.copy("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/Qt5Svg.dll", "dist/Qt5Svg.dll")
+shutil.copy(os.path.join(qt_bin_dir, "Qt5Svg.dll"), "dist/Qt5Svg.dll")
+
+print("Copy CuraEngine")
+shutil.copy("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", "dist/CuraEngine.exe")
+shutil.copy("@compiler_dir@/libstdc++-6.dll", "dist/libstdc++-6.dll")
+shutil.copy("@compiler_dir@/libwinpthread-1.dll", "dist/libwinpthread-1.dll")
+shutil.copy("@compiler_dir@/libgcc_s_seh-1.dll", "dist/libgcc_s_seh-1.dll")
 
 os.rename("dist/cura_app.exe", "dist/Cura.exe")
