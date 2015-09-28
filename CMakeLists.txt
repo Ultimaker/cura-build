@@ -304,10 +304,12 @@ elseif(WIN32)
     else()
         install(FILES vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
     endif()
+    install(DIRECTORY arduino DESTINATION "." COMPONENT "arduino")
 
     include(CPackComponent)
     cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
     cpack_add_component(vcredist DISPLAY_NAME "Install Visual Studio 2010 Redistributable")
+    cpack_add_component(arduino DISPLAY_NAME "Install Arduino Drivers")
 
     set(CPACK_GENERATOR "NSIS")
 else()

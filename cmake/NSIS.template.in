@@ -43,6 +43,7 @@
 @CPACK_NSIS_DEFINES@
 
   !include Sections.nsh
+  !Include Library.nsh
 
 ;--- Component support macros: ---
 ; The code for the add/remove functionality is from:
@@ -737,8 +738,19 @@ Section "-Core installation"
 
   !insertmacro MUI_STARTMENU_WRITE_END
   
-  IntCmp $vcredist_selected 0 +2
-  ExecWait '"$INSTDIR\vcredist_x86.exe" /q /norestart'
+  ${If} ${RunningX64}
+    IntCmp $vcredist_selected 0 +2
+    ExecWait '"$INSTDIR\vcredist_x64.exe" /q /norestart'
+  
+    IntCmp $arduino_selected 0 +2
+    ExecWait '"$INSTDIR\arduino\dpinst64.exe" /lm'
+  ${Else}
+    IntCmp $vcredist_selected 0 +2
+    ExecWait '"$INSTDIR\vcredist_x86.exe" /q /norestart'
+  
+    IntCmp $arduino_selected 0 +2
+    ExecWait '"$INSTDIR\arduino\dpinst32.exe" /lm'
+  ${EndIf}
 
 @CPACK_NSIS_EXTRA_INSTALL_COMMANDS@
 
