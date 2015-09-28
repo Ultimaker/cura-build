@@ -58,7 +58,7 @@ for dirpath, dirnames, filenames in os.walk(os.path.dirname(UM.__file__)):
             OPTIONS["includes"] += [module_name + "." + os.path.splitext(filename)[0]]
 
 setup(
-	name="Cura",
+    name="Cura",
     app=["inst/bin/cura_app.py"],
     version="@CURA_MAJOR_VERSION@.@CURA_MINOR_VERSION@.@CURA_PATCH_VERSION@",
     author="Ultimaker",
@@ -75,7 +75,7 @@ shutil.copy("inst/bin/CuraEngine", "dist/Cura.app/Contents/MacOS/CuraEngine")
 # Remove all *_debug.x.dylib files since we do not need them but py2app copies 
 # them anyway.
 for path, dirs, files in os.walk("dist/Cura.app/Contents"):
-	for file in files:
-		if "debug" in file:
-			print("Removing {0}".format(file))
-			os.remove(os.path.join(path, file))
+    for file in files:
+        if "debug" in file:
+            print("Removing {0}".format(file))
+                os.remove(os.path.join(path, file))
