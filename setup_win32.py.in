@@ -102,6 +102,9 @@ print("Copy CuraEngine")
 shutil.copy("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", "dist/CuraEngine.exe")
 shutil.copy("@compiler_dir@/libstdc++-6.dll", "dist/libstdc++-6.dll")
 shutil.copy("@compiler_dir@/libwinpthread-1.dll", "dist/libwinpthread-1.dll")
-shutil.copy("@compiler_dir@/libgcc_s_seh-1.dll", "dist/libgcc_s_seh-1.dll")
+try:
+    shutil.copy("@compiler_dir@/libgcc_s_seh-1.dll", "dist/libgcc_s_seh-1.dll")
+except FileNotFoundError:
+    shutil.copy("@compiler_dir@/libgcc_s_dw2-1.dll", "dist/libgcc_s_dw2-1.dll")
 
 os.rename("dist/cura_app.exe", "dist/Cura.exe")
