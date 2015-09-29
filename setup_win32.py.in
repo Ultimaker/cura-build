@@ -1,0 +1,110 @@
+# Copyright (c) 2015 Ultimaker B.V.
+# Cura is released under the terms of the AGPLv3 or higher.
+
+from distutils.core import setup
+import py2exe
+import UM
+import UM.Qt
+import cura
+import os
+import re
+import shutil
+import site
+
+# work around the limitation that shutil.copytree does not allow the target directory to exist
+def copytree(src, dst, symlinks=False, ignore=None):
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if os.path.isdir(s):
+            copytree(s, d, symlinks, ignore)
+        else:
+            shutil.copy2(s, d)
+
+includes = [
+    "sip", 
+    "ctypes", 
+    "UM",
+    "PyQt5.QtNetwork", 
+    "PyQt5._QOpenGLFunctions_2_0",
+    "serial",
+    "Arcus", 
+    "google",
+    "google.protobuf", 
+    "google.protobuf.descriptor",
+    "xml.etree",
+    "xml.etree.ElementTree",
+    "cura",
+    "cura.OneAtATimeIterator"
+]
+
+# Include all the UM modules in the includes. As py2exe fails to properly find all the dependencies due to the plugin architecture.
+for dirpath, dirnames, filenames in os.walk(os.path.dirname(UM.__file__)):
+    if "__" in dirpath:
+        continue
+    module_path = dirpath.replace(os.path.dirname(UM.__file__), "UM")
+    module_path = module_path.split(os.path.sep)
+    module_name = ".".join(module_path)
+    if os.path.isfile(dirpath + "/__init__.py"):
+        includes += [module_name]
+        for filename in filenames:
+            if "__" in filename or not filename.endswith(".py"):
+                continue
+            includes += [module_name + "." + os.path.splitext(filename)[0]]
+
+print("Removing previous distribution package")
+shutil.rmtree("dist", True)
+
+setup(
+    name="Cura",
+    version="@CURA_MAJOR_VERSION@.@CURA_MINOR_VERSION@.@CURA_PATCH_VERSION@",
+    author="Ultimaker",
+    author_email="a.hiemstra@ultimaker.com",
+    url="http://software.ultimaker.com/",
+    license="GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
+    scripts=["inst/bin/cura_app.py"],
+    windows=[{"script": "inst/bin/cura_app.py", "dest_name": "Cura"}], "icon_resources": [(1, "@CMAKE_SOURCE_DIR@/cura.ico")]
+    #console=[{"script": "cura_app.py"}],
+    options={"py2exe": {"skip_archive": False, "includes": includes}}
+)
+
+print("Copying Cura plugins.")
+copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", "dist/plugins", ignore = shutil.ignore_patterns("OBJWriter", "MLPWriter", "MLPReader"))
+copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura/plugins", "dist/plugins")
+
+print("Copying resources.")
+copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "dist/resources")
+copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "dist/resources")
+
+print("Coping Uranium QML.")
+copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.4/site-packages/UM/Qt/qml/UM", "dist/qml/UM")
+
+qt_lib_dir = None
+qt_bin_dir = None
+if os.path.exists("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/plugins"):
+    qt_lib_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib"
+    qt_bin_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/bin"
+else:
+    import PyQt5.QtCore
+    qt_lib_dir = os.path.dirname(PyQt5.QtCore.__file__)
+    qt_bin_dir = os.path.dirname(PyQt5.QtCore.__file__)
+
+print("Copying Qt5 plugins")
+copytree(os.path.join(qt_lib_dir, "plugins"), "dist/PyQt5/plugins")
+print("Copying QtQuick plugins")
+copytree(os.path.join(qt_lib_dir, "qml"), "dist/qml")
+print("Copying Qt5 svg library")
+shutil.copy(os.path.join(qt_bin_dir, "Qt5Svg.dll"), "dist/Qt5Svg.dll")
+
+print("Copy CuraEngine")
+shutil.copy("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", "dist/CuraEngine.exe")
+shutil.copy("@compiler_dir@/libstdc++-6.dll", "dist/libstdc++-6.dll")
+shutil.copy("@compiler_dir@/libwinpthread-1.dll", "dist/libwinpthread-1.dll")
+try:
+    shutil.copy("@compiler_dir@/libgcc_s_seh-1.dll", "dist/libgcc_s_seh-1.dll")
+except FileNotFoundError:
+    shutil.copy("@compiler_dir@/libgcc_s_dw2-1.dll", "dist/libgcc_s_dw2-1.dll")
+
+os.rename("dist/cura_app.exe", "dist/Cura.exe")
