@@ -43,6 +43,7 @@ set(CURA_MINOR_VERSION "00")
 set(CURA_PATCH_VERSION "00")
 
 set(TAG_OR_BRANCH "15.10" CACHE STRING "The name of the tag or branch to build")
+set(EXTRA_REPOSITORIES "" CACHE STRING "Extra repositories to install. Expected to have a CMake based build system.")
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 set(EXTERNALPROJECT_SITEPACKAGES_DIR ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages)
 
@@ -246,6 +247,16 @@ ExternalProject_Add(Cura-PostProcessing
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
+foreach(repo ${EXTRA_REPOSITORIES})
+    separate_arguments(items UNIX_COMMAND "${repo}")
+    list(GET items 0 name)
+    list(GET items 1 repo)
+    ExternalProject_Add(${name}
+        GIT_REPOSITORY ${repo}
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
+    )
+endforeach()
+
 if(APPLE)
     ExternalProject_Add(Py2App
         DEPENDS Python
@@ -322,7 +333,14 @@ else()
         "${CMAKE_BINARY_DIR}/Cura-prefix/src/Cura-build;Cura;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Cura-PostProcessing-prefix/src/Cura-PostProcessing-build;Cura-PostProcessing;ALL;/usr"
     )
-    set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages/google;/usr/lib/python3/dist-packages/google")
+
+    foreach(repo ${EXTRA_REPOSITORIES})
+        separate_arguments(items UNIX_COMMAND "${repo}")
+        list(GET items 0 name)
+        list(APPEND CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR}/${name}-prefix/src/${name}-build;${name};ALL;/usr")
+    endforeach()
+
+    set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/inst/lib/python3/dist-packages/google;/usr/lib/python3/dist-packages/google")
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
