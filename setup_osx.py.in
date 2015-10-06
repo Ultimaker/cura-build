@@ -78,4 +78,4 @@ for path, dirs, files in os.walk("dist/Cura.app/Contents"):
     for file in files:
         if "debug" in file:
             print("Removing {0}".format(file))
-                os.remove(os.path.join(path, file))
+            os.remove(os.path.join(path, file))

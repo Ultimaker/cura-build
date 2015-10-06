@@ -54,6 +54,19 @@ for dirpath, dirnames, filenames in os.walk(os.path.dirname(UM.__file__)):
                 continue
             includes += [module_name + "." + os.path.splitext(filename)[0]]
 
+for dirpath, dirnames, filenames in os.walk(os.path.dirname(cura.__file__)):
+    if "__" in dirpath:
+        continue
+    module_path = dirpath.replace(os.path.dirname(cura.__file__), "cura")
+    module_path = module_path.split(os.path.sep)
+    module_name = ".".join(module_path)
+    if os.path.isfile(dirpath + "/__init__.py"):
+        includes += [module_name]
+        for filename in filenames:
+            if "__" in filename or not filename.endswith(".py"):
+                continue
+            includes += [module_name + "." + os.path.splitext(filename)[0]]
+
 print("Removing previous distribution package")
 shutil.rmtree("dist", True)
 
@@ -65,7 +78,7 @@ setup(
     url="http://software.ultimaker.com/",
     license="GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
     scripts=["inst/bin/cura_app.py"],
-    windows=[{"script": "inst/bin/cura_app.py", "dest_name": "Cura"}], "icon_resources": [(1, "@CMAKE_SOURCE_DIR@/cura.ico")]
+    windows=[{"script": "inst/bin/cura_app.py", "dest_name": "Cura", "icon_resources": [(1, "@CMAKE_SOURCE_DIR@/cura.ico")]}],
     #console=[{"script": "cura_app.py"}],
     options={"py2exe": {"skip_archive": False, "includes": includes}}
 )
