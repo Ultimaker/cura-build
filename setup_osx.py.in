@@ -9,6 +9,7 @@
 from setuptools import setup
 
 import UM
+import cura
 import os
 import glob
 import shutil
@@ -20,7 +21,6 @@ OPTIONS = {
 		"ctypes", 
 	    "UM",
 	    "cura",
-            "cura.OneAtATimeIterator",
 	    "PyQt5.QtNetwork", 
 	    "PyQt5._QOpenGLFunctions_2_0", 
 	    "serial", 
@@ -40,7 +40,7 @@ OPTIONS = {
 		"inst/share/uranium",
 		"inst/lib/python3.4/site-packages/UM/Qt/qml",
 	],
-        "iconfile": "@CMAKE_SOURCE_DIR@/cura.icns"
+    "iconfile": "@CMAKE_SOURCE_DIR@/cura.icns"
 }
 
 # Extend options.includes to include all files from the UM package.
@@ -48,6 +48,19 @@ for dirpath, dirnames, filenames in os.walk(os.path.dirname(UM.__file__)):
     if "__" in dirpath:
         continue
     module_path = dirpath.replace(os.path.dirname(UM.__file__), "UM")
+    module_path = module_path.split(os.path.sep)
+    module_name = ".".join(module_path)
+    if os.path.isfile(dirpath + "/__init__.py"):
+        OPTIONS["includes"] += [module_name]
+        for filename in filenames:
+            if "__" in filename or not filename.endswith(".py"):
+                continue
+            OPTIONS["includes"] += [module_name + "." + os.path.splitext(filename)[0]]
+
+for dirpath, dirnames, filenames in os.walk(os.path.dirname(cura.__file__)):
+    if "__" in dirpath:
+        continue
+    module_path = dirpath.replace(os.path.dirname(cura.__file__), "cura")
     module_path = module_path.split(os.path.sep)
     module_name = ".".join(module_path)
     if os.path.isfile(dirpath + "/__init__.py"):
