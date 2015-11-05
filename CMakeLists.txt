@@ -207,15 +207,22 @@ if(BUILD_PYSERIAL)
     )
 endif()
 
-ExternalProject_Add(Protobuf 
-    DEPENDS Python
-    GIT_REPOSITORY https://github.com/ultimaker/protobuf
-    GIT_TAG ${TAG_OR_BRANCH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DINSTALL_PYTHON=ON -DBUILD_STATIC=ON
+ExternalProject_Add(Protobuf
+    GIT_REPOSITORY https://github.com/google/protobuf
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF ../Protobuf/cmake
+)
+
+ExternalProject_Add(Protobuf-python
+    DEPENDS Protobuf Python
+    GIT_REPOSITORY https://github.com/google/protobuf
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND cd python && ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation
+    INSTALL_COMMAND cd python && ${PYTHON_EXECUTABLE} setup.py install --cpp_implementation ${python_install}
+    BUILD_IN_SOURCE 1
 )
 
 ExternalProject_Add(Arcus 
-    DEPENDS Python Protobuf
+    DEPENDS Python Protobuf Protobuf-python
     GIT_REPOSITORY https://github.com/ultimaker/libArcus
     GIT_TAG ${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON
@@ -324,7 +331,7 @@ else()
         "${CMAKE_BINARY_DIR}/Cura-prefix/src/Cura-build;Cura;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Cura-PostProcessing-prefix/src/Cura-PostProcessing-build;Cura-PostProcessing;ALL;/usr"
     )
-    set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages/google;/usr/lib/python3/dist-packages/google")
+    set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/inst/lib/python3/dist-packages/google;/usr/lib/python3/dist-packages/google")
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
