@@ -15,6 +15,7 @@ option(BUILD_PYTHON "Include Python" ON)
 option(BUILD_QT "Include Qt" ON)
 option(BUILD_PYQT "Include PyQt" ON)
 option(BUILD_NUMPY "Include Numpy" ON)
+option(BUILD_SCIPY "Include Scipy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
 
 if(WIN32)
@@ -27,6 +28,7 @@ if(WIN32)
         set(BUILD_QT OFF)
         set(BUILD_PYQT OFF) #PyQt Fails to properly build with MinGW 64-bit
         set(BUILD_NUMPY OFF) #Numpy also fails
+        set(BUILD_SCIPY OFF) #As does Scipy
     else()
         set(BUILD_PYTHON OFF)
     endif()
@@ -35,6 +37,7 @@ elseif(NOT APPLE)
     set(BUILD_QT OFF)
     set(BUILD_PYQT OFF)
     set(BUILD_NUMPY OFF)
+    set(BUILD_SCIPY OFF)
     set(BUILD_PYSERIAL OFF)
 endif()
 
@@ -181,6 +184,12 @@ if(WIN32)
         --install-data=${native_prefix}\\share
         --install-scripts=${native_prefix}\\bin
     )
+elseif(NOT APPLE)
+    set(python_install
+        --root=${EXTERNALPROJECT_INSTALL_PREFIX}
+        --single-version-externally-managed
+        --install-lib=lib/python3/dist-packages
+    )
 endif()
 
 if(BUILD_NUMPY)
@@ -188,6 +197,17 @@ if(BUILD_NUMPY)
         DEPENDS Python
         URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
         URL_MD5 a1ed53432dbcd256398898d35bc8e645
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+endif()
+
+if(BUILD_SCIPY)
+    ExternalProject_Add(Scipy
+        DEPENDS Python Numpy
+        URL http://downloads.sourceforge.net/project/scipy/scipy/0.16.1/scipy-0.16.1.tar.gz
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
@@ -375,6 +395,7 @@ set(DEB_DEPENDS
 )
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS ${DEB_DEPENDS})
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "python3-scipy (>= 0.14)")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
 
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
