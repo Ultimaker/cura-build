@@ -243,6 +243,20 @@ if(NOT BUILD_64BIT)
         INSTALL_COMMAND cd python && ${PYTHON_EXECUTABLE} setup.py install --cpp_implementation ${python_install}
         BUILD_IN_SOURCE 1
     )
+    
+    # Workaround for stupid combo of setuptools and Protobuf build setup
+    # Setuptools will not look in $prefix or allow us to override linker search dirs
+    # Protobuf also does not specify any dirs and only specifies $srcdir/src/.libs as
+    # additional search dir. So we copy the protobuf lib there so LD can find it.
+    # Did I mention that setuptools is stupid?
+    if(WIN32)
+        ExternalProject_Add_Step(Protobuf-python copy-libproto
+            COMMAND ${CMAKE_COMMAND} -E make_directory <SOURCE_DIR>/src/.libs
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/inst/lib/libprotobuf.a <SOURCE_DIR>/src/.libs
+            DEPENDEES update
+            DEPENDERS build
+        )
+    endif()
 else()
     add_custom_target(Protobuf-python)
 endif()
