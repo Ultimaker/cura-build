@@ -229,17 +229,23 @@ endif()
 
 ExternalProject_Add(Protobuf
     GIT_REPOSITORY https://github.com/google/protobuf
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -G ${CMAKE_GENERATOR} ../Protobuf/cmake
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=-fPIC -G ${CMAKE_GENERATOR} ../Protobuf/cmake
 )
 
 # We need the C++ implementation of python-protobuf. However, that currently does not build with MinGW.
 # So instead make sure to have python-protobuf available in your Python installation.
 if(NOT BUILD_64BIT)
+    if(WIN32)
+        set(build_command ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
+    else()
+        set(build_command "LDFLAGS=-L${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
+    endif()
+
     ExternalProject_Add(Protobuf-python
         DEPENDS Protobuf Python
         GIT_REPOSITORY https://github.com/google/protobuf
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND cd python && ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation
+        BUILD_COMMAND cd python && ${build_command}
         INSTALL_COMMAND cd python && ${PYTHON_EXECUTABLE} setup.py install --cpp_implementation ${python_install}
         BUILD_IN_SOURCE 1
     )
