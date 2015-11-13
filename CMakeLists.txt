@@ -15,6 +15,7 @@ option(BUILD_PYTHON "Include Python" ON)
 option(BUILD_QT "Include Qt" ON)
 option(BUILD_PYQT "Include PyQt" ON)
 option(BUILD_NUMPY "Include Numpy" ON)
+option(BUILD_SCIPY "Include Scipy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
 
 if(WIN32)
@@ -27,6 +28,7 @@ if(WIN32)
         set(BUILD_QT OFF)
         set(BUILD_PYQT OFF) #PyQt Fails to properly build with MinGW 64-bit
         set(BUILD_NUMPY OFF) #Numpy also fails
+        set(BUILD_SCIPY OFF) #As does Scipy
     else()
         set(BUILD_PYTHON OFF)
     endif()
@@ -35,17 +37,20 @@ elseif(NOT APPLE)
     set(BUILD_QT OFF)
     set(BUILD_PYQT OFF)
     set(BUILD_NUMPY OFF)
+    set(BUILD_SCIPY OFF)
     set(BUILD_PYSERIAL OFF)
 endif()
-
-set(CURA_MAJOR_VERSION "00")
-set(CURA_MINOR_VERSION "00")
-set(CURA_PATCH_VERSION "00")
 
 set(TAG_OR_BRANCH "15.10" CACHE STRING "The name of the tag or branch to build")
 set(EXTRA_REPOSITORIES "" CACHE STRING "Extra repositories to install. Expected to have a CMake based build system.")
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 set(EXTERNALPROJECT_SITEPACKAGES_DIR ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages)
+
+set(CURA_MAJOR_VERSION "0" CACHE STRING "Cura Major Version")
+set(CURA_MINOR_VERSION "0" CACHE STRING "Cura Minor Version")
+set(CURA_PATCH_VERSION "0" CACHE STRING "Cura Patch Version")
+set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Information")
+set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}-${CURA_EXTRA_VERSION}")
 
 if(BUILD_PYTHON)
     ExternalProject_Add(Python
@@ -180,6 +185,12 @@ if(WIN32)
         --install-data=${native_prefix}\\share
         --install-scripts=${native_prefix}\\bin
     )
+elseif(NOT APPLE)
+    set(python_install
+        --root=${EXTERNALPROJECT_INSTALL_PREFIX}
+        --single-version-externally-managed
+        --install-lib=lib/python3/dist-packages
+    )
 endif()
 
 if(BUILD_NUMPY)
@@ -187,6 +198,17 @@ if(BUILD_NUMPY)
         DEPENDS Python
         URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
         URL_MD5 a1ed53432dbcd256398898d35bc8e645
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+endif()
+
+if(BUILD_SCIPY)
+    ExternalProject_Add(Scipy
+        DEPENDS Python Numpy
+        URL http://downloads.sourceforge.net/project/scipy/scipy/0.16.1/scipy-0.16.1.tar.gz
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
@@ -206,15 +228,48 @@ if(BUILD_PYSERIAL)
     )
 endif()
 
-ExternalProject_Add(Protobuf 
-    DEPENDS Python
-    GIT_REPOSITORY https://github.com/ultimaker/protobuf
-    GIT_TAG ${TAG_OR_BRANCH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DINSTALL_PYTHON=ON -DBUILD_STATIC=ON
+ExternalProject_Add(Protobuf
+    GIT_REPOSITORY https://github.com/google/protobuf
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=-fPIC -G ${CMAKE_GENERATOR} ../Protobuf/cmake
 )
 
+# We need the C++ implementation of python-protobuf. However, that currently does not build with MinGW.
+# So instead make sure to have python-protobuf available in your Python installation.
+if(NOT BUILD_64BIT)
+    if(WIN32)
+        set(build_command ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
+    else()
+        set(build_command "LDFLAGS=-L${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
+    endif()
+
+    ExternalProject_Add(Protobuf-python
+        DEPENDS Protobuf Python
+        GIT_REPOSITORY https://github.com/google/protobuf
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND cd python && ${build_command}
+        INSTALL_COMMAND cd python && ${PYTHON_EXECUTABLE} setup.py install --cpp_implementation ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+    
+    # Workaround for stupid combo of setuptools and Protobuf build setup
+    # Setuptools will not look in $prefix or allow us to override linker search dirs
+    # Protobuf also does not specify any dirs and only specifies $srcdir/src/.libs as
+    # additional search dir. So we copy the protobuf lib there so LD can find it.
+    # Did I mention that setuptools is stupid?
+    if(WIN32)
+        ExternalProject_Add_Step(Protobuf-python copy-libproto
+            COMMAND ${CMAKE_COMMAND} -E make_directory <SOURCE_DIR>/src/.libs
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/inst/lib/libprotobuf.a <SOURCE_DIR>/src/.libs
+            DEPENDEES update
+            DEPENDERS build
+        )
+    endif()
+else()
+    add_custom_target(Protobuf-python)
+endif()
+
 ExternalProject_Add(Arcus 
-    DEPENDS Python Protobuf
+    DEPENDS Python Protobuf Protobuf-python
     GIT_REPOSITORY https://github.com/ultimaker/libArcus
     GIT_TAG ${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON
@@ -224,7 +279,7 @@ ExternalProject_Add(CuraEngine
     DEPENDS Arcus
     GIT_REPOSITORY https://github.com/ultimaker/CuraEngine
     GIT_TAG ${TAG_OR_BRANCH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DCURA_ENGINE_VERSION=${CURA_VERSION}
 )
 
 ExternalProject_Add(Uranium
@@ -238,12 +293,19 @@ ExternalProject_Add(Cura
     DEPENDS Uranium CuraEngine
     GIT_REPOSITORY https://github.com/ultimaker/Cura
     GIT_TAG ${TAG_OR_BRANCH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DURANIUM_SCRIPTS_DIR=
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DURANIUM_SCRIPTS_DIR= -DCURA_VERSION=${CURA_VERSION}
 )
 
 ExternalProject_Add(Cura-PostProcessing
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/nallath/PostProcessingPlugin
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
+)
+
+ExternalProject_Add(cura-binary-data
+    DEPENDS Cura
+    GIT_REPOSITORY https://github.com/ultimaker/cura-binary-data
+    GIT_TAG ${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
@@ -282,16 +344,29 @@ endif()
 
 if(APPLE)
     configure_file(setup_osx.py.in setup_osx.py @ONLY)
+    
+    add_custom_target(build_app ALL DEPENDS ${CMAKE_BINARY_DIR}/dist/Cura.app)
+    add_dependencies(build_app cura-binary-data)
+
+    foreach(repo ${EXTRA_REPOSITORIES})
+        separate_arguments(items UNIX_COMMAND "${repo}")
+        list(GET items 0 name)
+        add_dependencies(build_app ${name})
+    endforeach()
 
     add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/dist/Cura.app 
-        COMMAND ${PYTHON_EXECUTABLE}
-        ARGS setup_osx.py py2app
+        TARGET build_app PRE_LINK
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/dist
+        COMMENT "Cleaning old dist/ directory"
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
+    add_custom_command(
+        TARGET build_app POST_BUILD
+        COMMAND ${PYTHON_EXECUTABLE} setup_osx.py py2app
         COMMENT "Running py2app"
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 
-    add_custom_target(build_app ALL DEPENDS ${CMAKE_BINARY_DIR}/dist/Cura.app)
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/Cura.app DESTINATION "." USE_SOURCE_PERMISSIONS)
 
     set(CPACK_GENERATOR "DragNDrop")
@@ -299,15 +374,28 @@ elseif(WIN32)
     get_filename_component(compiler_dir ${CMAKE_CXX_COMPILER} DIRECTORY)
     configure_file(setup_win32.py.in setup_win32.py @ONLY)
 
+    add_custom_target(build_exe ALL DEPENDS ${CMAKE_BINARY_DIR}/dist/Cura.exe)
+    add_dependencies(build_exe cura-binary-data)
+
+    foreach(repo ${EXTRA_REPOSITORIES})
+        separate_arguments(items UNIX_COMMAND "${repo}")
+        list(GET items 0 name)
+        add_dependencies(build_exe ${name})
+    endforeach()
+
     add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/dist/Cura.exe
-        COMMAND ${PYTHON_EXECUTABLE}
-        ARGS setup_win32.py py2exe
+        TARGET build_exe PRE_LINK
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/dist
+        COMMENT "Cleaning old dist/ directory"
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
+    add_custom_command(
+        TARGET build_exe POST_BUILD
+        COMMAND ${PYTHON_EXECUTABLE} setup_win32.py py2exe
         COMMENT "Running py2exe"
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 
-    add_custom_target(build_exe ALL DEPENDS ${CMAKE_BINARY_DIR}/dist/Cura.exe)
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/ DESTINATION "." USE_SOURCE_PERMISSIONS COMPONENT "cura")
     # Get the VCRedist from http://www.microsoft.com/en-us/download/details.aspx?id=26999
     if(BUILD_64BIT)
@@ -332,6 +420,7 @@ else()
         "${CMAKE_BINARY_DIR}/Uranium-prefix/src/Uranium-build;Uranium;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Cura-prefix/src/Cura-build;Cura;ALL;/usr"
         "${CMAKE_BINARY_DIR}/Cura-PostProcessing-prefix/src/Cura-PostProcessing-build;Cura-PostProcessing;ALL;/usr"
+        "${CMAKE_BINARY_DIR}/cura-binary-data-prefix/src/cura-binary-data-build;cura-binary-data;ALL;/usr"
     )
 
     foreach(repo ${EXTRA_REPOSITORIES})
@@ -348,6 +437,7 @@ set(CPACK_PACKAGE_VENDOR "Ultimaker")
 set(CPACK_PACKAGE_VERSION_MAJOR ${CURA_MAJOR_VERSION})
 set(CPACK_PACKAGE_VERSION_MINOR ${CURA_MINOR_VERSION})
 set(CPACK_PACKAGE_VERSION_PATCH ${CURA_PATCH_VERSION})
+set(CPACK_PACKAGE_VERSION ${CURA_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cura 3D Printing Software")
 set(CPACK_PACKAGE_CONTACT "Arjen Hiemstra <a.hiemstra@ultimaker.com>")
 if(NOT APPLE)
@@ -383,6 +473,7 @@ set(DEB_DEPENDS
 )
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS ${DEB_DEPENDS})
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "python3-scipy (>= 0.14)")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
 
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
