@@ -313,9 +313,10 @@ foreach(repo ${EXTRA_REPOSITORIES})
     separate_arguments(items UNIX_COMMAND "${repo}")
     list(GET items 0 name)
     list(GET items 1 repo)
+    list(GET items 2 cmake)
     ExternalProject_Add(${name}
         GIT_REPOSITORY ${repo}
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} ${cmake}
     )
 endforeach()
 
