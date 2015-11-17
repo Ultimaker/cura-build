@@ -238,7 +238,8 @@ if(NOT BUILD_64BIT)
     if(WIN32)
         set(build_command ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
     else()
-        set(build_command "LDFLAGS=-L${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
+        set(build_command "LDFLAGS=-L${EXTERNALPROJECT_INSTALL_PREFIX}/lib" "PROTOC=${EXTERNALPROJECT_INSTALL_PREFIX}/bin/protoc" ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
+
     endif()
 
     ExternalProject_Add(Protobuf-python
