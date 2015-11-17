@@ -358,7 +358,7 @@ elseif(WIN32)
     get_filename_component(compiler_dir ${CMAKE_CXX_COMPILER} DIRECTORY)
     configure_file(setup_win32.py.in setup_win32.py @ONLY)
 
-    add_custom_target(build_exe ALL DEPENDS ${CMAKE_BINARY_DIR}/dist/Cura.exe)
+    add_custom_target(build_exe ALL)
     add_dependencies(build_exe cura-binary-data)
 
     add_custom_command(
