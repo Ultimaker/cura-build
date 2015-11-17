@@ -236,6 +236,14 @@ ExternalProject_Add(Protobuf
 # We need the C++ implementation of python-protobuf. However, that currently does not build with MinGW.
 # So instead make sure to have python-protobuf available in your Python installation.
 if(NOT BUILD_64BIT)
+    if(APPLE)
+        # Protobuf-python-cpp includes a really ugly and nasty hack that checks whether the function
+        # being called is being called from a file ending in "_pb2.py". This fails on OSX with Py2App
+        # because it gets called from a "_pb2.pyc" file. This removes the check and makes the function
+        # always return true.
+        set(patch_command sed -i".bak" "95,132d" <SOURCE_DIR>/python/google/protobuf/pyext/descriptor.cc)
+    endif()
+
     if(WIN32)
         set(build_command ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
     else()
@@ -245,6 +253,7 @@ if(NOT BUILD_64BIT)
     ExternalProject_Add(Protobuf-python
         DEPENDS Protobuf Python
         GIT_REPOSITORY https://github.com/google/protobuf
+        PATCH_COMMAND ${patch_command}
         CONFIGURE_COMMAND ""
         BUILD_COMMAND cd python && ${build_command}
         INSTALL_COMMAND cd python && ${PYTHON_EXECUTABLE} setup.py install --cpp_implementation ${python_install}
@@ -346,7 +355,7 @@ endif()
 if(APPLE)
     configure_file(setup_osx.py.in setup_osx.py @ONLY)
     
-    add_custom_target(build_app ALL DEPENDS ${CMAKE_BINARY_DIR}/dist/Cura.app)
+    add_custom_target(build_app ALL)
     add_dependencies(build_app cura-binary-data)
 
     foreach(repo ${EXTRA_REPOSITORIES})
