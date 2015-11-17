@@ -239,7 +239,6 @@ if(NOT BUILD_64BIT)
         set(build_command ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
     else()
         set(build_command "LDFLAGS=-L${EXTERNALPROJECT_INSTALL_PREFIX}/lib" "PROTOC=${EXTERNALPROJECT_INSTALL_PREFIX}/bin/protoc" ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
-
     endif()
 
     ExternalProject_Add(Protobuf-python
@@ -446,6 +445,8 @@ string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS ${DEB_DEPENDS})
 set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "python3-scipy (>= 0.14)")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
+# Set the right epoch so Debian knows this is a more recent version
+set(CPACK_DEBIAN_PACKAGE_VERSION "2:${CPACK_PACKAGE_VERSION}")
 
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
