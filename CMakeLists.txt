@@ -68,11 +68,11 @@ else()
 endif()
 
 if(BUILD_QT)
-    set(qt_url http://download.qt.io/archive/qt/5.4/5.4.2/single/qt-everywhere-opensource-src-5.4.2.tar.gz)
-    set(qt_md5 fa1c4d819b401b267eb246a543a63ea5)
+    set(qt_url http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz)
+    set(qt_md5 59f0216819152b77536cf660b015d784)
     if(WIN32)
-        set(qt_url http://download.qt.io/archive/qt/5.4/5.4.2/single/qt-everywhere-opensource-src-5.4.2.zip)
-        set(qt_md5 b6a099fff154fcb0a0127619623d412f)
+        set(qt_url http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.zip)
+        set(qt_md5 d071cdaa1b8f34fb49f6deac94039c2c)
     endif()
 
     set(qt_options
