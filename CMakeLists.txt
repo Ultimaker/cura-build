@@ -41,7 +41,7 @@ elseif(NOT APPLE)
     set(BUILD_PYSERIAL OFF)
 endif()
 
-set(TAG_OR_BRANCH "15.10" CACHE STRING "The name of the tag or branch to build")
+set(TAG_OR_BRANCH "master" CACHE STRING "The name of the tag or branch to build")
 set(EXTRA_REPOSITORIES "" CACHE STRING "Extra repositories to install. Expected to have a CMake based build system.")
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 set(EXTERNALPROJECT_SITEPACKAGES_DIR ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages)
