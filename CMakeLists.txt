@@ -139,7 +139,7 @@ if(BUILD_PYQT)
 
     ExternalProject_Add(Sip
         DEPENDS Python
-        URL http://downloads.sourceforge.net/project/pyqt/sip/sip-4.16.9/sip-4.16.9.zip
+        URL http://downloads.sourceforge.net/project/pyqt/sip/sip-4.17/sip-4.17.zip
         CONFIGURE_COMMAND ${sip_command}
         BUILD_IN_SOURCE 1
     )
@@ -169,7 +169,7 @@ if(BUILD_PYQT)
 
     ExternalProject_Add(PyQt
         DEPENDS Python Qt Sip
-        URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.4.2/PyQt-gpl-5.4.2.tar.gz
+        URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.5.1/PyQt-gpl-5.5.1.tar.gz
         CONFIGURE_COMMAND ${pyqt_command}
         BUILD_IN_SOURCE 1
     )
