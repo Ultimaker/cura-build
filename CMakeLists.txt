@@ -41,14 +41,14 @@ elseif(NOT APPLE)
     set(BUILD_PYSERIAL OFF)
 endif()
 
-set(TAG_OR_BRANCH "master" CACHE STRING "The name of the tag or branch to build")
+set(TAG_OR_BRANCH "2.1" CACHE STRING "The name of the tag or branch to build")
 set(EXTRA_REPOSITORIES "" CACHE STRING "Extra repositories to install. Expected to have a CMake based build system.")
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 set(EXTERNALPROJECT_SITEPACKAGES_DIR ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages)
 
-set(CURA_MAJOR_VERSION "0" CACHE STRING "Cura Major Version")
+set(CURA_MAJOR_VERSION "2" CACHE STRING "Cura Major Version")
 set(CURA_MINOR_VERSION "0" CACHE STRING "Cura Minor Version")
-set(CURA_PATCH_VERSION "0" CACHE STRING "Cura Patch Version")
+set(CURA_PATCH_VERSION "99" CACHE STRING "Cura Patch Version")
 set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Information")
 set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}-${CURA_EXTRA_VERSION}")
 
