@@ -84,6 +84,7 @@ if(BUILD_QT)
         -confirm-license
         -nomake examples
         -nomake tests
+        -no-cups
         -skip qtconnectivity
         -skip qtdoc
         -skip qtenginio
@@ -96,11 +97,15 @@ if(BUILD_QT)
         -skip qtwebengine
         -skip qtwebkit
         -skip qtwebsockets
-        -skip qtx11extras
         -skip qtandroidextras
         -skip qtactiveqt
         -skip qttools
         -skip qtxmlpatterns
+        -skip qt3d
+        -skip qtcanvas3d
+        -skip qtserialport
+        -skip qtwayland
+        -skip qtwebkit-examples
     )
 
     if(APPLE)
