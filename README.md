@@ -23,6 +23,8 @@ On Windows, the following dependencies are needed for building:
 * CMake (http://www.cmake.org/)
 * MinGW-W64 >= 4.9.04 (http://mingw-w64.org/doku.php)
 * Python 3.4 (http://python.org/, note that using Python 3.5 is currently untested on Windows)
+* Microsoft DirectX SDK (http://www.microsoft.com/en-us/download/details.aspx?id=6812)
+* Microsoft C++ Redistributable 2015 (microsoft.com/en-us/download/details.aspx?id=48145)
 
 Additonally, for 32-bit builds:
 
@@ -37,8 +39,31 @@ For creating installer we use NSIS 3: http://nsis.sourceforge.net/Main_Page
 
 Make sure these dependencies are available from your path.
 
-To build, clone the repository, then create a build directory. From that directory, run "env_win32.bat" when doing 32-bit builds and "env_win64.bat" for 64-bit builds.
-Then run CMake using the MinGW Generator. Finally, call "mingw32-make" to build everything and "mingw32-make package" to build the installer.
+```shell
+REM 32-bit
+git clone git@github.com:Ultimaker/cura-build.git
+cd cura-build
+mkdir build
+cd build
+copy <src>/vc_redist.x32.exe .
+..\env_win32.bat
+cmake -G "MinGW Makefiles" ..
+mingw32-make
+mingw32-make package
+```
+
+```shell
+REM 64-bit
+git clone git@github.com:Ultimaker/cura-build.git
+cd cura-build
+mkdir build
+cd build
+copy <src>/vc_redist.x64.exe .
+..\env_win64.bat
+cmake -G "MinGW Makefiles" ..
+mingw32-make
+mingw32-make package
+```
 
 ## Ubuntu/Linux
 
