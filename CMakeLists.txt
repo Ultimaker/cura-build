@@ -242,7 +242,7 @@ endif()
 
 ExternalProject_Add(Protobuf
     GIT_REPOSITORY https://github.com/google/protobuf
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=-fPIC -G ${CMAKE_GENERATOR} ../Protobuf/cmake
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=-fPIC\ -std=c++11\ -stdlib=libc++ -G ${CMAKE_GENERATOR} ../Protobuf/cmake
 )
 
 # We need the C++ implementation of python-protobuf. However, that currently does not build with MinGW.
