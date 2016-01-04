@@ -53,8 +53,15 @@ set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Infor
 set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}-${CURA_EXTRA_VERSION}")
 
 if(BUILD_PYTHON)
+    if(APPLE)
+        # See http://bugs.python.org/issue21381
+        # The interpreter crashes when MACOSX_DEPLOYMENT_TARGET=10.7 due to the increased stack size.
+        set(patch_command sed -i".bak" "8704,8704d" <SOURCE_DIR>/configure)
+    endif()
+
     ExternalProject_Add(Python
         URL https://www.python.org/ftp/python/3.4.3/Python-3.4.3.tgz
+        PATCH_COMMAND ${patch_command}
         CONFIGURE_COMMAND ./configure --prefix=${EXTERNALPROJECT_INSTALL_PREFIX} --enable-shared --with-threads --without-pymalloc
         BUILD_IN_SOURCE 1
     )
