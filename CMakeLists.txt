@@ -53,8 +53,15 @@ set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Infor
 set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}-${CURA_EXTRA_VERSION}")
 
 if(BUILD_PYTHON)
+    if(APPLE)
+        # See http://bugs.python.org/issue21381
+        # The interpreter crashes when MACOSX_DEPLOYMENT_TARGET=10.7 due to the increased stack size.
+        set(patch_command sed -i".bak" "8704,8704d" <SOURCE_DIR>/configure)
+    endif()
+
     ExternalProject_Add(Python
         URL https://www.python.org/ftp/python/3.4.3/Python-3.4.3.tgz
+        PATCH_COMMAND ${patch_command}
         CONFIGURE_COMMAND ./configure --prefix=${EXTERNALPROJECT_INSTALL_PREFIX} --enable-shared --with-threads --without-pymalloc
         BUILD_IN_SOURCE 1
     )
@@ -235,7 +242,7 @@ endif()
 
 ExternalProject_Add(Protobuf
     GIT_REPOSITORY https://github.com/google/protobuf
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=-fPIC -G ${CMAKE_GENERATOR} ../Protobuf/cmake
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=-fPIC\ -std=c++11\ -stdlib=libc++ -G ${CMAKE_GENERATOR} ../Protobuf/cmake
 )
 
 # We need the C++ implementation of python-protobuf. However, that currently does not build with MinGW.
