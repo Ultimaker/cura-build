@@ -6,7 +6,9 @@ This repository contains build scripts used to build Cura and all depenencies fr
 
 1. Install CMake (available via [homebrew](http://brew.sh/) or [cmake.org](http://www.cmake.org/))
 2. Install latest version of Xcode.
-3. Run these commands:
+3. On Mac OS X > 10.10, execute command: *brew link openssl --force*
+4. Because Fortran is necessary: *brew install gcc*
+5. Run these commands:
 ```shell
 git clone git@github.com:Ultimaker/cura-build.git
 cd cura-build
@@ -23,8 +25,12 @@ On Windows, the following dependencies are needed for building:
 * CMake (http://www.cmake.org/)
 * MinGW-W64 >= 4.9.04 (http://mingw-w64.org/doku.php)
 * Python 3.4 (http://python.org/, note that using Python 3.5 is currently untested on Windows)
+* Microsoft Visual Studio 2015 (community edition: 
+  Install Programming languages: Visual c++ (all), Python Tools for Visual Studio (Nov 2015)
+  Windows & Web Development: Universal Windows App Development Tools (Tools 1.2 & windows 10 SDK-10/0/10586; Windows 10 SDK -10.0.10240)
 * Microsoft DirectX SDK (http://www.microsoft.com/en-us/download/details.aspx?id=6812)
 * Microsoft C++ Redistributable 2015 (microsoft.com/en-us/download/details.aspx?id=48145)
+* Py2Exe (https://pypi.python.org/pypi/py2exe/0.9.2.0/#downloads)
 
 Additonally, for 32-bit builds:
 
@@ -33,19 +39,23 @@ Additonally, for 32-bit builds:
 For 64-bit builds:
 
 * PyQt 5.4 (https://riverbankcomputing.com/software/pyqt/download5, Building PyQt currently fails using MinGW 64-bit)
-* Numpy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy (Building numpy also fails with MinGW 64-bit)
+* NumPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy (Building numpy also fails with MinGW 64-bit); make sure to get the NON-MKL version!
+* SciPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy (Building numpy also fails with MinGW 64-bit)
 
 For creating installer we use NSIS 3: http://nsis.sourceforge.net/Main_Page
 
 Make sure these dependencies are available from your path.
+
+Install protobuf.wheel found in cura-build-binaries (TODO: create cura-build-binaries repo)
+Create empty __init__.py in c:\Python34\Lib\site-packages\google (TODO: make it part of the proto.wheel installation)
 
 ```shell
 REM 32-bit
 git clone git@github.com:Ultimaker/cura-build.git
 cd cura-build
 mkdir build
+copy <src>/vc_redist.x32.exe vcredist_x86.exe
 cd build
-copy <src>/vc_redist.x32.exe .
 ..\env_win32.bat
 cmake -G "MinGW Makefiles" ..
 mingw32-make
@@ -57,13 +67,15 @@ REM 64-bit
 git clone git@github.com:Ultimaker/cura-build.git
 cd cura-build
 mkdir build
+copy <src>/vc_redist.x64.exe vcredist_x64.exe
 cd build
-copy <src>/vc_redist.x64.exe .
 ..\env_win64.bat
-cmake -G "MinGW Makefiles" ..
+cmake -G "MinGW Makefiles" -DBUILD_64BIT:BOOL=ON ..
 mingw32-make
 mingw32-make package
 ```
+
+Before make package - copy arduino to cura-build/
 
 ## Ubuntu/Linux
 
