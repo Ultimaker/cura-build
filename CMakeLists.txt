@@ -184,7 +184,7 @@ endif()
 
 if(BUILD_PYQT)
     set(sip_command "")
-    if(BUILD_OS_WINDOWS OR BUILD_OS_LINUX)
+    if(BUILD_OS_WINDOWS)
         set(sip_command
             ${PYTHON_EXECUTABLE}
             configure.py
