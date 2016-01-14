@@ -500,13 +500,14 @@ elseif(BUILD_OS_WINDOWS)
     )
 
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/ DESTINATION "." USE_SOURCE_PERMISSIONS COMPONENT "cura")
-    # Get the VCRedist from http://www.microsoft.com/en-us/download/details.aspx?id=26999
-    if(BUILD_OS_WIN64)
-        install(FILES vcredist_x64.exe DESTINATION "." COMPONENT "vcredist")
-    else()
-        install(FILES vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
-    endif()
-    install(DIRECTORY arduino DESTINATION "." COMPONENT "arduino")
+
+	if(BUILD_OS_WIN32)
+		install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
+	else()
+		install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x64.exe DESTINATION "." COMPONENT "vcredist")
+	endif()
+
+	install(DIRECTORY ${EXTERNALPROJECT_INSTALL_PREFIX}/arduino DESTINATION "." COMPONENT "arduino")
 
     include(CPackComponent)
     cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
