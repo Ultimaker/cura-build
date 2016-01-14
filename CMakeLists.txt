@@ -7,10 +7,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(ExternalProject)
 include(GNUInstallDirs)
 
-if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.7")
-endif()
-
 option(BUILD_PYTHON "Include Python" ON)
 option(BUILD_QT "Include Qt" ON)
 option(BUILD_PYQT "Include PyQt" ON)
