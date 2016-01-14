@@ -7,6 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(ExternalProject)
 include(GNUInstallDirs)
 
+# Define Options
 option(BUILD_PYTHON "Include Python" ON)
 option(BUILD_QT "Include Qt" ON)
 option(BUILD_PYQT "Include PyQt" ON)
@@ -18,20 +19,7 @@ if(WIN32)
     option(BUILD_64BIT "Create a 64-bit build" OFF)
 endif()
 
-if(WIN32)
-    if (BUILD_64BIT)
-        set(BUILD_PYTHON OFF)
-        set(BUILD_QT OFF)
-        set(BUILD_PYQT OFF) #PyQt Fails to properly build with MinGW 64-bit
-        set(BUILD_NUMPY OFF) #Numpy also fails
-        set(BUILD_SCIPY OFF) #As does Scipy
-    else()
-        set(BUILD_PYTHON OFF)
-    endif()
-elseif(NOT APPLE)
-    set(BUILD_PYTHON OFF)
-endif()
-
+# Create variables to simplify OS management
 set(BUILD_OS_OSX OFF)
 set(BUILD_OS_LINUX OFF)
 set(BUILD_OS_WINDOWS OFF)
@@ -57,11 +45,28 @@ else()
     message(FATAL_ERROR "Unsupported Operating System: ${CMAKE_SYSTEM_NAME}")
 endif()
 
+# Explicitly disable unsupported options
+if(BUILD_OS_WINDOWS)
+    if(BUILD_OS_WIN64)
+        set(BUILD_PYTHON OFF)
+        set(BUILD_QT OFF)
+        set(BUILD_PYQT OFF) #PyQt Fails to properly build with MinGW 64-bit
+        set(BUILD_NUMPY OFF) #Numpy also fails
+        set(BUILD_SCIPY OFF) #As does Scipy
+    else()
+        set(BUILD_PYTHON OFF)
+    endif()
+elseif(BUILD_OS_LINUX)
+    set(BUILD_PYTHON OFF)
+endif()
+
 set(TAG_OR_BRANCH "2.1" CACHE STRING "The name of the tag or branch to build")
 set(EXTRA_REPOSITORIES "" CACHE STRING "Extra repositories to install. Expected to have a CMake based build system.")
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 set(EXTERNALPROJECT_SITEPACKAGES_DIR ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages)
 
+# Create the version-related variables
+# These can optionally be overridden from the build enviroment.
 if(DEFINED ENV{CURA_MAJOR_VERSION})
     set(CURA_MAJOR_VERSION $ENV{CURA_MAJOR_VERSION} CACHE STRING "Cura Major Version" FORCE)
 else()
