@@ -136,6 +136,7 @@ if(BUILD_QT)
         -confirm-license
         -nomake examples
         -nomake tests
+        -nomake tools
         -no-cups
         -skip qtconnectivity
         -skip qtdoc
