@@ -28,7 +28,6 @@ On Windows, the following dependencies are needed for building:
 * Microsoft Visual Studio 2015 (community edition: 
   Install Programming languages: Visual c++ (all), Python Tools for Visual Studio (Nov 2015)
   Windows & Web Development: Universal Windows App Development Tools (Tools 1.2 & windows 10 SDK-10/0/10586; Windows 10 SDK -10.0.10240)
-* Microsoft DirectX SDK (http://www.microsoft.com/en-us/download/details.aspx?id=6812)
 * Microsoft C++ Redistributable 2015 (microsoft.com/en-us/download/details.aspx?id=48145)
 * Py2Exe (https://pypi.python.org/pypi/py2exe/0.9.2.0/#downloads)
 * For creating installer we use NSIS 3: http://nsis.sourceforge.net/Main_Page
