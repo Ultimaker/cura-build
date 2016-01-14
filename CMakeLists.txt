@@ -526,8 +526,8 @@ elseif(BUILD_OS_LINUX)
         "${CMAKE_BINARY_DIR}/inst/share;/opt/cura/share"
     )
 
-    install(FILES cura DESTINATION bin)
-    install(FILES cura.desktop DESTINATION share/applications)
+    install(PROGRAMS cura DESTINATION bin)
+    install(PROGRAMS cura.desktop DESTINATION share/applications)
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
