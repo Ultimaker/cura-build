@@ -120,7 +120,9 @@ endif()
 if(BUILD_QT)
     set(qt_url http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz)
     set(qt_md5 59f0216819152b77536cf660b015d784)
-    if(WIN32)
+
+    # Qt uses different sources for Windows 
+    if(BUILD_OS_WINDOWS)
         set(qt_url http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.zip)
         set(qt_md5 d071cdaa1b8f34fb49f6deac94039c2c)
     endif()
@@ -158,9 +160,9 @@ if(BUILD_QT)
         -skip qtwebkit-examples
     )
 
-    if(APPLE)
+    if(BUILD_OS_OSX)
         list(APPEND qt_options -no-framework)
-    elseif(WIN32)
+    elseif(BUILD_OS_WINDOWS)
         list(APPEND qt_options -opengl desktop)
     endif()
 
@@ -176,7 +178,7 @@ endif()
 
 if(BUILD_PYQT)
     set(sip_command "")
-    if(WIN32)
+    if(BUILD_OS_WINDOWS OR BUILD_OS_LINUX)
         set(sip_command
             ${PYTHON_EXECUTABLE}
             configure.py
@@ -188,7 +190,10 @@ if(BUILD_PYQT)
             "CFLAGS+=${CMAKE_C_FLAGS}"
             "CXXFLAGS+=${CMAKE_CXX_FLAGS}"
         )
-    else()
+    elseif(BUILD_OS_LINUX)
+        set(sip_command
+        )
+    elseif(BUILD_OS_OSX)
         set(sip_command ${PYTHON_EXECUTABLE} configure.py --sysroot=${EXTERNALPROJECT_INSTALL_PREFIX})
     endif()
 
@@ -200,7 +205,7 @@ if(BUILD_PYQT)
     )
 
     set(pyqt_command "")
-    if(WIN32)
+    if(BUILD_OS_WINDOWS)
         set(pyqt_command
             ${PYTHON_EXECUTABLE} configure.py
             --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip.exe
@@ -212,9 +217,12 @@ if(BUILD_PYQT)
             "CFLAGS+=${CMAKE_C_FLAGS}"
             "CXXFLAGS+=${CMAKE_CXX_FLAGS}"
         )
-    else()
+    elseif(BUILD_OS_LINUX)
         set(pyqt_command
-             ${PYTHON_EXECUTABLE} configure.py
+        )
+    elseif(BUILD_OS_OSX)
+        set(pyqt_command
+            ${PYTHON_EXECUTABLE} configure.py
             --sysroot ${EXTERNALPROJECT_INSTALL_PREFIX}
             --qmake ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/qmake
             --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip
@@ -232,7 +240,7 @@ else()
     add_custom_target(PyQt)
 endif()
 
-if(WIN32)
+if(BUILD_OS_WINDOWS)
     # Because setuptools is stupid and will interpret "C:/..." as a relative path
     string(REPLACE "/" "\\" native_prefix ${EXTERNALPROJECT_INSTALL_PREFIX})
     set(python_install
@@ -240,7 +248,7 @@ if(WIN32)
         --install-data=${native_prefix}\\share
         --install-scripts=${native_prefix}\\bin
     )
-elseif(NOT APPLE)
+elseif(BUILD_OS_LINUX)
     set(python_install
         --root=${EXTERNALPROJECT_INSTALL_PREFIX}
         --single-version-externally-managed
@@ -288,10 +296,10 @@ ExternalProject_Add(Protobuf
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=-fPIC\ -std=c++11\ -stdlib=libc++ -G ${CMAKE_GENERATOR} ../Protobuf/cmake
 )
 
-# We need the C++ implementation of python-protobuf. However, that currently does not build with MinGW.
+# We need the C++ implementation of python-protobuf. However, that currently does not build on 64-bit Windows with MinGW.
 # So instead make sure to have python-protobuf available in your Python installation.
-if(NOT BUILD_64BIT)
-    if(APPLE)
+if(NOT BUILD_OS_WIN64)
+    if(BUILD_OS_OSX)
         # Protobuf-python-cpp includes a really ugly and nasty hack that checks whether the function
         # being called is being called from a file ending in "_pb2.py". This fails on OSX with Py2App
         # because it gets called from a "_pb2.pyc" file. This removes the check and makes the function
@@ -299,7 +307,7 @@ if(NOT BUILD_64BIT)
         set(patch_command sed -i".bak" "95,132d" <SOURCE_DIR>/python/google/protobuf/pyext/descriptor.cc)
     endif()
 
-    if(WIN32)
+    if(BUILD_OS_WINDOWS)
         set(build_command ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
     else()
         set(build_command "LDFLAGS=-L${EXTERNALPROJECT_INSTALL_PREFIX}/lib" "PROTOC=${EXTERNALPROJECT_INSTALL_PREFIX}/bin/protoc" ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
@@ -320,7 +328,7 @@ if(NOT BUILD_64BIT)
     # Protobuf also does not specify any dirs and only specifies $srcdir/src/.libs as
     # additional search dir. So we copy the protobuf lib there so LD can find it.
     # Did I mention that setuptools is stupid?
-    if(WIN32)
+    if(BUILD_OS_WINDOWS)
         ExternalProject_Add_Step(Protobuf-python copy-libproto
             COMMAND ${CMAKE_COMMAND} -E make_directory <SOURCE_DIR>/src/.libs
             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/inst/lib/libprotobuf.a <SOURCE_DIR>/src/.libs
@@ -390,7 +398,7 @@ foreach(repo ${EXTRA_REPOSITORIES})
     )
 endforeach()
 
-if(APPLE)
+if(BUILD_OS_OSX)
     ExternalProject_Add(Py2App
         DEPENDS Python
         URL https://pypi.python.org/packages/source/p/py2app/py2app-0.9.tar.gz
@@ -399,7 +407,7 @@ if(APPLE)
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install
         BUILD_IN_SOURCE 1
     )
-elseif(WIN32)
+elseif(BUILD_OS_WINDOWS)
     # Currently, py2exe can not be built with MinGW since the code apparently uses
     # a lot of MSVC-isms. So instead, install py2exe in your Python installation and
     # use that.
@@ -413,9 +421,9 @@ elseif(WIN32)
     # )
 endif()
 
-if(APPLE)
+if(BUILD_OS_OSX)
     configure_file(setup_osx.py.in setup_osx.py @ONLY)
-    
+
     add_custom_target(build_app ALL)
     add_dependencies(build_app cura-binary-data)
 
@@ -441,7 +449,7 @@ if(APPLE)
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/Cura.app DESTINATION "." USE_SOURCE_PERMISSIONS)
 
     set(CPACK_GENERATOR "DragNDrop")
-elseif(WIN32)
+elseif(BUILD_OS_WINDOWS)
     get_filename_component(compiler_dir ${CMAKE_CXX_COMPILER} DIRECTORY)
     configure_file(setup_win32.py.in setup_win32.py @ONLY)
 
@@ -469,7 +477,7 @@ elseif(WIN32)
 
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/ DESTINATION "." USE_SOURCE_PERMISSIONS COMPONENT "cura")
     # Get the VCRedist from http://www.microsoft.com/en-us/download/details.aspx?id=26999
-    if(BUILD_64BIT)
+    if(BUILD_OS_WIN64)
         install(FILES vcredist_x64.exe DESTINATION "." COMPONENT "vcredist")
     else()
         install(FILES vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
@@ -482,7 +490,7 @@ elseif(WIN32)
     cpack_add_component(arduino DISPLAY_NAME "Install Arduino Drivers")
 
     set(CPACK_GENERATOR "NSIS")
-else()
+elseif(BUILD_OS_LINUX)
     set(CPACK_GENERATOR "DEB")
 
     set(CPACK_INSTALL_CMAKE_PROJECTS
@@ -511,7 +519,7 @@ set(CPACK_PACKAGE_VERSION_PATCH ${CURA_PATCH_VERSION})
 set(CPACK_PACKAGE_VERSION ${CURA_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cura 3D Printing Software")
 set(CPACK_PACKAGE_CONTACT "Arjen Hiemstra <a.hiemstra@ultimaker.com>")
-if(NOT APPLE)
+if(NOT BUILD_OS_OSX)
     set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
 endif()
 set(CPACK_PACKAGE_EXECUTABLES Cura "Cura ${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}")
