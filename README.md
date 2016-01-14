@@ -36,10 +36,10 @@ Additonally, for 32-bit builds:
 
 * Perl (http://www.activestate.com/activeperl, Required to build Qt)
 * Create in the user direcotry a file named pydistutils.cfg with the following contents:
-  ```shell
-  [build]
-  compiler=mingw32
-  ```
+```shell
+[build]
+compiler=mingw32
+```
 
 For 64-bit builds:
 
