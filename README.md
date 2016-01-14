@@ -36,6 +36,7 @@ Make sure these dependencies are available from your path.
 Additonally, for 32-bit builds:
 
 * Perl (http://www.activestate.com/activeperl, Required to build Qt)
+* OpenBlas (http://sourceforge.net/projects/openblas/files/v0.2.15/)
 * Create in the user direcotry a file named pydistutils.cfg with the following contents:
 ```shell
 [build]
