@@ -25,6 +25,8 @@ On Windows, the following dependencies are needed for building:
 * CMake (http://www.cmake.org/)
 * MinGW-W64 >= 4.9.04 (http://mingw-w64.org/doku.php)
 * Python 3.4 (http://python.org/, note that using Python 3.5 is currently untested on Windows)
+* NumPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy - make sure to get the NON-MKL version!
+* SciPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy
 * Microsoft Visual Studio 2015 (community edition: 
   Install Programming languages: Visual c++ (all), Python Tools for Visual Studio (Nov 2015)
   Windows & Web Development: Universal Windows App Development Tools (Tools 1.2 & windows 10 SDK-10/0/10586; Windows 10 SDK -10.0.10240)
@@ -36,7 +38,6 @@ Make sure these dependencies are available from your path.
 Additonally, for 32-bit builds:
 
 * Perl (http://www.activestate.com/activeperl, Required to build Qt)
-* OpenBlas (http://sourceforge.net/projects/openblas/files/v0.2.15/)
 * Create in the user direcotry a file named pydistutils.cfg with the following contents:
 ```shell
 [build]
@@ -46,8 +47,6 @@ compiler=mingw32
 For 64-bit builds:
 
 * PyQt 5.4 (https://riverbankcomputing.com/software/pyqt/download5, Building PyQt currently fails using MinGW 64-bit)
-* NumPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy (Building numpy also fails with MinGW 64-bit); make sure to get the NON-MKL version!
-* SciPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy (Building numpy also fails with MinGW 64-bit)
 * Install protobuf.wheel found in cura-build-binaries (TODO: create cura-build-binaries repo)
 * Create empty __init__.py in c:\Python34\Lib\site-packages\google (TODO: make it part of the proto.wheel installation)
 
