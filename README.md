@@ -31,6 +31,9 @@ On Windows, the following dependencies are needed for building:
 * Microsoft DirectX SDK (http://www.microsoft.com/en-us/download/details.aspx?id=6812)
 * Microsoft C++ Redistributable 2015 (microsoft.com/en-us/download/details.aspx?id=48145)
 * Py2Exe (https://pypi.python.org/pypi/py2exe/0.9.2.0/#downloads)
+* For creating installer we use NSIS 3: http://nsis.sourceforge.net/Main_Page
+
+Make sure these dependencies are available from your path.
 
 Additonally, for 32-bit builds:
 
@@ -47,9 +50,7 @@ For 64-bit builds:
 * NumPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy (Building numpy also fails with MinGW 64-bit); make sure to get the NON-MKL version!
 * SciPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy (Building numpy also fails with MinGW 64-bit)
 
-For creating installer we use NSIS 3: http://nsis.sourceforge.net/Main_Page
 
-Make sure these dependencies are available from your path.
 
 Install protobuf.wheel found in cura-build-binaries (TODO: create cura-build-binaries repo)
 Create empty __init__.py in c:\Python34\Lib\site-packages\google (TODO: make it part of the proto.wheel installation)
