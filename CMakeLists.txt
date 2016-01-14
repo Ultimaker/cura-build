@@ -192,6 +192,12 @@ if(BUILD_PYQT)
         )
     elseif(BUILD_OS_LINUX)
         set(sip_command
+            ${PYTHON_EXECUTABLE}
+            configure.py
+            --bindir=${EXTERNALPROJECT_INSTALL_PREFIX}/bin
+            --destdir=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages
+            --incdir=${EXTERNALPROJECT_INSTALL_PREFIX}/include
+            --sipdir=${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
         )
     elseif(BUILD_OS_OSX)
         set(sip_command ${PYTHON_EXECUTABLE} configure.py --sysroot=${EXTERNALPROJECT_INSTALL_PREFIX})
@@ -219,6 +225,13 @@ if(BUILD_PYQT)
         )
     elseif(BUILD_OS_LINUX)
         set(pyqt_command
+            ${PYTHON_EXECUTABLE} configure.py
+            --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip
+            --qmake ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/qmake
+            --confirm-license
+            --destdir ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages
+            --bindir ${EXTERNALPROJECT_INSTALL_PREFIX}/bin
+            --sipdir ${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
         )
     elseif(BUILD_OS_OSX)
         set(pyqt_command
@@ -251,7 +264,6 @@ if(BUILD_OS_WINDOWS)
 elseif(BUILD_OS_LINUX)
     set(python_install
         --root=${EXTERNALPROJECT_INSTALL_PREFIX}
-        --single-version-externally-managed
         --install-lib=lib/python3/dist-packages
     )
 endif()
