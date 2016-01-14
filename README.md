@@ -49,11 +49,8 @@ For 64-bit builds:
 * PyQt 5.4 (https://riverbankcomputing.com/software/pyqt/download5, Building PyQt currently fails using MinGW 64-bit)
 * NumPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy (Building numpy also fails with MinGW 64-bit); make sure to get the NON-MKL version!
 * SciPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy (Building numpy also fails with MinGW 64-bit)
-
-
-
-Install protobuf.wheel found in cura-build-binaries (TODO: create cura-build-binaries repo)
-Create empty __init__.py in c:\Python34\Lib\site-packages\google (TODO: make it part of the proto.wheel installation)
+* Install protobuf.wheel found in cura-build-binaries (TODO: create cura-build-binaries repo)
+* Create empty __init__.py in c:\Python34\Lib\site-packages\google (TODO: make it part of the proto.wheel installation)
 
 ```shell
 REM 32-bit
