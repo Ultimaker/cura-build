@@ -62,11 +62,38 @@ set(EXTRA_REPOSITORIES "" CACHE STRING "Extra repositories to install. Expected 
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 set(EXTERNALPROJECT_SITEPACKAGES_DIR ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages)
 
-set(CURA_MAJOR_VERSION "2" CACHE STRING "Cura Major Version")
-set(CURA_MINOR_VERSION "0" CACHE STRING "Cura Minor Version")
-set(CURA_PATCH_VERSION "99" CACHE STRING "Cura Patch Version")
-set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Information")
+if(DEFINED ENV{CURA_MAJOR_VERSION})
+    set(CURA_MAJOR_VERSION $ENV{CURA_MAJOR_VERSION} CACHE STRING "Cura Major Version" FORCE)
+else()
+    set(CURA_MAJOR_VERSION "2" CACHE STRING "Cura Major Version")
+endif()
+
+if(DEFINED ENV{CURA_MINOR_VERSION})
+    set(CURA_MINOR_VERSION $ENV{CURA_MINOR_VERSION} CACHE STRING "Cura Minor Version" FORCE)
+else()
+    set(CURA_MINOR_VERSION "0" CACHE STRING "Cura Minor Version")
+endif()
+
+if(DEFINED ENV{CURA_PATCH_VERSION})
+    set(CURA_PATCH_VERSION $ENV{CURA_PATCH_VERSION} CACHE STRING "Cura Patch Version" FORCE)
+else()
+    set(CURA_PATCH_VERSION "99" CACHE STRING "Cura Patch Version")
+endif()
+
+if(DEFINED ENV{CURA_EXTRA_VERSION})
+    set(CURA_EXTRA_VERSION $ENV{CURA_EXTRA_VERSION} CACHE STRING "Cura Extra Version Information" FORCE)
+else()
+    set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Information")
+endif()
+
 set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}-${CURA_EXTRA_VERSION}")
+
+message(STATUS "Building Cura ${CURA_VERSION}")
+
+if(BUILD_OS_WIN32)
+    # To deal with stupid setuptools not creating install directories
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages)
+endif()
 
 if(BUILD_PYTHON)
     if(APPLE)
