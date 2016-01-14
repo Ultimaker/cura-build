@@ -506,22 +506,16 @@ elseif(BUILD_OS_WINDOWS)
 elseif(BUILD_OS_LINUX)
     set(CPACK_GENERATOR "DEB")
 
-    set(CPACK_INSTALL_CMAKE_PROJECTS
-        "${CMAKE_BINARY_DIR}/Arcus-prefix/src/Arcus-build;Arcus;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/CuraEngine-prefix/src/CuraEngine-build;CuraEngine;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/Uranium-prefix/src/Uranium-build;Uranium;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/Cura-prefix/src/Cura-build;Cura;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/Cura-PostProcessing-prefix/src/Cura-PostProcessing-build;Cura-PostProcessing;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/cura-binary-data-prefix/src/cura-binary-data-build;cura-binary-data;ALL;/usr"
+    set(CPACK_INSTALL_CMAKE_PROJECTS "")
+
+    set(CPACK_INSTALLED_DIRECTORIES 
+        "${CMAKE_BINARY_DIR}/inst/bin;/opt/cura/bin"
+        "${CMAKE_BINARY_DIR}/inst/lib;/opt/cura/lib"
+        "${CMAKE_BINARY_DIR}/inst/share;/opt/cura/share"
     )
 
-    foreach(repo ${EXTRA_REPOSITORIES})
-        separate_arguments(items UNIX_COMMAND "${repo}")
-        list(GET items 0 name)
-        list(APPEND CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR}/${name}-prefix/src/${name}-build;${name};ALL;/usr")
-    endforeach()
-
-    set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/inst/lib/python3/dist-packages/google;/usr/lib/python3/dist-packages/google")
+    install(FILES cura DESTINATION bin)
+    install(FILES cura.desktop DESTINATION share/applications)
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
@@ -550,22 +544,11 @@ set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
 
 set(DEB_DEPENDS
     "python3 (>= 3.4.0)"
-    "python3-pyqt5 (>= 5.4.0)"
-    "python3-pyqt5.qtopengl (>= 5.4.0)"
-    "python3-pyqt5.qtquick (>= 5.4.0)"
-    "python3-pyqt5.qtsvg (>= 5.4.0)"
-    "python3-numpy (>= 1.8.0)"
-    "python3-serial (>= 2.6)"
     "python3-opengl (>= 3.0)"
-    "qml-module-qtquick2 (>= 5.4.0)"
-    "qml-module-qtquick-window2 (>= 5.4.0)"
-    "qml-module-qtquick-layouts (>= 5.4.0)"
-    "qml-module-qtquick-dialogs (>= 5.4.0)"
-    "qml-module-qtquick-controls (>= 5.4.0)"
+    "libopenblas-base"
 )
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS ${DEB_DEPENDS})
-set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "python3-scipy (>= 0.14)")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
 # Set the right epoch so Debian knows this is a more recent version
 set(CPACK_DEBIAN_PACKAGE_VERSION "2:${CPACK_PACKAGE_VERSION}")

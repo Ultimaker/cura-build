@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Cura
+GenericName=3D Printing Software
+Comment=
+Exec=/usr/bin/cura
+TryExec=/usr/bin/cura
+Icon=/opt/cura/share/cura/resources/images/cura-icon.png
+Terminal=false
+Type=Application
+MimeType=application/sla
+Categories=Graphics;
+Keywords=3D;Printing;
