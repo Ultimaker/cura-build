@@ -54,11 +54,16 @@ Dependencies:
 * python3-numpy (>= 1.8.0)
 * python3-serial (>= 2.6)
 * python3-opengl (>= 3.0)
+* python3-setuptools
+* python3-dev
 * qml-module-qtquick2 (>= 5.4.0)
 * qml-module-qtquick-window2 (>= 5.4.0)
 * qml-module-qtquick-layouts (>= 5.4.0)
 * qml-module-qtquick-dialogs (>= 5.4.0)
 * qml-module-qtquick-controls (>= 5.4.0)
+* zlib1g
+* build-essential
+* cmake
 
 To build, make sure these dependencies are installed, then clone this repository and run the following commands from your clone:
 
