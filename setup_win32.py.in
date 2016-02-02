@@ -10,6 +10,7 @@ import os
 import re
 import shutil
 import site
+import Arcus
 
 # work around the limitation that shutil.copytree does not allow the target directory to exist
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -30,10 +31,7 @@ includes = [
     "PyQt5.QtNetwork", 
     "PyQt5._QOpenGLFunctions_2_0",
     "serial",
-    "Arcus", 
-    "google",
-    "google.protobuf", 
-    "google.protobuf.descriptor",
+    "Arcus",
     "xml.etree",
     "xml.etree.ElementTree",
     "cura",
