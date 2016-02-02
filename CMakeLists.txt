@@ -256,7 +256,7 @@ if(BUILD_PYQT)
         BUILD_IN_SOURCE 1
     )
 else()
-    add_custom_target(sip)
+    add_custom_target(Sip)
     add_custom_target(PyQt)
 endif()
 
@@ -327,7 +327,7 @@ if(BUILD_OS_WIN64)
 endif()
 
 ExternalProject_Add(Arcus
-    DEPENDS Python Protobuf sip
+    DEPENDS Python Protobuf Sip
     GIT_REPOSITORY https://github.com/ultimaker/libArcus
     GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${ARCUS_EXTRA_ARGS}
