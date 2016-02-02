@@ -256,6 +256,7 @@ if(BUILD_PYQT)
         BUILD_IN_SOURCE 1
     )
 else()
+    add_custom_target(sip)
     add_custom_target(PyQt)
 endif()
 
@@ -320,55 +321,16 @@ ExternalProject_Add(Protobuf
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=${protobuf_cxx_flags} -G ${CMAKE_GENERATOR} ../Protobuf/cmake
 )
 
-# We need the C++ implementation of python-protobuf. However, that currently does not build on 64-bit Windows with MinGW.
-# So instead make sure to have python-protobuf available in your Python installation.
-if(NOT BUILD_OS_WIN64)
-    if(BUILD_OS_OSX)
-        # Protobuf-python-cpp includes a really ugly and nasty hack that checks whether the function
-        # being called is being called from a file ending in "_pb2.py". This fails on OSX with Py2App
-        # because it gets called from a "_pb2.pyc" file. This removes the check and makes the function
-        # always return true.
-        set(patch_command sed -i".bak" "95,132d" <SOURCE_DIR>/python/google/protobuf/pyext/descriptor.cc)
-    endif()
-
-    if(BUILD_OS_WINDOWS)
-        set(build_command ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
-    else()
-        set(build_command "LDFLAGS=-L${EXTERNALPROJECT_INSTALL_PREFIX}/lib" "PROTOC=${EXTERNALPROJECT_INSTALL_PREFIX}/bin/protoc" ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
-    endif()
-
-    ExternalProject_Add(Protobuf-python
-        DEPENDS Protobuf Python
-        GIT_REPOSITORY https://github.com/google/protobuf
-        PATCH_COMMAND ${patch_command}
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND cd python && ${build_command}
-        INSTALL_COMMAND cd python && ${PYTHON_EXECUTABLE} setup.py install --cpp_implementation ${python_install}
-        BUILD_IN_SOURCE 1
-    )
-    
-    # Workaround for stupid combo of setuptools and Protobuf build setup
-    # Setuptools will not look in $prefix or allow us to override linker search dirs
-    # Protobuf also does not specify any dirs and only specifies $srcdir/src/.libs as
-    # additional search dir. So we copy the protobuf lib there so LD can find it.
-    # Did I mention that setuptools is stupid?
-    if(BUILD_OS_WINDOWS)
-        ExternalProject_Add_Step(Protobuf-python copy-libproto
-            COMMAND ${CMAKE_COMMAND} -E make_directory <SOURCE_DIR>/src/.libs
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/inst/lib/libprotobuf.a <SOURCE_DIR>/src/.libs
-            DEPENDEES update
-            DEPENDERS build
-        )
-    endif()
-else()
-    add_custom_target(Protobuf-python)
+if(BUILD_OS_WIN64)
+    # Due to problems building Python modules on Win64 we currently need to disable building Arcus.
+    set(ARCUS_EXTRA_ARGS -DBUILD_PYTHON=OFF)
 endif()
 
-ExternalProject_Add(Arcus 
-    DEPENDS Python Protobuf Protobuf-python
+ExternalProject_Add(Arcus
+    DEPENDS Python Protobuf sip
     GIT_REPOSITORY https://github.com/ultimaker/libArcus
-    GIT_TAG ${TAG_OR_BRANCH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON
+    GIT_TAG origin/${TAG_OR_BRANCH}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${ARCUS_EXTRA_ARGS}
 )
 
 ExternalProject_Add(CuraEngine
