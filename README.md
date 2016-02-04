@@ -99,6 +99,12 @@ Dependencies:
 To build, make sure these dependencies are installed, then clone this repository and run the following commands from your clone:
 
 ```shell
+sudo apt-get install python3 python3-pyqt5 python3-pyqt5.qtopengl python3-pyqt5.qtquick python3-pyqt5.qtsvg python3-numpy python3-serial python3-opengl qml-module-qtquick2 qml-module-qtquick-window2 qml-module-qtquick-layouts qml-module-qtquick-dialogs qml-module-qtquick-controls
+git clone http://github.com/Ultimaker/cura-build
+cd cura-build
+```
+
+```shell
 mkdir build
 cd build
 cmake ..
