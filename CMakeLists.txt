@@ -484,14 +484,19 @@ elseif(BUILD_OS_LINUX)
 
     set(CPACK_INSTALL_CMAKE_PROJECTS "")
 
-    set(CPACK_INSTALLED_DIRECTORIES 
+    set(CPACK_INSTALLED_DIRECTORIES
         "${CMAKE_BINARY_DIR}/inst/bin;/opt/cura/bin"
         "${CMAKE_BINARY_DIR}/inst/lib;/opt/cura/lib"
         "${CMAKE_BINARY_DIR}/inst/share;/opt/cura/share"
     )
 
-    install(PROGRAMS cura DESTINATION bin)
-    install(PROGRAMS cura.desktop DESTINATION share/applications)
+    set(package_dir "_CPack_Packages/Linux/${CPACK_GENERATOR}/Cura-${CURA_VERSION}-Linux/")
+    set(CPACK_INSTALL_COMMANDS
+        "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/bin"
+        "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/share/applications"
+        "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura ${package_dir}/usr/bin/"
+        "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura.desktop ${package_dir}/usr/share/applications/"
+    )
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
