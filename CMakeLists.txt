@@ -276,8 +276,13 @@ elseif(BUILD_OS_LINUX)
 endif()
 
 if(BUILD_NUMPY)
+    ExternalProject_Add(OpenBLAS
+        URL https://github.com/xianyi/OpenBLAS/archive/v0.2.15.tar.gz
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    )
+
     ExternalProject_Add(Numpy
-        DEPENDS Python
+        DEPENDS Python OpenBLAS
         URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
         URL_MD5 a1ed53432dbcd256398898d35bc8e645
         CONFIGURE_COMMAND ""
