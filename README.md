@@ -90,6 +90,7 @@ Dependencies:
 * python3-pyqt5.qtsvg (>= 5.4.0)
 * python3-numpy (>= 1.8.0)
 * python3-serial (>= 2.6)
+* python3-sip-dev
 * python3-opengl (>= 3.0)
 * qml-module-qtquick2 (>= 5.4.0)
 * qml-module-qtquick-window2 (>= 5.4.0)
