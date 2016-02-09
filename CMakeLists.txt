@@ -275,29 +275,47 @@ elseif(BUILD_OS_LINUX)
     )
 endif()
 
-if(BUILD_NUMPY)
+if((BUILD_NUMPY OR BUILD_SCIPY) AND BUILD_OS_LINUX)
     ExternalProject_Add(OpenBLAS
         URL https://github.com/xianyi/OpenBLAS/archive/v0.2.15.tar.gz
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        CONFIGURE_COMMAND ""
+        INSTALL_COMMAND make PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} install
+        BUILD_IN_SOURCE 1
     )
+else()
+    add_custom_target(OpenBLAS)
+endif()
+
+if(BUILD_NUMPY)
+    set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
+    if(BUILD_OS_LINUX)
+        # Inform numpy about using OpenBLAS
+        set(build_numpy "BLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.a" ${build_numpy})
+    endif()
 
     ExternalProject_Add(Numpy
         DEPENDS Python OpenBLAS
         URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
         URL_MD5 a1ed53432dbcd256398898d35bc8e645
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        BUILD_COMMAND ${build_numpy}
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
         BUILD_IN_SOURCE 1
     )
 endif()
 
 if(BUILD_SCIPY)
+    set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
+    if(BUILD_OS_LINUX)
+        # Inform scipy about using OpenBLAS
+        set(build_scipy "BLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.a" ${build_numpy})
+    endif()
+
     ExternalProject_Add(Scipy
         DEPENDS Python Numpy
         URL http://downloads.sourceforge.net/project/scipy/scipy/0.16.1/scipy-0.16.1.tar.gz
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        BUILD_COMMAND ${build_scipy}
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
         BUILD_IN_SOURCE 1
     )
@@ -530,8 +548,9 @@ set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
 
 set(DEB_DEPENDS
     "python3 (>= 3.4.0)"
+    "python3 (<< 3.5.0)"
     "python3-opengl (>= 3.0)"
-    "libopenblas-base"
+    "libgfortran3"
 )
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS ${DEB_DEPENDS})
