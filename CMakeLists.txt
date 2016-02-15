@@ -279,7 +279,7 @@ if((BUILD_NUMPY OR BUILD_SCIPY) AND BUILD_OS_LINUX)
     ExternalProject_Add(OpenBLAS
         URL https://github.com/xianyi/OpenBLAS/archive/v0.2.15.tar.gz
         CONFIGURE_COMMAND ""
-        INSTALL_COMMAND make PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} install
+        INSTALL_COMMAND make PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} TARGET=NEHALEM install
         BUILD_IN_SOURCE 1
     )
 else()
