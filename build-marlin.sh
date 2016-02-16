@@ -1,5 +1,5 @@
 #Set path to Arduino headers and compilers and such.
-ARDUINO_PATH=/usr/share/arduino
+ARDUINO_PATH=/home/ruben/Applications/arduino-1.0.5
 PATH=${ARDUINO_PATH}/hardware/tools/avr/bin:${ARDUINO_PATH}/hardware/tools/avr/tools/bin:$PATH
 ARDUINO_VERSION=105
 CURA_VERSION=2.1
@@ -35,10 +35,10 @@ function makeAndCopy
 #Building the actual firmware!
 
 #Ultimaker Original
-makeAndCopy MarlinUltimaker-115200 Marlin Marlin_v1 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"115200_single\" BAUDRATE=115200 TEMP_SENSOR_1=0 EXTRUDERS=1"
-makeAndCopy MarlinUltimaker-250000 Marlin Marlin_v1 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"250000_single\" BAUDRATE=250000 TEMP_SENSOR_1=0 EXTRUDERS=1"
-makeAndCopy MarlinUltimaker-115200-dual Marlin Marlin_v1 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"115200_dual\" BAUDRATE=115200 TEMP_SENSOR_1=-1 EXTRUDERS=2"
-makeAndCopy MarlinUltimaker-250000-dual Marlin Marlin_v1 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"250000_dual\" BAUDRATE=250000 TEMP_SENSOR_1=-1 EXTRUDERS=2"
+makeAndCopy MarlinUltimaker-115200 Marlin Marlin_v1 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"115200_single\"' BAUDRATE=115200 TEMP_SENSOR_1=0 EXTRUDERS=1"
+makeAndCopy MarlinUltimaker-250000 Marlin Marlin_v1 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"250000_single\"' BAUDRATE=250000 TEMP_SENSOR_1=0 EXTRUDERS=1"
+makeAndCopy MarlinUltimaker-115200-dual Marlin Marlin_v1 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"115200_dual\"' BAUDRATE=115200 TEMP_SENSOR_1=-1 EXTRUDERS=2"
+makeAndCopy MarlinUltimaker-250000-dual Marlin Marlin_v1 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"250000_dual\"' BAUDRATE=250000 TEMP_SENSOR_1=-1 EXTRUDERS=2"
 makeAndCopy MarlinUltimaker-HBK-115200 Marlin Marlin_UM_HeatedBedUpgrade 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"115200_single_HB\"' BAUDRATE=115200 TEMP_SENSOR_1=0 EXTRUDERS=1"
 makeAndCopy MarlinUltimaker-HBK-250000 Marlin Marlin_UM_HeatedBedUpgrade 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"250000_single_HB\"' BAUDRATE=250000 TEMP_SENSOR_1=0 EXTRUDERS=1"
 makeAndCopy MarlinUltimaker-HBK-115200-dual Marlin Marlin_UM_HeatedBedUpgrade 7 "'VERSION_BASE=\"Ultimaker:_${CURA_VERSION}\"' 'VERSION_PROFILE=\"115200_dual_HB\"' BAUDRATE=115200 TEMP_SENSOR_1=-1 EXTRUDERS=2"
