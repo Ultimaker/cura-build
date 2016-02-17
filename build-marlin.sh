@@ -8,6 +8,7 @@ CURA_VERSION=2.1
 git clone https://github.com/Ultimaker/cura-binary-data.git
 cd cura-binary-data
 git checkout 2.1 #TODO: Set this properly?
+git pull #Just to be sure, in case the repository already existed.
 cd ..
 
 #Helper functions.
