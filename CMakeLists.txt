@@ -170,6 +170,8 @@ if(BUILD_QT)
         list(APPEND qt_options -no-framework)
     elseif(BUILD_OS_WINDOWS)
         list(APPEND qt_options -opengl desktop)
+    elseif(BUILD_OS_LINUX)
+        list(APPEND qt_options -no-rpath)
     endif()
 
     ExternalProject_Add(Qt
