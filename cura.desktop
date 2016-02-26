@@ -2,7 +2,7 @@
 Name=Cura
 GenericName=3D Printing Software
 Comment=
-Exec=/usr/bin/cura
+Exec=/usr/bin/cura %F
 TryExec=/usr/bin/cura
 Icon=/opt/cura/share/cura/resources/images/cura-icon.png
 Terminal=false
