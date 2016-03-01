@@ -490,13 +490,13 @@ elseif(BUILD_OS_WINDOWS)
 
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/ DESTINATION "." USE_SOURCE_PERMISSIONS COMPONENT "cura")
 
-	if(BUILD_OS_WIN32)
-		install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
-	else()
-		install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x64.exe DESTINATION "." COMPONENT "vcredist")
-	endif()
+    if(BUILD_OS_WIN32)
+        install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x32.exe DESTINATION "." COMPONENT "vcredist")
+    else()
+        install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x64.exe DESTINATION "." COMPONENT "vcredist")
+    endif()
 
-	install(DIRECTORY ${EXTERNALPROJECT_INSTALL_PREFIX}/arduino DESTINATION "." COMPONENT "arduino")
+    install(DIRECTORY ${EXTERNALPROJECT_INSTALL_PREFIX}/arduino DESTINATION "." COMPONENT "arduino")
 
     include(CPackComponent)
     cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
@@ -567,5 +567,10 @@ set(CPACK_NSIS_MENU_LINKS
     "https://ultimaker.com/en/support/software" "Cura Online Documentation"
     "https://github.com/ultimaker/cura" "Cura Development Resources"
 )
+if(BUILD_OS_WIN32)
+    set(CPACK_NSIS_PACKAGE_ARCHITECTURE "32")
+else()
+    set(CPACK_NSIS_PACKAGE_ARCHITECTURE "64")
+endif()
 
 include(CPack)
