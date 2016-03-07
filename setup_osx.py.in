@@ -105,3 +105,22 @@ for path, dirs, files in os.walk("dist/Cura.app/Contents"):
         if "debug" in file:
             print("Removing {0}".format(file))
             os.remove(os.path.join(path, file))
+
+# Py2App does not handle @rpath properly and fails to find the required libraries.
+# So we need to copy it manually.
+shutil.copy("inst/lib/libQt5Core.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5Core.5.dylib")
+shutil.copy("inst/lib/libQt5Gui.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5Gui.5.dylib")
+shutil.copy("inst/lib/libQt5MacExtras.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5MacExtras.5.dylib")
+shutil.copy("inst/lib/libQt5Network.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5Network.5.dylib")
+shutil.copy("inst/lib/libQt5OpenGL.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5OpenGL.5.dylib")
+shutil.copy("inst/lib/libQt5Qml.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5Qml.5.dylib")
+shutil.copy("inst/lib/libQt5Quick.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5Quick.5.dylib")
+shutil.copy("inst/lib/libQt5QuickWidgets.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5QuickWidgets.5.dylib")
+shutil.copy("inst/lib/libQt5Svg.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5Svg.5.dylib")
+shutil.copy("inst/lib/libQt5Widgets.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5Widgets.5.dylib")
+shutil.copy("inst/lib/libQt5Xml.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5Xml.5.dylib")
+shutil.copy("inst/lib/libQt5DBus.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5DBus.5.dylib")
+shutil.copy("inst/lib/libQt5PrintSupport.5.dylib", "dist/Cura.app/Contents/Frameworks/libQt5PrintSupport.5.dylib")
+
+# Ensure we set the right @rpath value.
+os.system("install_name_tool -add_rpath @executable_path/../Frameworks dist/Cura.app/Contents/MacOS/Cura")

@@ -7,10 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(ExternalProject)
 include(GNUInstallDirs)
 
-if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.7")
-endif()
-
+# Define Options
 option(BUILD_PYTHON "Include Python" ON)
 option(BUILD_QT "Include Qt" ON)
 option(BUILD_PYQT "Include PyQt" ON)
@@ -22,8 +19,35 @@ if(WIN32)
     option(BUILD_64BIT "Create a 64-bit build" OFF)
 endif()
 
-if(WIN32)
-    if (BUILD_64BIT)
+# Create variables to simplify OS management
+set(BUILD_OS_OSX OFF)
+set(BUILD_OS_LINUX OFF)
+set(BUILD_OS_WINDOWS OFF)
+set(BUILD_OS_WIN32 OFF)
+set(BUILD_OS_WIN64 OFF)
+
+if(CYGWIN)
+    message(FATAL_ERROR "Cygwin is not supported")
+endif()
+
+if(APPLE)
+    set(BUILD_OS_OSX ON)
+elseif(WIN32)
+    set(BUILD_OS_WINDOWS ON)
+    if(BUILD_64BIT)
+        set(BUILD_OS_WIN64 ON)
+    else()
+        set(BUILD_OS_WIN32 ON)
+    endif()
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(BUILD_OS_LINUX ON)
+else()
+    message(FATAL_ERROR "Unsupported Operating System: ${CMAKE_SYSTEM_NAME}")
+endif()
+
+# Explicitly disable unsupported options
+if(BUILD_OS_WINDOWS)
+    if(BUILD_OS_WIN64)
         set(BUILD_PYTHON OFF)
         set(BUILD_QT OFF)
         set(BUILD_PYQT OFF) #PyQt Fails to properly build with MinGW 64-bit
@@ -32,13 +56,8 @@ if(WIN32)
     else()
         set(BUILD_PYTHON OFF)
     endif()
-elseif(NOT APPLE)
+elseif(BUILD_OS_LINUX)
     set(BUILD_PYTHON OFF)
-    set(BUILD_QT OFF)
-    set(BUILD_PYQT OFF)
-    set(BUILD_NUMPY OFF)
-    set(BUILD_SCIPY OFF)
-    set(BUILD_PYSERIAL OFF)
 endif()
 
 set(TAG_OR_BRANCH "2.1" CACHE STRING "The name of the tag or branch to build")
@@ -46,15 +65,51 @@ set(EXTRA_REPOSITORIES "" CACHE STRING "Extra repositories to install. Expected 
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 set(EXTERNALPROJECT_SITEPACKAGES_DIR ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages)
 
-set(CURA_MAJOR_VERSION "2" CACHE STRING "Cura Major Version")
-set(CURA_MINOR_VERSION "0" CACHE STRING "Cura Minor Version")
-set(CURA_PATCH_VERSION "99" CACHE STRING "Cura Patch Version")
-set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Information")
+# Create the version-related variables
+# These can optionally be overridden from the build enviroment.
+if(DEFINED ENV{CURA_MAJOR_VERSION})
+    set(CURA_MAJOR_VERSION $ENV{CURA_MAJOR_VERSION} CACHE STRING "Cura Major Version" FORCE)
+else()
+    set(CURA_MAJOR_VERSION "2" CACHE STRING "Cura Major Version")
+endif()
+
+if(DEFINED ENV{CURA_MINOR_VERSION})
+    set(CURA_MINOR_VERSION $ENV{CURA_MINOR_VERSION} CACHE STRING "Cura Minor Version" FORCE)
+else()
+    set(CURA_MINOR_VERSION "0" CACHE STRING "Cura Minor Version")
+endif()
+
+if(DEFINED ENV{CURA_PATCH_VERSION})
+    set(CURA_PATCH_VERSION $ENV{CURA_PATCH_VERSION} CACHE STRING "Cura Patch Version" FORCE)
+else()
+    set(CURA_PATCH_VERSION "99" CACHE STRING "Cura Patch Version")
+endif()
+
+if(DEFINED ENV{CURA_EXTRA_VERSION})
+    set(CURA_EXTRA_VERSION $ENV{CURA_EXTRA_VERSION} CACHE STRING "Cura Extra Version Information" FORCE)
+else()
+    set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Information")
+endif()
+
 set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}-${CURA_EXTRA_VERSION}")
 
+message(STATUS "Building Cura ${CURA_VERSION}")
+
+if(BUILD_OS_WIN32)
+    # To deal with stupid setuptools not creating install directories
+    file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages)
+endif()
+
 if(BUILD_PYTHON)
+    if(APPLE)
+        # See http://bugs.python.org/issue21381
+        # The interpreter crashes when MACOSX_DEPLOYMENT_TARGET=10.7 due to the increased stack size.
+        set(patch_command sed -i".bak" "8704,8704d" <SOURCE_DIR>/configure)
+    endif()
+
     ExternalProject_Add(Python
         URL https://www.python.org/ftp/python/3.4.3/Python-3.4.3.tgz
+        PATCH_COMMAND ${patch_command}
         CONFIGURE_COMMAND ./configure --prefix=${EXTERNALPROJECT_INSTALL_PREFIX} --enable-shared --with-threads --without-pymalloc
         BUILD_IN_SOURCE 1
     )
@@ -70,7 +125,9 @@ endif()
 if(BUILD_QT)
     set(qt_url http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz)
     set(qt_md5 59f0216819152b77536cf660b015d784)
-    if(WIN32)
+
+    # Qt uses different sources for Windows 
+    if(BUILD_OS_WINDOWS)
         set(qt_url http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.zip)
         set(qt_md5 d071cdaa1b8f34fb49f6deac94039c2c)
     endif()
@@ -84,6 +141,7 @@ if(BUILD_QT)
         -confirm-license
         -nomake examples
         -nomake tests
+        -nomake tools
         -no-cups
         -skip qtconnectivity
         -skip qtdoc
@@ -108,10 +166,12 @@ if(BUILD_QT)
         -skip qtwebkit-examples
     )
 
-    if(APPLE)
+    if(BUILD_OS_OSX)
         list(APPEND qt_options -no-framework)
-    elseif(WIN32)
+    elseif(BUILD_OS_WINDOWS)
         list(APPEND qt_options -opengl desktop)
+    elseif(BUILD_OS_LINUX)
+        list(APPEND qt_options -no-rpath)
     endif()
 
     ExternalProject_Add(Qt
@@ -126,7 +186,7 @@ endif()
 
 if(BUILD_PYQT)
     set(sip_command "")
-    if(WIN32)
+    if(BUILD_OS_WINDOWS)
         set(sip_command
             ${PYTHON_EXECUTABLE}
             configure.py
@@ -138,7 +198,16 @@ if(BUILD_PYQT)
             "CFLAGS+=${CMAKE_C_FLAGS}"
             "CXXFLAGS+=${CMAKE_CXX_FLAGS}"
         )
-    else()
+    elseif(BUILD_OS_LINUX)
+        set(sip_command
+            ${PYTHON_EXECUTABLE}
+            configure.py
+            --bindir=${EXTERNALPROJECT_INSTALL_PREFIX}/bin
+            --destdir=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages
+            --incdir=${EXTERNALPROJECT_INSTALL_PREFIX}/include
+            --sipdir=${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
+        )
+    elseif(BUILD_OS_OSX)
         set(sip_command ${PYTHON_EXECUTABLE} configure.py --sysroot=${EXTERNALPROJECT_INSTALL_PREFIX})
     endif()
 
@@ -150,7 +219,7 @@ if(BUILD_PYQT)
     )
 
     set(pyqt_command "")
-    if(WIN32)
+    if(BUILD_OS_WINDOWS)
         set(pyqt_command
             ${PYTHON_EXECUTABLE} configure.py
             --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip.exe
@@ -162,9 +231,19 @@ if(BUILD_PYQT)
             "CFLAGS+=${CMAKE_C_FLAGS}"
             "CXXFLAGS+=${CMAKE_CXX_FLAGS}"
         )
-    else()
+    elseif(BUILD_OS_LINUX)
         set(pyqt_command
-             ${PYTHON_EXECUTABLE} configure.py
+            ${PYTHON_EXECUTABLE} configure.py
+            --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip
+            --qmake ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/qmake
+            --confirm-license
+            --destdir ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages
+            --bindir ${EXTERNALPROJECT_INSTALL_PREFIX}/bin
+            --sipdir ${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
+        )
+    elseif(BUILD_OS_OSX)
+        set(pyqt_command
+            ${PYTHON_EXECUTABLE} configure.py
             --sysroot ${EXTERNALPROJECT_INSTALL_PREFIX}
             --qmake ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/qmake
             --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip
@@ -179,10 +258,11 @@ if(BUILD_PYQT)
         BUILD_IN_SOURCE 1
     )
 else()
+    add_custom_target(Sip)
     add_custom_target(PyQt)
 endif()
 
-if(WIN32)
+if(BUILD_OS_WINDOWS)
     # Because setuptools is stupid and will interpret "C:/..." as a relative path
     string(REPLACE "/" "\\" native_prefix ${EXTERNALPROJECT_INSTALL_PREFIX})
     set(python_install
@@ -190,32 +270,54 @@ if(WIN32)
         --install-data=${native_prefix}\\share
         --install-scripts=${native_prefix}\\bin
     )
-elseif(NOT APPLE)
+elseif(BUILD_OS_LINUX)
     set(python_install
         --root=${EXTERNALPROJECT_INSTALL_PREFIX}
-        --single-version-externally-managed
         --install-lib=lib/python3/dist-packages
     )
 endif()
 
+if((BUILD_NUMPY OR BUILD_SCIPY) AND BUILD_OS_LINUX)
+    ExternalProject_Add(OpenBLAS
+        URL https://github.com/xianyi/OpenBLAS/archive/v0.2.15.tar.gz
+        CONFIGURE_COMMAND ""
+        INSTALL_COMMAND make PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} TARGET=NEHALEM install
+        BUILD_IN_SOURCE 1
+    )
+else()
+    add_custom_target(OpenBLAS)
+endif()
+
 if(BUILD_NUMPY)
+    set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
+    if(BUILD_OS_LINUX)
+        # Inform numpy about using OpenBLAS
+        set(build_numpy "BLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.a" ${build_numpy})
+    endif()
+
     ExternalProject_Add(Numpy
-        DEPENDS Python
+        DEPENDS Python OpenBLAS
         URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
         URL_MD5 a1ed53432dbcd256398898d35bc8e645
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        BUILD_COMMAND ${build_numpy}
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
         BUILD_IN_SOURCE 1
     )
 endif()
 
 if(BUILD_SCIPY)
+    set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
+    if(BUILD_OS_LINUX)
+        # Inform scipy about using OpenBLAS
+        set(build_scipy "BLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.a" ${build_numpy})
+    endif()
+
     ExternalProject_Add(Scipy
         DEPENDS Python Numpy
         URL http://downloads.sourceforge.net/project/scipy/scipy/0.16.1/scipy-0.16.1.tar.gz
         CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        BUILD_COMMAND ${build_scipy}
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
         BUILD_IN_SOURCE 1
     )
@@ -233,93 +335,61 @@ if(BUILD_PYSERIAL)
     )
 endif()
 
-ExternalProject_Add(Protobuf
-    GIT_REPOSITORY https://github.com/google/protobuf
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=-fPIC -G ${CMAKE_GENERATOR} ../Protobuf/cmake
-)
-
-# We need the C++ implementation of python-protobuf. However, that currently does not build with MinGW.
-# So instead make sure to have python-protobuf available in your Python installation.
-if(NOT BUILD_64BIT)
-    if(APPLE)
-        # Protobuf-python-cpp includes a really ugly and nasty hack that checks whether the function
-        # being called is being called from a file ending in "_pb2.py". This fails on OSX with Py2App
-        # because it gets called from a "_pb2.pyc" file. This removes the check and makes the function
-        # always return true.
-        set(patch_command sed -i".bak" "95,132d" <SOURCE_DIR>/python/google/protobuf/pyext/descriptor.cc)
-    endif()
-
-    if(WIN32)
-        set(build_command ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
-    else()
-        set(build_command "LDFLAGS=-L${EXTERNALPROJECT_INSTALL_PREFIX}/lib" "PROTOC=${EXTERNALPROJECT_INSTALL_PREFIX}/bin/protoc" ${PYTHON_EXECUTABLE} setup.py build --cpp_implementation)
-    endif()
-
-    ExternalProject_Add(Protobuf-python
-        DEPENDS Protobuf Python
-        GIT_REPOSITORY https://github.com/google/protobuf
-        PATCH_COMMAND ${patch_command}
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND cd python && ${build_command}
-        INSTALL_COMMAND cd python && ${PYTHON_EXECUTABLE} setup.py install --cpp_implementation ${python_install}
-        BUILD_IN_SOURCE 1
-    )
-    
-    # Workaround for stupid combo of setuptools and Protobuf build setup
-    # Setuptools will not look in $prefix or allow us to override linker search dirs
-    # Protobuf also does not specify any dirs and only specifies $srcdir/src/.libs as
-    # additional search dir. So we copy the protobuf lib there so LD can find it.
-    # Did I mention that setuptools is stupid?
-    if(WIN32)
-        ExternalProject_Add_Step(Protobuf-python copy-libproto
-            COMMAND ${CMAKE_COMMAND} -E make_directory <SOURCE_DIR>/src/.libs
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/inst/lib/libprotobuf.a <SOURCE_DIR>/src/.libs
-            DEPENDEES update
-            DEPENDERS build
-        )
-    endif()
+if(BUILD_OS_OSX)
+    set(protobuf_cxx_flags "-fPIC -std=c++11 -stdlib=libc++")
 else()
-    add_custom_target(Protobuf-python)
+    set(protobuf_cxx_flags "-fPIC -std=c++11")
 endif()
 
-ExternalProject_Add(Arcus 
-    DEPENDS Python Protobuf Protobuf-python
+ExternalProject_Add(Protobuf
+    URL https://github.com/google/protobuf/archive/v3.0.0-beta-2.tar.gz
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=${protobuf_cxx_flags} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -G ${CMAKE_GENERATOR} ../Protobuf/cmake
+)
+
+if(BUILD_OS_WIN64)
+    # Due to problems building Python modules on Win64 we currently need to disable building Arcus.
+    set(ARCUS_EXTRA_ARGS -DBUILD_PYTHON=OFF)
+endif()
+
+ExternalProject_Add(Arcus
+    DEPENDS Python Protobuf Sip
     GIT_REPOSITORY https://github.com/ultimaker/libArcus
-    GIT_TAG ${TAG_OR_BRANCH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON
+    GIT_TAG origin/${TAG_OR_BRANCH}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${ARCUS_EXTRA_ARGS}
 )
 
 ExternalProject_Add(CuraEngine
     DEPENDS Arcus
     GIT_REPOSITORY https://github.com/ultimaker/CuraEngine
-    GIT_TAG ${TAG_OR_BRANCH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release -DCURA_ENGINE_VERSION=${CURA_VERSION}
+    GIT_TAG origin/${TAG_OR_BRANCH}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCURA_ENGINE_VERSION=${CURA_VERSION} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 )
 
 ExternalProject_Add(Uranium
     DEPENDS PyQt Arcus
     GIT_REPOSITORY https://github.com/ultimaker/Uranium
-    GIT_TAG ${TAG_OR_BRANCH}
+    GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
 ExternalProject_Add(Cura
     DEPENDS Uranium CuraEngine
     GIT_REPOSITORY https://github.com/ultimaker/Cura
-    GIT_TAG ${TAG_OR_BRANCH}
+    GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DURANIUM_SCRIPTS_DIR= -DCURA_VERSION=${CURA_VERSION}
 )
 
 ExternalProject_Add(Cura-PostProcessing
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/nallath/PostProcessingPlugin
+    GIT_TAG origin/master
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
 ExternalProject_Add(cura-binary-data
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/ultimaker/cura-binary-data
-    GIT_TAG ${TAG_OR_BRANCH}
+    GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
@@ -336,11 +406,12 @@ foreach(repo ${EXTRA_REPOSITORIES})
 
     ExternalProject_Add(${name}
         GIT_REPOSITORY ${repo}
+        GIT_TAG origin/master
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} ${cmake}
     )
 endforeach()
 
-if(APPLE)
+if(BUILD_OS_OSX)
     ExternalProject_Add(Py2App
         DEPENDS Python
         URL https://pypi.python.org/packages/source/p/py2app/py2app-0.9.tar.gz
@@ -349,7 +420,7 @@ if(APPLE)
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install
         BUILD_IN_SOURCE 1
     )
-elseif(WIN32)
+elseif(BUILD_OS_WINDOWS)
     # Currently, py2exe can not be built with MinGW since the code apparently uses
     # a lot of MSVC-isms. So instead, install py2exe in your Python installation and
     # use that.
@@ -363,9 +434,9 @@ elseif(WIN32)
     # )
 endif()
 
-if(APPLE)
+if(BUILD_OS_OSX)
     configure_file(setup_osx.py.in setup_osx.py @ONLY)
-    
+
     add_custom_target(build_app ALL)
     add_dependencies(build_app cura-binary-data)
 
@@ -391,7 +462,7 @@ if(APPLE)
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/Cura.app DESTINATION "." USE_SOURCE_PERMISSIONS)
 
     set(CPACK_GENERATOR "DragNDrop")
-elseif(WIN32)
+elseif(BUILD_OS_WINDOWS)
     get_filename_component(compiler_dir ${CMAKE_CXX_COMPILER} DIRECTORY)
     configure_file(setup_win32.py.in setup_win32.py @ONLY)
 
@@ -418,13 +489,14 @@ elseif(WIN32)
     )
 
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/ DESTINATION "." USE_SOURCE_PERMISSIONS COMPONENT "cura")
-    # Get the VCRedist from http://www.microsoft.com/en-us/download/details.aspx?id=26999
-    if(BUILD_64BIT)
-        install(FILES vcredist_x64.exe DESTINATION "." COMPONENT "vcredist")
-    else()
-        install(FILES vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
-    endif()
-    install(DIRECTORY arduino DESTINATION "." COMPONENT "arduino")
+
+	if(BUILD_OS_WIN32)
+		install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x86.exe DESTINATION "." COMPONENT "vcredist")
+	else()
+		install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x64.exe DESTINATION "." COMPONENT "vcredist")
+	endif()
+
+	install(DIRECTORY ${EXTERNALPROJECT_INSTALL_PREFIX}/arduino DESTINATION "." COMPONENT "arduino")
 
     include(CPackComponent)
     cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
@@ -432,25 +504,24 @@ elseif(WIN32)
     cpack_add_component(arduino DISPLAY_NAME "Install Arduino Drivers")
 
     set(CPACK_GENERATOR "NSIS")
-else()
+elseif(BUILD_OS_LINUX)
     set(CPACK_GENERATOR "DEB")
 
-    set(CPACK_INSTALL_CMAKE_PROJECTS
-        "${CMAKE_BINARY_DIR}/Arcus-prefix/src/Arcus-build;Arcus;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/CuraEngine-prefix/src/CuraEngine-build;CuraEngine;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/Uranium-prefix/src/Uranium-build;Uranium;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/Cura-prefix/src/Cura-build;Cura;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/Cura-PostProcessing-prefix/src/Cura-PostProcessing-build;Cura-PostProcessing;ALL;/usr"
-        "${CMAKE_BINARY_DIR}/cura-binary-data-prefix/src/cura-binary-data-build;cura-binary-data;ALL;/usr"
+    set(CPACK_INSTALL_CMAKE_PROJECTS "")
+
+    set(CPACK_INSTALLED_DIRECTORIES
+        "${CMAKE_BINARY_DIR}/inst/bin;/opt/cura/bin"
+        "${CMAKE_BINARY_DIR}/inst/lib;/opt/cura/lib"
+        "${CMAKE_BINARY_DIR}/inst/share;/opt/cura/share"
     )
 
-    foreach(repo ${EXTRA_REPOSITORIES})
-        separate_arguments(items UNIX_COMMAND "${repo}")
-        list(GET items 0 name)
-        list(APPEND CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR}/${name}-prefix/src/${name}-build;${name};ALL;/usr")
-    endforeach()
-
-    set(CPACK_INSTALLED_DIRECTORIES "${CMAKE_BINARY_DIR}/inst/lib/python3/dist-packages/google;/usr/lib/python3/dist-packages/google")
+    set(package_dir "_CPack_Packages/Linux/${CPACK_GENERATOR}/Cura-${CURA_VERSION}-Linux/")
+    set(CPACK_INSTALL_COMMANDS
+        "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/bin"
+        "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/share/applications"
+        "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura ${package_dir}/usr/bin/"
+        "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura.desktop ${package_dir}/usr/share/applications/"
+    )
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
@@ -461,7 +532,7 @@ set(CPACK_PACKAGE_VERSION_PATCH ${CURA_PATCH_VERSION})
 set(CPACK_PACKAGE_VERSION ${CURA_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cura 3D Printing Software")
 set(CPACK_PACKAGE_CONTACT "Arjen Hiemstra <a.hiemstra@ultimaker.com>")
-if(NOT APPLE)
+if(NOT BUILD_OS_OSX)
     set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
 endif()
 set(CPACK_PACKAGE_EXECUTABLES Cura "Cura ${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}")
@@ -479,22 +550,12 @@ set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
 
 set(DEB_DEPENDS
     "python3 (>= 3.4.0)"
-    "python3-pyqt5 (>= 5.4.0)"
-    "python3-pyqt5.qtopengl (>= 5.4.0)"
-    "python3-pyqt5.qtquick (>= 5.4.0)"
-    "python3-pyqt5.qtsvg (>= 5.4.0)"
-    "python3-numpy (>= 1.8.0)"
-    "python3-serial (>= 2.6)"
+    "python3 (<< 3.5.0)"
     "python3-opengl (>= 3.0)"
-    "qml-module-qtquick2 (>= 5.4.0)"
-    "qml-module-qtquick-window2 (>= 5.4.0)"
-    "qml-module-qtquick-layouts (>= 5.4.0)"
-    "qml-module-qtquick-dialogs (>= 5.4.0)"
-    "qml-module-qtquick-controls (>= 5.4.0)"
+    "libgfortran3"
 )
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS ${DEB_DEPENDS})
-set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "python3-scipy (>= 0.14)")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
 # Set the right epoch so Debian knows this is a more recent version
 set(CPACK_DEBIAN_PACKAGE_VERSION "2:${CPACK_PACKAGE_VERSION}")
