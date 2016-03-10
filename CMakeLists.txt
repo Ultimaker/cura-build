@@ -10,6 +10,7 @@ include(GNUInstallDirs)
 # Define Options
 option(BUILD_PYTHON "Include Python" ON)
 option(BUILD_QT "Include Qt" ON)
+option(BUILD_SIP "Include SIP" ON)
 option(BUILD_PYQT "Include PyQt" ON)
 option(BUILD_NUMPY "Include Numpy" ON)
 option(BUILD_SCIPY "Include Scipy" ON)
@@ -47,14 +48,24 @@ endif()
 
 # Explicitly disable unsupported options
 if(BUILD_OS_WINDOWS)
+    set(BUILD_PYTHON OFF)
+
+    # Disable building of Numpy and Scipy due to build failures.
+    set(BUILD_NUMPY OFF)
+    set(BUILD_SCIPY OFF)
+
+    # On Win32, MinGW built Qt ignores environment variable changes made when running the
+    # application. Since we need that to disable the threaded renderer, we need to use an
+    # MSVC built Qt/PyQt for now.
+    #
+    # On Win64, in addition MinGW built python extensions fail to load properly so we cannot
+    # use it at all.
+    set(BUILD_QT OFF)
+    set(BUILD_PYQT OFF)
     if(BUILD_OS_WIN64)
-        set(BUILD_PYTHON OFF)
-        set(BUILD_QT OFF)
-        set(BUILD_PYQT OFF) #PyQt Fails to properly build with MinGW 64-bit
-        set(BUILD_NUMPY OFF) #Numpy also fails
-        set(BUILD_SCIPY OFF) #As does Scipy
-    else()
-        set(BUILD_PYTHON OFF)
+        # Sip is required to build the Arcus python bindings, which works fine on Win32
+        # but fails on Win64. So we need an externally built SIP and Arcus bindings on Win64.
+        set(BUILD_SIP OFF)
     endif()
 elseif(BUILD_OS_LINUX)
     set(BUILD_PYTHON OFF)
@@ -184,7 +195,7 @@ else()
     add_custom_target(Qt)
 endif()
 
-if(BUILD_PYQT)
+if(BUILD_SIP)
     set(sip_command "")
     if(BUILD_OS_WINDOWS)
         set(sip_command
@@ -217,7 +228,11 @@ if(BUILD_PYQT)
         CONFIGURE_COMMAND ${sip_command}
         BUILD_IN_SOURCE 1
     )
+else()
+    add_custom_target(Sip)
+endif()
 
+if(BUILD_PYQT)
     set(pyqt_command "")
     if(BUILD_OS_WINDOWS)
         set(pyqt_command
@@ -258,7 +273,6 @@ if(BUILD_PYQT)
         BUILD_IN_SOURCE 1
     )
 else()
-    add_custom_target(Sip)
     add_custom_target(PyQt)
 endif()
 
