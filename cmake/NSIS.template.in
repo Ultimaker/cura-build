@@ -745,7 +745,7 @@ Section "-Core installation"
   ${If} ${RunningX64}
     ExecWait '"$INSTDIR\arduino\dpinst64.exe" /lm /sw'
   ${Else}
-    ExecWait '"$INSTDIR\arduino\dpinst64.exe" /lm /sw'
+    ExecWait '"$INSTDIR\arduino\dpinst32.exe" /lm /sw'
   ${EndIf}
 
 @CPACK_NSIS_EXTRA_INSTALL_COMMANDS@
