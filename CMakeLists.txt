@@ -292,10 +292,12 @@ elseif(BUILD_OS_LINUX)
 endif()
 
 if((BUILD_NUMPY OR BUILD_SCIPY) AND BUILD_OS_LINUX)
+    set(openblas_options DYNAMIC_ARCH=1 NO_STATIC=1)
     ExternalProject_Add(OpenBLAS
         URL https://github.com/xianyi/OpenBLAS/archive/v0.2.15.tar.gz
         CONFIGURE_COMMAND ""
-        INSTALL_COMMAND make PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} TARGET=PENRYN install
+        BUILD_COMMAND make ${openblas_options}
+        INSTALL_COMMAND make PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} ${openblas_options} install
         BUILD_IN_SOURCE 1
     )
 else()
@@ -304,9 +306,11 @@ endif()
 
 if(BUILD_NUMPY)
     set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
+    set(install_numpy ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     if(BUILD_OS_LINUX)
         # Inform numpy about using OpenBLAS
-        set(build_numpy "BLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.a" ${build_numpy})
+        set(build_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${build_numpy})
+        set(install_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${install_numpy})
     endif()
 
     ExternalProject_Add(Numpy
@@ -315,16 +319,18 @@ if(BUILD_NUMPY)
         URL_MD5 a1ed53432dbcd256398898d35bc8e645
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${build_numpy}
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        INSTALL_COMMAND ${install_numpy}
         BUILD_IN_SOURCE 1
     )
 endif()
 
 if(BUILD_SCIPY)
     set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
+    set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     if(BUILD_OS_LINUX)
         # Inform scipy about using OpenBLAS
-        set(build_scipy "BLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.a" ${build_numpy})
+        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${build_scipy})
+        set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${install_scipy})
     endif()
 
     ExternalProject_Add(Scipy
@@ -332,7 +338,7 @@ if(BUILD_SCIPY)
         URL http://downloads.sourceforge.net/project/scipy/scipy/0.16.1/scipy-0.16.1.tar.gz
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${build_scipy}
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        INSTALL_COMMAND ${install_scipy}
         BUILD_IN_SOURCE 1
     )
 endif()
