@@ -37,9 +37,6 @@ OPTIONS = {
         "PyQt5._QOpenGLFunctions_2_0", 
         "serial", 
         "Arcus", 
-        "google", 
-        "google.protobuf", 
-        "google.protobuf.descriptor", 
         "xml.etree", 
         "xml.etree.ElementTree"
     ],
