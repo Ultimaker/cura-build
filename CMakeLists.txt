@@ -266,9 +266,17 @@ if(BUILD_PYQT)
         )
     endif()
 
+    # This patches the PyQt 5.4.2 source code to remove the "disconnectNotify" method from QPyQmlObject.
+    # This fixes a deadlock that could randomly occur when deleting QML items.
+    # This workaround should be removed as soon as a new stable release of PyQt is available that includes the fix.
+    set(pyqt_patch
+        patch qpy/QtQml/qpyqmlobject.cpp ${CMAKE_SOURCE_DIR}/qpyqmlobject.cpp.patch && patch qpy/QtQml/qpyqmlobject.h ${CMAKE_SOURCE_DIR}/qpyqmlobject.h.patch
+    )
+
     ExternalProject_Add(PyQt
         DEPENDS Python Qt Sip
         URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.4.2/PyQt-gpl-5.4.2.tar.gz
+        PATCH_COMMAND ${pyqt_patch}
         CONFIGURE_COMMAND ${pyqt_command}
         BUILD_IN_SOURCE 1
     )
@@ -329,8 +337,8 @@ if(BUILD_SCIPY)
     set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     if(BUILD_OS_LINUX)
         # Inform scipy about using OpenBLAS
-        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${build_scipy})
-        set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${install_scipy})
+        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${build_scipy})
+        set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${install_scipy})
     endif()
 
     ExternalProject_Add(Scipy
@@ -410,6 +418,12 @@ ExternalProject_Add(cura-binary-data
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/ultimaker/cura-binary-data
     GIT_TAG origin/${TAG_OR_BRANCH}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
+)
+
+ExternalProject_Add(Cura-Doodle3D
+    DEPENDS Cura
+    GIT_REPOSITORY https://github.com/Doodle3D/Doodle3D-cura-plugin
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
