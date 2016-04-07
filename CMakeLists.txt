@@ -424,6 +424,7 @@ ExternalProject_Add(cura-binary-data
 ExternalProject_Add(Cura-Doodle3D
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/Doodle3D/Doodle3D-cura-plugin
+    GIT_TAG origin/master
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
