@@ -154,6 +154,7 @@ if(BUILD_QT)
         -nomake tests
         -nomake tools
         -no-cups
+        -no-sql-sqlite
         -skip qtconnectivity
         -skip qtdoc
         -skip qtenginio
