@@ -555,8 +555,13 @@ elseif(BUILD_OS_LINUX)
         "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/share/applications"
         "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura ${package_dir}/usr/bin/"
         "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura.desktop ${package_dir}/usr/share/applications/"
-        "${CMAKE_COMMAND} -E copy /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.20 ${package_dir}/opt/cura/lib/libstdc++.so.6"
     )
+
+    set(CPACK_INSTALL_COMMANDS ${CPACK_INSTALL_COMMANDS} "mkdir -pv ${package_dir}/opt/cura/lib/")
+    file(GLOB libstdc_libraries "/usr/lib/x86_64-linux-gnu/libstdc++.so.*")
+    foreach(libstdc_library ${libstdc_libraries})
+        set(CPACK_INSTALL_COMMANDS ${CPACK_INSTALL_COMMANDS} "cp -rfv ${libstdc_library} ${package_dir}/opt/cura/lib/")
+    endforeach()
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
