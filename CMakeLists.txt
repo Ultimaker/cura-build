@@ -102,7 +102,10 @@ else()
     set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Information")
 endif()
 
-set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}-${CURA_EXTRA_VERSION}")
+set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}")
+if("${CURA_EXTRA_VERSION}" STREQUAL "")
+    set(CURA_VERSION "${CURA_VERSION}-${CURA_EXTRA_VERSION}")
+endif()
 
 message(STATUS "Building Cura ${CURA_VERSION}")
 
@@ -424,6 +427,7 @@ ExternalProject_Add(cura-binary-data
 ExternalProject_Add(Cura-Doodle3D
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/Doodle3D/Doodle3D-cura-plugin
+    GIT_TAG origin/master
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
