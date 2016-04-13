@@ -7,6 +7,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(ExternalProject)
 include(GNUInstallDirs)
 
+# Force to use "lib" as LIBDIR - ARCH uses "lib64" or "lib32" for example.
+set(LIBDIR "lib" CACHE FILEPATH "" FORCE)
+
 # Define Options
 option(BUILD_PYTHON "Include Python" ON)
 option(BUILD_QT "Include Qt" ON)
