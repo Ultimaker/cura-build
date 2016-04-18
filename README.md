@@ -1,6 +1,6 @@
 # cura-build
 
-This repository contains build scripts used to build Cura and all depenencies from scratch.
+This repository contains build scripts used to build Cura and all dependencies from scratch.
 
 ## OS X
 
@@ -22,23 +22,24 @@ make
 
 On Windows, the following dependencies are needed for building:
 
-* CMake (http://www.cmake.org/)
-* MinGW-W64 >= 4.9.04 (http://mingw-w64.org/doku.php)
-* Python 3.4 (http://python.org/, note that using Python 3.5 is currently untested on Windows)
-* NumPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy - make sure to get the NON-MKL version!
-* SciPy from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy
-* Microsoft Visual Studio 2015 (community edition: 
+* **git for windows** (https://git-for-windows.github.io/) The `git` command should be available on your `%PATH%`. Make sure that the `cmd` directory in the git for windows installation directory is on the `%PATH%` and *not* its `bin` directory, otherwise mingw32 will complain about `sh.exe` being on the path.
+* **CMake** (http://www.cmake.org/) Once CMake is installed make sure it is available on your `%PATH%`. Check this by running `cmake --version` in the Windows console.
+* **MinGW-W64** >= 4.9.04 (http://mingw-w64.org/doku.php) Once installed, its `bin` directory should be available on your `%PATH%`. Test this by running `mingw32-make --version` in the Windows console.
+* **Python** 3.4 (http://python.org/, note that using Python 3.5 is currently untested on Windows)
+* **NumPy** from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy - make sure to get the NON-MKL version!
+* **SciPy** from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy
+* **Microsoft Visual Studio 2015 (community edition)**: 
   Install Programming languages: Visual c++ (all), Python Tools for Visual Studio (Nov 2015)
   Windows & Web Development: Universal Windows App Development Tools (Tools 1.2 & windows 10 SDK-10/0/10586; Windows 10 SDK -10.0.10240)
-* Py2Exe (https://pypi.python.org/pypi/py2exe/0.9.2.0/#downloads)
-* For creating installer we use NSIS 3: http://nsis.sourceforge.net/Main_Page
+* **Py2Exe** (https://pypi.python.org/pypi/py2exe/0.9.2.0/#downloads) The easiest way to install this is to run the command `pip install py2exe`. The executable `build_exe.exe` should now be in your `<python dir>/Scripts` directory. You may have to add `<python dir>/Scripts` to you `%PATH%`.
+* **NSIS 3** (http://nsis.sourceforge.net/Main_Page) for creating the installer 
 
 Make sure these dependencies are available from your path.
 
-Additonally, for 32-bit builds:
+Additionally, for 32-bit builds:
 
 * Perl (http://www.activestate.com/activeperl, Required to build Qt)
-* Create in the user direcotry a file named pydistutils.cfg with the following contents:
+* Create in the user directory a file named pydistutils.cfg with the following contents:
 ```shell
 [build]
 compiler=mingw32
