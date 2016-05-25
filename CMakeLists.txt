@@ -103,7 +103,7 @@ else()
 endif()
 
 set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}")
-if("${CURA_EXTRA_VERSION}" STREQUAL "")
+if(NOT "${CURA_EXTRA_VERSION}" STREQUAL "")
     set(CURA_VERSION "${CURA_VERSION}-${CURA_EXTRA_VERSION}")
 endif()
 
@@ -600,8 +600,6 @@ set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
 
 set(DEB_DEPENDS
     "python3 (>= 3.4.0)"
-    "python3 (<< 3.5.0)"
-    "python3-opengl (>= 3.0)"
     "libgfortran3"
 )
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
