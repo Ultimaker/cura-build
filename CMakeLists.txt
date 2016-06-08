@@ -102,7 +102,10 @@ else()
     set(CURA_EXTRA_VERSION "${TAG_OR_BRANCH}" CACHE STRING "Cura Extra Version Information")
 endif()
 
-set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}-${CURA_EXTRA_VERSION}")
+set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}")
+if(NOT "${CURA_EXTRA_VERSION}" STREQUAL "")
+    set(CURA_VERSION "${CURA_VERSION}-${CURA_EXTRA_VERSION}")
+endif()
 
 message(STATUS "Building Cura ${CURA_VERSION}")
 
@@ -154,6 +157,15 @@ if(BUILD_QT)
         -nomake tests
         -nomake tools
         -no-cups
+        -no-sql-db2
+        -no-sql-ibase
+        -no-sql-mysql
+        -no-sql-oci
+        -no-sql-odbc
+        -no-sql-psql
+        -no-sql-sqlite
+        -no-sql-sqlite2
+        -no-sql-tds
         -skip qtconnectivity
         -skip qtdoc
         -skip qtenginio
@@ -300,6 +312,8 @@ elseif(BUILD_OS_LINUX)
 endif()
 
 if((BUILD_NUMPY OR BUILD_SCIPY) AND BUILD_OS_LINUX)
+    # Fortran compiler is needed for OpenBLAS, but it does no check whether it is available.
+    enable_language (Fortran)
     set(openblas_options DYNAMIC_ARCH=1 NO_STATIC=1)
     ExternalProject_Add(OpenBLAS
         URL https://github.com/xianyi/OpenBLAS/archive/v0.2.15.tar.gz
@@ -424,6 +438,7 @@ ExternalProject_Add(cura-binary-data
 ExternalProject_Add(Cura-Doodle3D
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/Doodle3D/Doodle3D-cura-plugin
+    GIT_TAG origin/master
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
@@ -585,8 +600,6 @@ set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
 
 set(DEB_DEPENDS
     "python3 (>= 3.4.0)"
-    "python3 (<< 3.5.0)"
-    "python3-opengl (>= 3.0)"
     "libgfortran3"
 )
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
