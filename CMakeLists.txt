@@ -16,6 +16,7 @@ option(BUILD_NUMPY "Include Numpy" ON)
 option(BUILD_SCIPY "Include Scipy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
 option(BUILD_SETUPTOOLS "Include Setuptools" ON)
+option(BUILD_NUMPY_STL "Include Numpy-STL" ON)
 
 if(WIN32)
     option(BUILD_64BIT "Create a 64-bit build" OFF)
@@ -391,6 +392,19 @@ if(BUILD_SETUPTOOLS)
         BUILD_IN_SOURCE 1
     )
 endif()
+
+if(BUILD_NUMPY_STL)
+    ExternalProject_Add(NumpySTL
+        DEPENDS Python Setuptools
+        URL https://github.com/WoLpH/numpy-stl/archive/v1.9.0.tar.gz
+        URL_MD5 cda2531edecff4468a4bbe78c6a2833b
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+endif()
+
 if(BUILD_OS_OSX)
     set(protobuf_cxx_flags "-fPIC -std=c++11 -stdlib=libc++")
 else()
