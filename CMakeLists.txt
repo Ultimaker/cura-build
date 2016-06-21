@@ -328,12 +328,13 @@ else()
 endif()
 
 if(BUILD_NUMPY)
-    set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
-    set(install_numpy ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     if(BUILD_OS_LINUX)
         # Inform numpy about using OpenBLAS
         set(build_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${build_numpy})
         set(install_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${install_numpy})
+    else()
+        set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
+        set(install_numpy ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     endif()
 
     ExternalProject_Add(Numpy
@@ -348,12 +349,13 @@ if(BUILD_NUMPY)
 endif()
 
 if(BUILD_SCIPY)
-    set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
-    set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     if(BUILD_OS_LINUX)
         # Inform scipy about using OpenBLAS
         set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${build_scipy})
         set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${install_scipy})
+    else()
+        set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
+        set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     endif()
 
     ExternalProject_Add(Scipy
