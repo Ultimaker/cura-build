@@ -15,7 +15,6 @@ option(BUILD_PYQT "Include PyQt" ON)
 option(BUILD_NUMPY "Include Numpy" ON)
 option(BUILD_SCIPY "Include Scipy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
-option(BUILD_SETUPTOOLS "Include Setuptools" ON)
 option(BUILD_NUMPY_STL "Include Numpy-STL" ON)
 
 if(WIN32)
@@ -381,21 +380,9 @@ if(BUILD_PYSERIAL)
     )
 endif()
 
-if(BUILD_SETUPTOOLS)
-    ExternalProject_Add(Setuptools
-        DEPENDS Python
-        URL https://pypi.python.org/packages/45/5e/79ca67a0d6f2f42bfdd9e467ef97398d6ad87ee2fa9c8cdf7caf3ddcab1e/setuptools-23.0.0.tar.gz
-        URL_MD5 100a90664040f8ff232fbac02a4c5652
-        CONFIGURE_COMMAND ""
-        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
-        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
-        BUILD_IN_SOURCE 1
-    )
-endif()
-
 if(BUILD_NUMPY_STL)
     ExternalProject_Add(NumpySTL
-        DEPENDS Python Setuptools
+        DEPENDS Python
         URL https://github.com/WoLpH/numpy-stl/archive/v1.9.0.tar.gz
         URL_MD5 cda2531edecff4468a4bbe78c6a2833b
         CONFIGURE_COMMAND ""
