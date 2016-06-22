@@ -67,27 +67,24 @@ if(BUILD_OS_WINDOWS)
         # but fails on Win64. So we need an externally built SIP and Arcus bindings on Win64.
         set(BUILD_SIP OFF)
     endif()
-elseif(BUILD_OS_LINUX)
-    set(BUILD_PYTHON OFF)
 endif()
 
 set(TAG_OR_BRANCH "master" CACHE STRING "The name of the tag or branch to build")
 set(EXTRA_REPOSITORIES "" CACHE STRING "Extra repositories to install. Expected to have a CMake based build system.")
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
-set(EXTERNALPROJECT_SITEPACKAGES_DIR ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages)
 
 # Create the version-related variables
 # These can optionally be overridden from the build enviroment.
 if(DEFINED ENV{CURA_MAJOR_VERSION})
     set(CURA_MAJOR_VERSION $ENV{CURA_MAJOR_VERSION} CACHE STRING "Cura Major Version" FORCE)
 else()
-    set(CURA_MAJOR_VERSION "master" CACHE STRING "Cura Major Version")
+    set(CURA_MAJOR_VERSION "2" CACHE STRING "Cura Major Version")
 endif()
 
 if(DEFINED ENV{CURA_MINOR_VERSION})
     set(CURA_MINOR_VERSION $ENV{CURA_MINOR_VERSION} CACHE STRING "Cura Minor Version" FORCE)
 else()
-    set(CURA_MINOR_VERSION "0" CACHE STRING "Cura Minor Version")
+    set(CURA_MINOR_VERSION "2" CACHE STRING "Cura Minor Version")
 endif()
 
 if(DEFINED ENV{CURA_PATCH_VERSION})
@@ -114,7 +111,16 @@ if(BUILD_OS_WIN32)
     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages)
 endif()
 
+
+set(PYTHON_DISTPACKAGES lib/python3.4/dist-packages)
+set(PYTHON_DISTPACKAGES_FULL ${EXTERNALPROJECT_INSTALL_PREFIX}/${PYTHON_DISTPACKAGES})
 if(BUILD_PYTHON)
+    set(PYTHONINTERP_FOUND ON)
+    set(PYTHON_VERSION_MAJOR 3)
+    set(PYTHON_VERSION_MINOR 4)
+    set(PYTHON_VERSION_PATCH 3)
+    set(PYTHON_VERSION_STRING ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.${PYTHON_VERSION_PATCH})
+
     if(APPLE)
         # See http://bugs.python.org/issue21381
         # The interpreter crashes when MACOSX_DEPLOYMENT_TARGET=10.7 due to the increased stack size.
@@ -122,15 +128,17 @@ if(BUILD_PYTHON)
     endif()
 
     ExternalProject_Add(Python
-        URL https://www.python.org/ftp/python/3.4.3/Python-3.4.3.tgz
+        URL https://www.python.org/ftp/python/${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.${PYTHON_VERSION_PATCH}/Python-${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.${PYTHON_VERSION_PATCH}.tgz
+        URL_MD5 4281ff86778db65892c05151d5de738d
         PATCH_COMMAND ${patch_command}
         CONFIGURE_COMMAND ./configure --prefix=${EXTERNALPROJECT_INSTALL_PREFIX} --enable-shared --with-threads --without-pymalloc
         BUILD_IN_SOURCE 1
     )
 
-    set(PYTHON_EXECUTABLE ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/python3)
-    set(PYTHON_VERSION_MAJOR 3)
-    set(PYTHON_VERSION_MINOR 4)
+    if(BUILD_OS_LINUX)
+        set(PYTHON_EXECUTABLE_PREFIX "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" "PYTHONPATH=${PYTHON_DISTPACKAGES_FULL}")
+    endif()
+    set(PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE_PREFIX} ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/python3)    
 else()
     find_package(PythonInterp 3.4.0 REQUIRED)
     add_custom_target(Python)
@@ -226,7 +234,7 @@ if(BUILD_SIP)
             ${PYTHON_EXECUTABLE}
             configure.py
             --bindir=${EXTERNALPROJECT_INSTALL_PREFIX}/bin
-            --destdir=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages
+            --destdir=${PYTHON_DISTPACKAGES_FULL}
             --incdir=${EXTERNALPROJECT_INSTALL_PREFIX}/include
             --sipdir=${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
         )
@@ -264,7 +272,7 @@ if(BUILD_PYQT)
             --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip
             --qmake ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/qmake
             --confirm-license
-            --destdir ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages
+            --destdir ${PYTHON_DISTPACKAGES_FULL}
             --bindir ${EXTERNALPROJECT_INSTALL_PREFIX}/bin
             --sipdir ${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
         )
@@ -307,7 +315,7 @@ if(BUILD_OS_WINDOWS)
 elseif(BUILD_OS_LINUX)
     set(python_install
         --root=${EXTERNALPROJECT_INSTALL_PREFIX}
-        --install-lib=lib/python3/dist-packages
+        --install-lib=${PYTHON_DISTPACKAGES}
     )
 endif()
 
@@ -351,8 +359,8 @@ if(BUILD_SCIPY)
     set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     if(BUILD_OS_LINUX)
         # Inform scipy about using OpenBLAS
-        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${build_scipy})
-        set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${install_scipy})
+        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${PYTHON_DISTPACKAGES_FULL}" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${build_scipy})
+        set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${PYTHON_DISTPACKAGES_FULL}" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${install_scipy})
     endif()
 
     ExternalProject_Add(Scipy
@@ -393,11 +401,18 @@ if(BUILD_OS_WIN64)
     set(ARCUS_EXTRA_ARGS -DBUILD_PYTHON=OFF)
 endif()
 
+if(BUILD_OS_LINUX)
+    set(CMAKE_COMMAND_LINUX_PREFIX "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" "PYTHONPATH=${PYTHON_DISTPACKAGES_FULL}")
+endif()
+set(CMAKE_COMMAND_PREFIX ${CMAKE_COMMAND_LINUX_PREFIX})
+set(CMAKE_COMMAND_FULL ${CMAKE_COMMAND_PREFIX} ${CMAKE_COMMAND})
+
 ExternalProject_Add(Arcus
     DEPENDS Python Protobuf Sip
     GIT_REPOSITORY https://github.com/ultimaker/libArcus
     GIT_TAG origin/${TAG_OR_BRANCH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${ARCUS_EXTRA_ARGS}
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
+    CMAKE_ARGS -DPYTHON_SITE_PACKAGES_DIR=${PYTHON_DISTPACKAGES}/ -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${ARCUS_EXTRA_ARGS}
 )
 
 ExternalProject_Add(CuraEngine
@@ -411,6 +426,7 @@ ExternalProject_Add(Uranium
     DEPENDS PyQt Arcus
     GIT_REPOSITORY https://github.com/ultimaker/Uranium
     GIT_TAG origin/${TAG_OR_BRANCH}
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
@@ -418,6 +434,7 @@ ExternalProject_Add(Cura
     DEPENDS Uranium CuraEngine
     GIT_REPOSITORY https://github.com/ultimaker/Cura
     GIT_TAG origin/${TAG_OR_BRANCH}
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DURANIUM_SCRIPTS_DIR= -DCURA_VERSION=${CURA_VERSION}
 )
 
@@ -425,6 +442,7 @@ ExternalProject_Add(Cura-PostProcessing
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/nallath/PostProcessingPlugin
     GIT_TAG origin/master
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
@@ -439,6 +457,7 @@ ExternalProject_Add(Cura-Doodle3D
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/Doodle3D/Doodle3D-cura-plugin
     GIT_TAG origin/master
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
@@ -599,7 +618,6 @@ set(CPACK_RPM_PACKAGE_REQUIRES ${RPM_REQUIRES})
 set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
 
 set(DEB_DEPENDS
-    "python3 (>= 3.4.0)"
     "libgfortran3"
 )
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
@@ -620,5 +638,12 @@ if(BUILD_OS_WIN32)
 else()
     set(CPACK_NSIS_PACKAGE_ARCHITECTURE "64")
 endif()
+
+add_custom_target(mrproper)
+add_custom_command(
+    TARGET mrproper
+    COMMAND git clean -xfd .
+    COMMENT "Cleaning directory via GIT"
+)
 
 include(CPack)
