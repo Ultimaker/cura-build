@@ -15,6 +15,7 @@ option(BUILD_PYQT "Include PyQt" ON)
 option(BUILD_NUMPY "Include Numpy" ON)
 option(BUILD_SCIPY "Include Scipy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
+option(BUILD_NUMPY_STL "Include Numpy-STL" ON)
 
 if(WIN32)
     option(BUILD_64BIT "Create a 64-bit build" OFF)
@@ -327,12 +328,13 @@ else()
 endif()
 
 if(BUILD_NUMPY)
-    set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
-    set(install_numpy ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     if(BUILD_OS_LINUX)
         # Inform numpy about using OpenBLAS
         set(build_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${build_numpy})
         set(install_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${install_numpy})
+    else()
+        set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
+        set(install_numpy ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     endif()
 
     ExternalProject_Add(Numpy
@@ -347,12 +349,13 @@ if(BUILD_NUMPY)
 endif()
 
 if(BUILD_SCIPY)
-    set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
-    set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     if(BUILD_OS_LINUX)
         # Inform scipy about using OpenBLAS
         set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${build_scipy})
         set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${install_scipy})
+    else()
+        set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
+        set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     endif()
 
     ExternalProject_Add(Scipy
@@ -373,6 +376,18 @@ if(BUILD_PYSERIAL)
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+endif()
+
+if(BUILD_NUMPY_STL)
+    ExternalProject_Add(NumpySTL
+        DEPENDS Python
+        URL https://github.com/WoLpH/numpy-stl/archive/v1.9.0.tar.gz
+        URL_MD5 cda2531edecff4468a4bbe78c6a2833b
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${PYTHON_EXECUTABLE} setup.py install ${python_install}
         BUILD_IN_SOURCE 1
     )
 endif()
