@@ -111,6 +111,16 @@ if(BUILD_OS_WIN32)
     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages)
 endif()
 
+if(BUILD_OS_LINUX)
+    find_program (DPKG_ARCHITECTURE_FOUND "dpkg-architecture")
+    if(DPKG_ARCHITECTURE_FOUND)
+        execute_process(COMMAND ${DPKG_ARCHITECTURE_FOUND} -qDEB_HOST_MULTIARCH OUTPUT_VARIABLE CMAKE_DEBIAN_ARCH_TRIPLET OUTPUT_STRIP_TRAILING_WHITESPACE)
+        set(LIBSTDC6_REGEX "/usr/lib/${CMAKE_DEBIAN_ARCH_TRIPLET}/libstdc++.so.6*" CACHE STRING "Location of libstdc6 libraries." FORCE)
+    else()
+        set(LIBSTDC6_REGEX "/usr/lib/libstdc++.so.6*" CACHE STRING "Location of libstdc6 libraries." FORCE)
+    endif()
+endif()
+
 
 set(PYTHON_DISTPACKAGES lib/python3.4/dist-packages)
 set(PYTHON_DISTPACKAGES_FULL ${EXTERNALPROJECT_INSTALL_PREFIX}/${PYTHON_DISTPACKAGES})
@@ -589,8 +599,13 @@ elseif(BUILD_OS_LINUX)
         "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/share/applications"
         "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura ${package_dir}/usr/bin/"
         "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura.desktop ${package_dir}/usr/share/applications/"
-        "${CMAKE_COMMAND} -E copy /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.20 ${package_dir}/opt/cura/lib/libstdc++.so.6"
     )
+
+    set(CPACK_INSTALL_COMMANDS ${CPACK_INSTALL_COMMANDS} "mkdir -pv ${package_dir}/opt/cura/lib/")
+    file(GLOB libstdc_libraries "${LIBSTDC6_REGEX}")
+    foreach(libstdc_library ${libstdc_libraries})
+        set(CPACK_INSTALL_COMMANDS ${CPACK_INSTALL_COMMANDS} "cp -rfv ${libstdc_library} ${package_dir}/opt/cura/lib/")
+    endforeach()
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
