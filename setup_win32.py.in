@@ -11,6 +11,7 @@ import re
 import shutil
 import site
 import Arcus
+import scipy.spatial
 
 # work around the limitation that shutil.copytree does not allow the target directory to exist
 def copytree(src, dst, symlinks=False, ignore=None):
