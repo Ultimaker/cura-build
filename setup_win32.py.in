@@ -83,7 +83,7 @@ includes = [
     "scipy.optimize._cobyla",
     "scipy.optimize._group_columns",
     "scipy.optimize._lbfgsb",
-    "scipy.optimize._lsq/givens_elimination",
+    "scipy.optimize._lsq.givens_elimination",
     "scipy.optimize._minpack",
     "scipy.optimize._nnls",
     "scipy.optimize._slsqp",
