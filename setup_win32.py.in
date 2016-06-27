@@ -59,7 +59,7 @@ includes = [
 ]
 
 # Include all the UM modules in the includes. As py2exe fails to properly find all the dependencies due to the plugin architecture.
-includes += findSubPackages(UM.__file, "UM")
+includes += findSubPackages(UM.__file__, "UM")
 includes += findSubPackages(cura.__file__, "cura")
 includes += findSubPackages(scipy.__file__, "scipy")
 
