@@ -122,7 +122,7 @@ print("Copy numpy DLLs")
 numpy_core_dir = os.path.dirname(numpy.core.__file__)
 for item in os.listdir(numpy_core_dir):
     if item.endswith(".dll"):
-        shutils.copy(os.path.join(numpy_core_dir, item), os.path.join("dist", item))
+        shutil.copy(os.path.join(numpy_core_dir, item), os.path.join("dist", item))
 
 print("Copy CuraEngine")
 shutil.copy("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", "dist/CuraEngine.exe")
