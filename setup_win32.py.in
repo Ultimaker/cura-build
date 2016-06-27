@@ -39,7 +39,9 @@ includes = [
     "cura.OneAtATimeIterator",
     "scipy.spatial",
     "scipy.sparse.csgraph",
-    "scipy.sparse.csgraph._validation"
+    "scipy.sparse.csgraph._validation",
+    "scipy.linalg",
+    "scipy.linalg.cython_blas"
 ]
 
 # Include all the UM modules in the includes. As py2exe fails to properly find all the dependencies due to the plugin architecture.
