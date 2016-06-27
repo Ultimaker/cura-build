@@ -11,7 +11,7 @@ import re
 import shutil
 import site
 import Arcus
-import scipy.spatial
+import scipy
 
 # work around the limitation that shutil.copytree does not allow the target directory to exist
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -25,6 +25,25 @@ def copytree(src, dst, symlinks=False, ignore=None):
         else:
             shutil.copy2(s, d)
 
+def findSubPackages(root_package_path, package_name):
+    includes = []
+    for dirpath, dirnames, filenames in os.walk(os.path.dirname(root_package_path)):
+        if "__" in dirpath:
+            continue
+            
+        if "tests" in dirnames:
+            dirnames.remove("tests")
+            
+        module_path = dirpath.replace(os.path.dirname(root_package_path), package_name)
+        module_path = module_path.split(os.path.sep)
+        module_name = ".".join(module_path)
+        if os.path.isfile(dirpath + "/__init__.py"):
+            includes.append(module_name)
+            for filename in filenames:
+                if "__" not in filename and os.path.splitext(filename)[1] in [".py", ".pyd"]:
+                    includes.append(module_name + "." + os.path.splitext(filename)[0])
+    return includes
+
 includes = [
     "sip", 
     "ctypes", 
@@ -36,117 +55,22 @@ includes = [
     "xml.etree",
     "xml.etree.ElementTree",
     "cura",
-    "cura.OneAtATimeIterator",
-    
-    "scipy.cluster",
-    "scipy.cluster._hierarchy",
-    "scipy.cluster._vq",
-    "scipy.fftpack",
-    "scipy.fftpack.convolve",
-    "scipy.fftpack._fftpack",
-    "scipy.integrate",
-    "scipy.integrate.lsoda",
-    "scipy.integrate.vode",
-    "scipy.integrate._dop",
-    "scipy.integrate._odepack",
-    "scipy.integrate._quadpack",
-    "scipy.integrate._test_multivariate",
-    "scipy.integrate._test_odeint_banded",
-    "scipy.interpolate",
-    "scipy.interpolate.dfitpack",
-    "scipy.interpolate.interpnd",
-    "scipy.interpolate._fitpack",
-    "scipy.interpolate._interpolate",
-    "scipy.interpolate._ppoly",
-    "scipy.io.matlab",
-    "scipy.io.matlab.mio5_utils",
-    "scipy.io.matlab.mio_utils",
-    "scipy.io.matlab.streams",
-    "scipy.linalg",
-    "scipy.linalg.cython_blas",
-    "scipy.linalg.cython_lapack",
-    "scipy.linalg._calc_lwork",
-    "scipy.linalg._decomp_update",
-    "scipy.linalg._fblas",
-    "scipy.linalg._flapack",
-    "scipy.linalg._flinalg",
-    "scipy.linalg._interpolative",
-    "scipy.linalg._solve_toeplitz",
-    "scipy.ndimage",
-    "scipy.ndimage._nd_image",
-    "scipy.ndimage._ni_label",
-    "scipy.odr",
-    "scipy.odr.__odrpack",
-    "scipy.optimize",
-    "scipy.optimize.minpack2",
-    "scipy.optimize.moduleTNC",
-    "scipy.optimize._cobyla",
-    "scipy.optimize._group_columns",
-    "scipy.optimize._lbfgsb",
-    "scipy.optimize._lsq.givens_elimination",
-    "scipy.optimize._minpack",
-    "scipy.optimize._nnls",
-    "scipy.optimize._slsqp",
-    "scipy.optimize._zeros",
-    "scipy.signal",
-    "scipy.signal.sigtools",
-    "scipy.signal.spline",
-    "scipy.signal._max_len_seq_inner",
-    "scipy.signal._spectral",
-    "scipy.sparse",
-    "scipy.sparse.csgraph",
-    "scipy.sparse.csgraph._min_spanning_tree",
-    "scipy.sparse.csgraph._reordering",
-    "scipy.sparse.csgraph._shortest_path",
-    "scipy.sparse.csgraph._tools",
-    "scipy.sparse.csgraph._traversal",
-    "scipy.sparse.linalg",
-    "scipy.sparse.linalg.dsolve._superlu",
-    "scipy.sparse.linalg.eigen.arpack._arpack",
-    "scipy.sparse.linalg.isolve._iterative",
-    "scipy.sparse._csparsetools",
-    "scipy.sparse._sparsetools",
-    "scipy.spatial",
-    "scipy.spatial.ckdtree",
-    "scipy.spatial.qhull",
-    "scipy.spatial._distance_wrap",
-    "scipy.special.specfun",
-    "scipy.special._ellip_harm_2",
-    "scipy.special._ufuncs",
-    "scipy.special._ufuncs_cxx",
-    "scipy.stats",
-    "scipy.stats.mvn",
-    "scipy.stats.statlib",
-    "scipy.stats.vonmises_cython",
-    "scipy.stats._rank"
+    "cura.OneAtATimeIterator"
 ]
 
 # Include all the UM modules in the includes. As py2exe fails to properly find all the dependencies due to the plugin architecture.
-for dirpath, dirnames, filenames in os.walk(os.path.dirname(UM.__file__)):
-    if "__" in dirpath:
-        continue
-    module_path = dirpath.replace(os.path.dirname(UM.__file__), "UM")
-    module_path = module_path.split(os.path.sep)
-    module_name = ".".join(module_path)
-    if os.path.isfile(dirpath + "/__init__.py"):
-        includes += [module_name]
-        for filename in filenames:
-            if "__" in filename or not filename.endswith(".py"):
-                continue
-            includes += [module_name + "." + os.path.splitext(filename)[0]]
+includes += findSubPackages(UM.__file, "UM")
+includes += findSubPackages(cura.__file__, "cura")
+includes += findSubPackages(scipy.__file__, "scipy")
 
-for dirpath, dirnames, filenames in os.walk(os.path.dirname(cura.__file__)):
-    if "__" in dirpath:
-        continue
-    module_path = dirpath.replace(os.path.dirname(cura.__file__), "cura")
-    module_path = module_path.split(os.path.sep)
-    module_name = ".".join(module_path)
-    if os.path.isfile(dirpath + "/__init__.py"):
-        includes += [module_name]
-        for filename in filenames:
-            if "__" in filename or not filename.endswith(".py"):
-                continue
-            includes += [module_name + "." + os.path.splitext(filename)[0]]
+# Filter out the known bad apples.
+includes = [x for x in includes if x not in [
+                "scipy.interpolate.interpnd_info",
+                "scipy.misc.pilutil",
+                "scipy.special.generate_ufuncs",
+                "scipy.special._testutils",
+                "scipy.linalg._testutils",
+                "scipy._lib._testutils"]]
 
 print("Removing previous distribution package")
 shutil.rmtree("dist", True)
