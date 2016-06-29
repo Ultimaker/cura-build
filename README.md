@@ -119,37 +119,40 @@ cmake ..
 make
 make package
 ```
-## CentOs/Linux
+## CentOS/Linux
 
-cura-build can build Ubuntu/Debian packages of Cura.
+cura-build can build CentOS/RHEL packages of Cura.
 
 Dependencies:
 
-* python3 (>= 3.4.0)
-* python3-dev (>= 3.4.0)
-* python3-pyqt5 (>= 5.4.0)
-* python3-pyqt5.qtopengl (>= 5.4.0)
-* python3-pyqt5.qtquick (>= 5.4.0)
-* python3-pyqt5.qtsvg (>= 5.4.0)
-* python3-numpy (>= 1.8.0)
-* python3-serial (>= 2.6)
-* python3-opengl (>= 3.0)
-* python3-setuptools
-* python3-dev
-* qml-module-qtquick2 (>= 5.4.0)
-* qml-module-qtquick-window2 (>= 5.4.0)
-* qml-module-qtquick-layouts (>= 5.4.0)
-* qml-module-qtquick-dialogs (>= 5.4.0)
-* qml-module-qtquick-controls (>= 5.4.0)
-* zlib1g
-* build-essential
-* cmake
-* gfortran
+* gcc-gfortran 
+* python34.x86_64 
+* python34-devel.x86_64 
+* python34-numpy.x86_64 
+* pyserial.noarch 
+* PyOpenGL.noarch 
+* python34-setuptools.noarch 
+* wxPython.x86_64 
+* libstdc++-static.x86_64 
+* libstdc++-devel.x86_64 
+* openssl.x86_64 
+* openblas-devel.x86_64 
+* python34-numpy-f2py.x86_64
 
 To build, make sure these dependencies are installed, then clone this repository and run the following commands from your clone:
 
 ```shell
-sudo yum install gcc-gfortran python34.x86_64 python34-devel.x86_64 python3-pyqt5 python3-pyqt5.qtopengl python3-pyqt5.qtquick python3-pyqt5.qtsvg python34-numpy.x86_64 python3-serial PyOpenGL.noarch python34-setuptools.noarch qml-module-qtquick2 qml-module-qtquick-window2 qml-module-qtquick-layouts qml-module-qtquick-dialogs qml-module-qtquick-controls gfortran
+sudo yum install gcc-gfortran python34.x86_64 python34-devel.x86_64 python34-numpy.x86_64 pyserial.noarch PyOpenGL.noarch python34-setuptools.noarch wxPython.x86_64 libstdc++-static.x86_64 libstdc++-devel.x86_64 openssl.x86_64 openblas-devel.x86_64 python34-numpy-f2py.x86_64
+```
+download and install scipy from https://github.com/scipy/scipy/releases be sure to use python 3.4, eg. using sudo python3 setup.py install (version in repository is for python 2.7)
+download and install CMake from https://cmake.org/download/ and configure CMake to use ssl
+download and install Qt5 from https://www.qt.io/download/
+download and install PyQt5 from https://www.riverbankcomputing.com/software/pyqt/download5
+download and install sip from https://www.riverbankcomputing.com/software/sip/download make sure the verion is 4.18 or newer
+
+alternative method for installing python at: https://edwards.sdsu.edu/research/installing-python3-4-and-the-scipy-stack-on-centos/
+
+```shell
 git clone http://github.com/Ultimaker/cura-build.git
 cd cura-build
 ```
