@@ -11,6 +11,9 @@ import re
 import shutil
 import site
 import Arcus
+import scipy
+import numpy
+import numpy.core
 
 # work around the limitation that shutil.copytree does not allow the target directory to exist
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -23,6 +26,25 @@ def copytree(src, dst, symlinks=False, ignore=None):
             copytree(s, d, symlinks, ignore)
         else:
             shutil.copy2(s, d)
+
+def findSubPackages(root_package_path, package_name):
+    includes = []
+    for dirpath, dirnames, filenames in os.walk(os.path.dirname(root_package_path)):
+        if "__" in dirpath:
+            continue
+            
+        if "tests" in dirnames:
+            dirnames.remove("tests")
+            
+        module_path = dirpath.replace(os.path.dirname(root_package_path), package_name)
+        module_path = module_path.split(os.path.sep)
+        module_name = ".".join(module_path)
+        if os.path.isfile(dirpath + "/__init__.py"):
+            includes.append(module_name)
+            for filename in filenames:
+                if "__" not in filename and os.path.splitext(filename)[1] in [".py", ".pyd"]:
+                    includes.append(module_name + "." + os.path.splitext(filename)[0])
+    return includes
 
 includes = [
     "sip", 
@@ -39,31 +61,18 @@ includes = [
 ]
 
 # Include all the UM modules in the includes. As py2exe fails to properly find all the dependencies due to the plugin architecture.
-for dirpath, dirnames, filenames in os.walk(os.path.dirname(UM.__file__)):
-    if "__" in dirpath:
-        continue
-    module_path = dirpath.replace(os.path.dirname(UM.__file__), "UM")
-    module_path = module_path.split(os.path.sep)
-    module_name = ".".join(module_path)
-    if os.path.isfile(dirpath + "/__init__.py"):
-        includes += [module_name]
-        for filename in filenames:
-            if "__" in filename or not filename.endswith(".py"):
-                continue
-            includes += [module_name + "." + os.path.splitext(filename)[0]]
+includes += findSubPackages(UM.__file__, "UM")
+includes += findSubPackages(cura.__file__, "cura")
+includes += findSubPackages(scipy.__file__, "scipy")
 
-for dirpath, dirnames, filenames in os.walk(os.path.dirname(cura.__file__)):
-    if "__" in dirpath:
-        continue
-    module_path = dirpath.replace(os.path.dirname(cura.__file__), "cura")
-    module_path = module_path.split(os.path.sep)
-    module_name = ".".join(module_path)
-    if os.path.isfile(dirpath + "/__init__.py"):
-        includes += [module_name]
-        for filename in filenames:
-            if "__" in filename or not filename.endswith(".py"):
-                continue
-            includes += [module_name + "." + os.path.splitext(filename)[0]]
+# Filter out the known bad apples.
+includes = [x for x in includes if x not in [
+                "scipy.interpolate.interpnd_info",
+                "scipy.misc.pilutil",
+                "scipy.special.generate_ufuncs",
+                "scipy.special._testutils",
+                "scipy.linalg._testutils",
+                "scipy._lib._testutils"]]
 
 print("Removing previous distribution package")
 shutil.rmtree("dist", True)
@@ -108,6 +117,12 @@ print("Copying QtQuick plugins")
 copytree(os.path.join(qt_lib_dir, "qml"), "dist/qml")
 print("Copying Qt5 svg library")
 shutil.copy(os.path.join(qt_bin_dir, "Qt5Svg.dll"), "dist/Qt5Svg.dll")
+
+print("Copy numpy DLLs")
+numpy_core_dir = os.path.dirname(numpy.core.__file__)
+for item in os.listdir(numpy_core_dir):
+    if item.endswith(".dll"):
+        shutil.copy(os.path.join(numpy_core_dir, item), os.path.join("dist", item))
 
 print("Copy CuraEngine")
 shutil.copy("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", "dist/CuraEngine.exe")

@@ -1,3 +1,17 @@
+# CMake
+/*-prefix
+CMakeCache.txt
+CMakeFiles/
+CPackConfig.cmake
+CPackSourceConfig.cmake
+Makefile
+_CPack_Packages/
+cmake_install.cmake
+/inst/
+
+# CMake - Debian
+*.deb
+
 *.pyc
 *kdev*
 __pycache__
