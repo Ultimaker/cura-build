@@ -151,6 +151,7 @@ download and install PyQt5 from https://www.riverbankcomputing.com/software/pyqt
 download and install sip from https://www.riverbankcomputing.com/software/sip/download make sure the verion is 4.18 or newer
 
 alternative method for installing python at: https://edwards.sdsu.edu/research/installing-python3-4-and-the-scipy-stack-on-centos/
+make sure, that the PYTHONPATH can find dist-packages
 
 ```shell
 git clone http://github.com/Ultimaker/cura-build.git
