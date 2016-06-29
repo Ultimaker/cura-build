@@ -606,15 +606,20 @@ elseif(BUILD_OS_LINUX)
     set(CPACK_INSTALLED_DIRECTORIES
         "${CMAKE_BINARY_DIR}/inst/bin;/opt/cura/bin"
         "${CMAKE_BINARY_DIR}/inst/lib;/opt/cura/lib"
-        "${CMAKE_BINARY_DIR}/inst/share;/opt/cura/share"
+        "${CMAKE_BINARY_DIR}/inst/share/applications;/usr/share/applications"
+        "${CMAKE_BINARY_DIR}/inst/share/cura;/opt/cura/share/cura"
+        "${CMAKE_BINARY_DIR}/inst/share/doc;/opt/cura/share/doc"
+        "${CMAKE_BINARY_DIR}/inst/share/mime;/usr/share/mime"
+        "${CMAKE_BINARY_DIR}/inst/share/sip;/opt/cura/sip"
+        "${CMAKE_BINARY_DIR}/inst/share/uranium;/opt/cura/share/uranium"
     )
 
     set(package_dir "_CPack_Packages/Linux/${CPACK_GENERATOR}/Cura-${CURA_VERSION}-Linux/")
     set(CPACK_INSTALL_COMMANDS
         "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/bin"
         "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/share/applications"
-        "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura ${package_dir}/usr/bin/"
-        "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura.desktop ${package_dir}/usr/share/applications/"
+        "${CMAKE_COMMAND} -E rename ${CMAKE_BINARY_DIR}/inst/bin/cura ${CMAKE_BINARY_DIR}/inst/bin/cura.real"
+        "${CMAKE_COMMAND} -E copy   ${CMAKE_SOURCE_DIR}/cura          ${package_dir}/usr/bin"
     )
 
     set(CPACK_INSTALL_COMMANDS ${CPACK_INSTALL_COMMANDS} "mkdir -pv ${package_dir}/opt/cura/lib/")
