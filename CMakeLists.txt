@@ -395,8 +395,17 @@ if(BUILD_NUMPY_STL)
 endif()
 
 if(BUILD_ZEROCONF)
-    ExternalProject_Add(PythonZeroconf
+    ExternalProject_Add(PythonNetifaces
         DEPENDS Python
+        URL https://pypi.python.org/packages/18/fa/dd13d4910aea339c0bb87d2b3838d8fd923c11869b1f6e741dbd0ff3bc00/netifaces-0.10.4.tar.gz
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+
+    ExternalProject_Add(PythonZeroconf
+        DEPENDS PythonNetifaces
         URL https://github.com/jstasiak/python-zeroconf/archive/0.17.5.tar.gz
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
