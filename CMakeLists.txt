@@ -16,6 +16,7 @@ option(BUILD_NUMPY "Include Numpy" ON)
 option(BUILD_SCIPY "Include Scipy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
 option(BUILD_NUMPY_STL "Include Numpy-STL" ON)
+option(BUILD_ZEROCONF "Include python-zeroconf" ON)
 
 if(WIN32)
     option(BUILD_64BIT "Create a 64-bit build" OFF)
