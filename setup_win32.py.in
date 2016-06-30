@@ -57,7 +57,8 @@ includes = [
     "xml.etree",
     "xml.etree.ElementTree",
     "cura",
-    "cura.OneAtATimeIterator"
+    "cura.OneAtATimeIterator",
+    "zeroconf"
 ]
 
 # Include all the UM modules in the includes. As py2exe fails to properly find all the dependencies due to the plugin architecture.
