@@ -393,6 +393,17 @@ if(BUILD_NUMPY_STL)
     )
 endif()
 
+if(BUILD_ZEROCONF)
+    ExternalProject_Add(PythonZeroconf
+        DEPENDS Python
+        URL https://github.com/jstasiak/python-zeroconf/archive/0.17.5.tar.gz
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+endif()
+
 if(BUILD_OS_OSX)
     set(protobuf_cxx_flags "-fPIC -std=c++11 -stdlib=libc++")
 else()
