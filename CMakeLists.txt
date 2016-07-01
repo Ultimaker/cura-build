@@ -306,13 +306,6 @@ if(BUILD_PYQT)
         )
     endif()
 
-    # This patches the PyQt 5.4.2 source code to remove the "disconnectNotify" method from QPyQmlObject.
-    # This fixes a deadlock that could randomly occur when deleting QML items.
-    # This workaround should be removed as soon as a new stable release of PyQt is available that includes the fix.
-    set(pyqt_patch
-        patch qpy/QtQml/qpyqmlobject.cpp ${CMAKE_SOURCE_DIR}/qpyqmlobject.cpp.patch && patch qpy/QtQml/qpyqmlobject.h ${CMAKE_SOURCE_DIR}/qpyqmlobject.h.patch
-    )
-
     ExternalProject_Add(PyQt
         DEPENDS Python Qt Sip
         URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
