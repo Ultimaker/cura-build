@@ -352,17 +352,17 @@ endif()
 if(BUILD_NUMPY)
     if(BUILD_OS_LINUX)
         # Inform numpy about using OpenBLAS
-        set(build_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${PYTHON_EXECUTABLE} setup.py build)
+        set(build_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${PYTHON_EXECUTABLE} setup.py build -j 5)
         set(install_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     else()
-        set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
+        set(build_numpy ${PYTHON_EXECUTABLE} setup.py build -j 5)
         set(install_numpy ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     endif()
 
     ExternalProject_Add(Numpy
         DEPENDS Python OpenBLAS
-        URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
-        URL_MD5 a1ed53432dbcd256398898d35bc8e645
+        URL http://downloads.sourceforge.net/project/numpy/NumPy/1.11.1/numpy-1.11.1.tar.gz
+        URL_MD5 2f44a895a8104ffac140c3a70edbd450
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${build_numpy}
         INSTALL_COMMAND ${install_numpy}
