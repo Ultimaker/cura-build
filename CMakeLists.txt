@@ -17,6 +17,7 @@ option(BUILD_SCIPY "Include Scipy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
 option(BUILD_NUMPY_STL "Include Numpy-STL" ON)
 option(BUILD_ZEROCONF "Include python-zeroconf" ON)
+option(BUILD_COLORLOG "Include python-colorlog" ON)
 
 if(WIN32)
     option(BUILD_64BIT "Create a 64-bit build" OFF)
@@ -71,6 +72,10 @@ if(BUILD_OS_WINDOWS)
         # but fails on Win64. So we need an externally built SIP and Arcus bindings on Win64.
         set(BUILD_SIP OFF)
     endif()
+endif()
+
+if(BUILD_OS_WINDOWS OR BUILD_OS_OSX)
+    set(BUILD_COLORLOG OFF)
 endif()
 
 set(TAG_OR_BRANCH "master" CACHE STRING "The name of the tag or branch to build")
@@ -426,6 +431,18 @@ if(BUILD_ZEROCONF)
     ExternalProject_Add(PythonZeroconf
         DEPENDS PythonNetifaces
         URL https://github.com/jstasiak/python-zeroconf/archive/0.17.5.tar.gz
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+endif()
+
+if(BUILD_COLORLOG)
+    ExternalProject_Add(PythonColorlog
+        DEPENDS Python
+        URL https://github.com/borntyping/python-colorlog/archive/2.7.0.tar.gz
+        URL_MD5 a39a0ab37877a0b682f493f8ce23ad0b
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
         INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
