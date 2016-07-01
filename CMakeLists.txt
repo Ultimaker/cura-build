@@ -315,7 +315,8 @@ if(BUILD_PYQT)
 
     ExternalProject_Add(PyQt
         DEPENDS Python Qt Sip
-        URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.4.2/PyQt-gpl-5.4.2.tar.gz
+        URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
+        URL_MD5 dbfc885c0548e024ba5260c4f44e0481
         PATCH_COMMAND ${pyqt_patch}
         CONFIGURE_COMMAND ${pyqt_command}
         BUILD_IN_SOURCE 1
