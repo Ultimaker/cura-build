@@ -38,7 +38,8 @@ OPTIONS = {
         "serial", 
         "Arcus", 
         "xml.etree", 
-        "xml.etree.ElementTree"
+        "xml.etree.ElementTree",
+        "zeroconf",
     ],
     "resources": [
         "inst/lib/plugins",

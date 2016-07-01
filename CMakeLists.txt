@@ -16,6 +16,7 @@ option(BUILD_NUMPY "Include Numpy" ON)
 option(BUILD_SCIPY "Include Scipy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
 option(BUILD_NUMPY_STL "Include Numpy-STL" ON)
+option(BUILD_ZEROCONF "Include python-zeroconf" ON)
 
 if(WIN32)
     option(BUILD_64BIT "Create a 64-bit build" OFF)
@@ -55,6 +56,7 @@ if(BUILD_OS_WINDOWS)
     set(BUILD_NUMPY OFF)
     set(BUILD_SCIPY OFF)
     set(BUILD_NUMPY_STL OFF)
+    set(BUILD_ZEROCONF OFF)
 
     # On Win32, MinGW built Qt ignores environment variable changes made when running the
     # application. Since we need that to disable the threaded renderer, we need to use an
@@ -349,8 +351,8 @@ endif()
 if(BUILD_NUMPY)
     if(BUILD_OS_LINUX)
         # Inform numpy about using OpenBLAS
-        set(build_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${build_numpy})
-        set(install_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${install_numpy})
+        set(build_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${PYTHON_EXECUTABLE} setup.py build)
+        set(install_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     else()
         set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
         set(install_numpy ${PYTHON_EXECUTABLE} setup.py install ${python_install})
@@ -370,8 +372,8 @@ endif()
 if(BUILD_SCIPY)
     if(BUILD_OS_LINUX)
         # Inform scipy about using OpenBLAS
-        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${build_scipy})
-        set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${install_scipy})
+        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py build)
+        set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     else()
         set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
         set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
@@ -407,6 +409,26 @@ if(BUILD_NUMPY_STL)
         CONFIGURE_COMMAND ""
         BUILD_COMMAND "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${PYTHON_EXECUTABLE} setup.py build
         INSTALL_COMMAND "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+endif()
+
+if(BUILD_ZEROCONF)
+    ExternalProject_Add(PythonNetifaces
+        DEPENDS Python
+        URL https://pypi.python.org/packages/18/fa/dd13d4910aea339c0bb87d2b3838d8fd923c11869b1f6e741dbd0ff3bc00/netifaces-0.10.4.tar.gz
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+
+    ExternalProject_Add(PythonZeroconf
+        DEPENDS PythonNetifaces
+        URL https://github.com/jstasiak/python-zeroconf/archive/0.17.5.tar.gz
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
         BUILD_IN_SOURCE 1
     )
 endif()
