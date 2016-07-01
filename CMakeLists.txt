@@ -263,7 +263,8 @@ if(BUILD_SIP)
 
     ExternalProject_Add(Sip
         DEPENDS Python
-        URL http://downloads.sourceforge.net/project/pyqt/sip/sip-4.17/sip-4.17.zip
+        URL http://downloads.sourceforge.net/project/pyqt/sip/sip-4.18/sip-4.18.zip
+        URL_MD5 e860d06782962fa02f81aeecba3d82a7
         CONFIGURE_COMMAND ${sip_command}
         BUILD_IN_SOURCE 1
     )
