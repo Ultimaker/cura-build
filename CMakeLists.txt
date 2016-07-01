@@ -373,16 +373,17 @@ endif()
 if(BUILD_SCIPY)
     if(BUILD_OS_LINUX)
         # Inform scipy about using OpenBLAS
-        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py build)
+        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py build -j 5)
         set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     else()
-        set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
+        set(build_scipy ${PYTHON_EXECUTABLE} setup.py build -j 5)
         set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     endif()
 
     ExternalProject_Add(Scipy
         DEPENDS Python Numpy
-        URL http://downloads.sourceforge.net/project/scipy/scipy/0.16.1/scipy-0.16.1.tar.gz
+        URL https://github.com/scipy/scipy/releases/download/v0.17.1/scipy-0.17.1.tar.gz
+        URL_MD5 8987b9a3e3cd79218a0a423b21c8e4de
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${build_scipy}
         INSTALL_COMMAND ${install_scipy}
