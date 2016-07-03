@@ -119,3 +119,49 @@ cmake ..
 make
 make package
 ```
+## CentOS/Linux
+
+cura-build can build CentOS/RHEL packages of Cura.
+
+Dependencies:
+
+* gcc-gfortran 
+* python34.x86_64 
+* python34-devel.x86_64 
+* python34-numpy.x86_64 
+* pyserial.noarch 
+* PyOpenGL.noarch 
+* python34-setuptools.noarch 
+* wxPython.x86_64 
+* libstdc++-static.x86_64 
+* libstdc++-devel.x86_64 
+* openssl.x86_64 
+* openblas-devel.x86_64 
+* python34-numpy-f2py.x86_64
+
+To build, make sure these dependencies are installed, then clone this repository and run the following commands from your clone:
+
+```shell
+sudo yum install gcc-gfortran python34.x86_64 python34-devel.x86_64 python34-numpy.x86_64 pyserial.noarch PyOpenGL.noarch python34-setuptools.noarch wxPython.x86_64 libstdc++-static.x86_64 libstdc++-devel.x86_64 openssl.x86_64 openblas-devel.x86_64 python34-numpy-f2py.x86_64
+```
+1. download and install scipy from https://github.com/scipy/scipy/releases be sure to use python 3.4, eg. using sudo python3 setup.py 2. install (version in repository is for python 2.7)
+3. download and install CMake from https://cmake.org/download/ and configure CMake to use ssl
+4. download and install Qt5 from https://www.qt.io/download/
+5. download and install PyQt5 from https://www.riverbankcomputing.com/software/pyqt/download5
+6. download and install sip from https://www.riverbankcomputing.com/software/sip/download make sure the verion is 4.18 or newer
+
+Alternative method for installing python at: https://edwards.sdsu.edu/research/installing-python3-4-and-the-scipy-stack-on-centos/
+Make sure, that the PYTHONPATH can find dist-packages. 
+
+```shell
+git clone http://github.com/Ultimaker/cura-build.git
+cd cura-build
+```
+
+```shell
+mkdir build
+cd build
+cmake ..
+make
+make package
+```
