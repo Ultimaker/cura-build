@@ -50,7 +50,8 @@ def findSubPackages(root_package_path, package_name):
 
 includes = [
     "sip", 
-    "ctypes", 
+    "ctypes",
+    "uuid",
     "UM",
     "PyQt5.QtNetwork", 
     "PyQt5._QOpenGLFunctions_2_0",
