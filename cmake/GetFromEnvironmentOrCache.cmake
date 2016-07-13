@@ -1,0 +1,9 @@
+# Copyright 2016 Ultimaker
+
+macro(GetFromEnvironmentOrCache VARIABLE_NAME DEFAULT_VALUE CACHE_TYPE CACHE_DESCRIPTION)
+    set(${VARIABLE_NAME} ${DEFAULT_VALUE} CACHE ${CACHE_TYPE} ${CACHE_DESCRIPTION})
+
+    if(DEFINED ENV{${VARIABLE_NAME}})
+        set(${VARIABLE_NAME} $ENV{${VARIABLE_NAME}} CACHE ${CACHE_TYPE} ${CACHE_DESCRIPTION} FORCE)
+    endif()
+endmacro(GetFromEnvironmentOrCache)
