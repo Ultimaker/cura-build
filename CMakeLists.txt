@@ -51,6 +51,21 @@ foreach(_project ${_projects})
 endforeach()
 
 ProcessProjectDependencies(TARGET projects)
+
+# Create package step
+if(BUILD_PACKAGE)
+    add_custom_target(packaging ALL DEPENDS projects COMMENT "Packaging Projects...")
+
+    if(BUILD_OS_WINDOWS)
+        include(packaging/windows.cmake)
+    elseif(BUILD_OS_OSX)
+        include(packaging/osx.cmake)
+    elseif(BUILD_OS_LINUX)
+        include(packaging/linux.cmake)
+    else()
+        message(STATUS "Do not know how to build an executable for the current platform! You will have to create it manually.")
+    endif()
+endif()
 #
 #
 # message(STATUS "Building Cura ${CURA_VERSION}")
