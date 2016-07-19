@@ -10,6 +10,7 @@ include(GNUInstallDirs)
 # find_package(CuraBuildEnvironment)
 # include(CuraBuildPlatformDetection)
 include(GetFromEnvironmentOrCache)
+include(SetProjectDependencies)
 
 option(BUILD_PACKAGE "Create a package with the build of Cura" ON)
 option(SIGN_PACKAGE "Perform signing of the created package. Implies BUILD_PACKAGE" ON)
@@ -49,6 +50,7 @@ foreach(_project ${_projects})
     include(${_project})
 endforeach()
 
+ProcessProjectDependencies(TARGET projects)
 #
 #
 # message(STATUS "Building Cura ${CURA_VERSION}")
