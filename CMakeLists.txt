@@ -11,13 +11,14 @@ include(GNUInstallDirs)
 # include(CuraBuildPlatformDetection)
 include(GetFromEnvironmentOrCache)
 
-find_package(PythonInterp 3.5.0 REQUIRED)
-find_package(Qt5 5.6.0 REQUIRED Core Qml Quick Widgets)
-# find_package(Arcus 1.1 REQUIRED)
+option(BUILD_PACKAGE "Create a package with the build of Cura" ON)
+option(SIGN_PACKAGE "Perform signing of the created package. Implies BUILD_PACKAGE" ON)
 
-# find_package(Python-Arcus VERSION 1.1 REQUIRED)
-find_package(PyQt 5.6 REQUIRED)
-find_package(SciPy 0.17 REQUIRED)
+if(SIGN_PACKAGE)
+    set(BUILD_PACKAGE ON)
+endif()
+
+set(BUILD_OS_LINUX TRUE)
 
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 
@@ -35,6 +36,18 @@ if(NOT "${CURA_EXTRA_VERSION}" STREQUAL "")
     set(CURA_VERSION "${CURA_VERSION}-${CURA_EXTRA_VERSION}")
 endif()
 
+# Build projects step
+add_custom_target(projects ALL COMMENT "Building Projects...")
+
+file(GLOB _projects projects/*.cmake)
+foreach(_project ${_projects})
+    # Go through all files in projects/ and include them. The project files should define
+    # targets for the actual projects. In addition, these files are expected to define any
+    # packages they depend on with find_package and any other projects they depend on as
+    # dependencies of the target(s). Project files are free to define multiple targets though
+    # they should only define targets relevant for that project.
+    include(${_project})
+endforeach()
 
 #
 #
