@@ -66,6 +66,22 @@ if(BUILD_PACKAGE)
         message(STATUS "Do not know how to build an executable for the current platform! You will have to create it manually.")
     endif()
 endif()
+
+# Sign packages step
+if(SIGN_PACKAGE)
+    add_custom_target(signing ALL DEPENDS packaging COMMENT "Signing Package...")
+
+    if(BUILD_OS_WINDOWS)
+        include(signing/windows.cmake)
+    elseif(BUILD_OS_OSX)
+        include(signing/osx.cmake)
+    elseif(BUILD_OS_LINUX)
+        include(signing/linux.cmake)
+    else()
+        message(STATUS "Do not know how to sign the executable for the current platform! You will need to perform signing manually.")
+    endif()
+endif()
+
 #
 #
 # message(STATUS "Building Cura ${CURA_VERSION}")
