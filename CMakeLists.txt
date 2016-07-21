@@ -8,7 +8,7 @@ include(ExternalProject)
 include(GNUInstallDirs)
 
 # find_package(CuraBuildEnvironment)
-# include(CuraBuildPlatformDetection)
+include(BuildPlatformDetection)
 include(GetFromEnvironmentOrCache)
 include(SetProjectDependencies)
 
