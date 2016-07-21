@@ -11,13 +11,11 @@ def load_scipy(finder, module):
 hooks.load_scipy = load_scipy
 
 def load_pyqt5_qtquick(finder, module):
-    name, QtCore = hooks._qt_implementation(module)
-
-    finder.IncludeModule("%s.QtCore" % name)
-    finder.IncludeModule("%s.QtGui" % name)
-    finder.IncludeModule("%s.QtQml" % name)
-    finder.IncludeModule("%s.QtNetwork" % name)
-    finder.IncludeModule("%s._QOpenGLFunctions_2_0" % name)
+    finder.IncludeModule("PyQt5.QtCore")
+    finder.IncludeModule("PyQt5.QtGui")
+    finder.IncludeModule("PyQt5.QtQml")
+    finder.IncludeModule("PyQt5.QtNetwork")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
 
 hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
@@ -28,7 +26,7 @@ search_path.insert(2, "@CMAKE_INSTALL_PREFIX@/lib/python3/dist-packages/")
 # Dependencies are automatically detected, but it might need
 # fine tuning.
 build_options = {
-    "build_exe": "package/cx_freeze",
+    "build_exe": "package/",
     "path": search_path,
     "packages": [
         "xml.etree",
@@ -42,6 +40,43 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3/dist-packages/UM/Qt/qml/UM", "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources")
+    ],
+    "optimize": 2,
+    "bin_path_includes": [
+        "/lib",
+        "/lib64",
+        "/usr/lib",
+        "/usr/lib64",
+    ],
+    "bin_excludes": [
+        "linux-vdso.so.1",
+        "libpthread.so.0",
+        "libdl.so.2",
+        "librt.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2",
+        "libz.so.1",
+        "libgcc_s.so.1",
+        "libglib-2.0",
+        "librt.so.1",
+        "libcap.so.2",
+        "libGL.so.1",
+        "libglapi.so.0",
+        "libXext.so.6",
+        "libXdamage.so.1",
+        "libXfixes.so.3",
+        "libX11-xcb.so.1",
+        "libX11.so.6",
+        "libxcb-glx.so.0",
+        "libxcb-dri2.so.0",
+        "libxcb.so.1",
+        "libXxf86vm.so.1",
+        "libdrm.so.2",
+        "libexpat.so.1",
+        "libXau.so.6"
     ]
 }
 
