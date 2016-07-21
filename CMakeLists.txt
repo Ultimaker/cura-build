@@ -19,8 +19,6 @@ if(SIGN_PACKAGE)
     set(BUILD_PACKAGE ON)
 endif()
 
-set(BUILD_OS_LINUX TRUE)
-
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 
 GetFromEnvironmentOrCache(TAG_OR_BRANCH "master" STRING "The name of the tag or branch to build")
@@ -32,9 +30,9 @@ GetFromEnvironmentOrCache(CURA_VERSION_MINOR "0" STRING "Cura Minor Version")
 GetFromEnvironmentOrCache(CURA_VERSION_PATCH "0" STRING "Cura Patch Version")
 GetFromEnvironmentOrCache(CURA_VERSION_EXTRA "${TAG_OR_BRANCH}" STRING "Cura Extra Version Information")
 
-set(CURA_VERSION "${CURA_MAJOR_VERSION}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}")
-if(NOT "${CURA_EXTRA_VERSION}" STREQUAL "")
-    set(CURA_VERSION "${CURA_VERSION}-${CURA_EXTRA_VERSION}")
+set(CURA_VERSION "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}")
+if(NOT "${CURA_VERSION_EXTRA}" STREQUAL "")
+    set(CURA_VERSION "${CURA_VERSION}-${CURA_VERSION_EXTRA}")
 endif()
 
 # Build projects step
