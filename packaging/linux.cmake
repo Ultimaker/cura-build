@@ -11,4 +11,16 @@ add_custom_command(
     VERBATIM
 )
 #
+# add_custom_command(
+#     TARGET packaging POST_BUILD
+#     COMMAND ${PYTHON_EXECUTABLE} setup_osx.py py2app
+#     COMMENT "Running py2app"
+#     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+# )
+#
+# install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/Cura.app DESTINATION "." USE_SOURCE_PERMISSIONS)
+#
+# set(CPACK_GENERATOR "DragNDrop")
+
+#
 #
