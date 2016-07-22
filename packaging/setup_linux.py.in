@@ -26,7 +26,7 @@ search_path.insert(2, "@CMAKE_INSTALL_PREFIX@/lib/python3/dist-packages/")
 # Dependencies are automatically detected, but it might need
 # fine tuning.
 build_options = {
-    "build_exe": "package/",
+    "build_exe": "package/usr/bin",
     "path": search_path,
     "packages": [
         "xml.etree",
