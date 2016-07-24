@@ -540,11 +540,26 @@ FunctionEnd
 @CPACK_NSIS_COMPONENT_SECTIONS@
 
 Section "Open STL files with Cura"
-    WriteRegStr HKCR .stl "" "STL Model File"
-    DeleteRegValue HKCR .stl "Content Type"
-    WriteRegStr HKCR "Cura STL model file\DefaultIcon" "" "$INSTDIR\Cura.exe,0"
-    WriteRegStr HKCR "Cura STL model file\shell" "" "open"
-    WriteRegStr HKCR "Cura STL model file\shell\open\command" "" '"$INSTDIR\Cura.exe" "%1"'
+    Push $0
+    Push $1
+ 
+    ReadRegStr $1 HKCR .stl ""  ; read current file association
+    StrCmp "$1" "" NoBackup  ; is it empty
+    StrCmp "$1" "Cura.model.STL" NoBackup  ; is it our own
+        WriteRegStr HKCR .stl "backup_val" "$1"  ; backup current value
+NoBackup:
+    WriteRegStr HKCR .stl "" "Cura.model.STL"  ; set our file association
+ 
+    ReadRegStr $0 HKCR Cura.model.STL ""
+    StrCmp $0 "" 0 Skip
+        WriteRegStr HKCR "Cura.model.STL" "" "Cura.model.STL"
+        WriteRegStr HKCR "Cura.model.STL\shell" "" "open"
+        WriteRegStr HKCR "Cura.model.STL\DefaultIcon" "" "$INSTDIR\Cura.exe,0"
+Skip:
+    WriteRegStr HKCR "Cura.model.STL\shell\open\command" "" '"$INSTDIR\Cura.exe" "%1"'
+ 
+    Pop $1
+    Pop $0
 SectionEnd
 
 Section /o "Open OBJ files with Cura"
