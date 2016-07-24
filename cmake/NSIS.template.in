@@ -556,7 +556,7 @@ Section /o "Open OBJ files with Cura"
 SectionEnd
 
 Section /o "Open 3MF files with Cura"
-    WriteRegStr HKCR .3mf "" ""
+    WriteRegStr HKCR .3mf "" "3D Manufacturing Format"
     DeleteRegValue HKCR .3mf "Content Type"
     WriteRegStr HKCR "Cura 3MF model file\DefaultIcon" "" "$INSTDIR\Cura.exe,0"
     WriteRegStr HKCR "Cura 3MF model file\shell" "" "open"
