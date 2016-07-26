@@ -23,7 +23,7 @@ function(FindPythonPackage)
         set(_VERSION_PROPERTY "__version__")
     endif()
 
-    if(NOT PythonInterp_FOUND)
+    if(NOT PYTHONINTERP_FOUND)
         if(_REQUIRED)
             message(FATAL_ERROR "Could not find Python interpreter for required dependency ${_MODULE_NAME}")
         else()
@@ -32,7 +32,7 @@ function(FindPythonPackage)
         endif()
     endif()
 
-    if(PythonInterp_FOUND)
+    if(PYTHONINTERP_FOUND)
         execute_process(
             COMMAND ${PYTHON_EXECUTABLE} -c "import ${_MODULE_NAME}; print(${_MODULE_NAME}.__file__, ${_MODULE_NAME}.${_VERSION_PROPERTY})"
             RESULT_VARIABLE _process_status
