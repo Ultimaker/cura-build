@@ -50,6 +50,12 @@ build_options = {
     "excludes": [ ]
 }
 
+bdist_mac_options = {
+    "iconfile": "@CMAKE_SOURCE_DIR@/packaging/cura.icns",
+    "custom_info_plist": "@CMAKE_BINARY_DIR@/Info.plist",
+    "bundle_name": "Cura"
+}
+
 executables = [
     Executable("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py", targetName = "cura")
 ]
@@ -62,6 +68,6 @@ setup(
     url="http://software.ultimaker.com/",
     license="GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
     
-    options = {"build_exe": build_options},
+    options = {"build_exe": build_options, "bdist_mac": bdist_mac_options },
     executables = executables
 )
