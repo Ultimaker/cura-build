@@ -28,9 +28,16 @@ On Windows, the following dependencies are needed for building:
 * **Python** 3.4 (http://python.org/, note that using Python 3.5 is currently untested on Windows)
 * **NumPy** from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy - make sure to get the NON-MKL version!
 * **SciPy** from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy
-* **Microsoft Visual Studio 2015 (community edition)**: 
-  Install Programming languages: Visual c++ (all), Python Tools for Visual Studio (Nov 2015)
-  Windows & Web Development: Universal Windows App Development Tools (Tools 1.2 & windows 10 SDK-10/0/10586; Windows 10 SDK -10.0.10240)
+* **Microsoft Visual Studio 2015 (community edition)**:
+  Go to "custom installation" and choose:
+    * Programming languages:
+      * Visual c++ (all)
+      * Python Tools for Visual Studio (Nov 2015)
+    * Windows & Web Development:
+      * Universal Windows App Development Tools:
+        * Tools 1.2
+        * Windows 10 SDK 10.0.10586
+        * Windows 10 SDK 10.0.10240
 * **Py2Exe** (https://pypi.python.org/pypi/py2exe/0.9.2.0/#downloads) The easiest way to install this is to run the command `pip install py2exe`. The executable `build_exe.exe` should now be in your `<python dir>/Scripts` directory. You may have to add `<python dir>/Scripts` to you `%PATH%`.
 * **NSIS 3** (http://nsis.sourceforge.net/Main_Page) for creating the installer 
 
