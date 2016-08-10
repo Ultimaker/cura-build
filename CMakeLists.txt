@@ -422,7 +422,8 @@ else()
 endif()
 
 ExternalProject_Add(Protobuf
-    URL https://github.com/google/protobuf/archive/v3.0.0-beta-2.tar.gz
+    URL https://github.com/google/protobuf/archive/v3.0.0.tar.gz
+    URL_MD5 d4f6ca65aadc6310b3872ee421e79fa6
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_INSTALL_LIBDIR=lib -Dprotobuf_BUILD_TESTS=OFF -DCMAKE_CXX_FLAGS=${protobuf_cxx_flags} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -G ${CMAKE_GENERATOR} ../Protobuf/cmake
 )
 
