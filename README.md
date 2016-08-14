@@ -28,6 +28,8 @@ On Windows, the following dependencies are needed for building:
 * **Python** 3.4 (http://python.org/, note that using Python 3.5 is currently untested on Windows)
 * **NumPy** from http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy - make sure to get the NON-MKL version!
 * **SciPy** from http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy
+* **Py2Exe** (https://pypi.python.org/pypi/py2exe/0.9.2.0/#downloads) The easiest way to install this is to run the command `pip install py2exe`. The executable `build_exe.exe` should now be in your `<python dir>/Scripts` directory. You may have to add `<python dir>/Scripts` to you `%PATH%`.
+* **Numpy-STL** (https://pypi.python.org/pypi/numpy-stl) Also the easiest way to install is via `pip3 install stl`.
 * **Microsoft Visual Studio 2015 (community edition)**:
   Go to "custom installation" and choose:
     * Programming languages:
@@ -38,8 +40,6 @@ On Windows, the following dependencies are needed for building:
         * Tools 1.2
         * Windows 10 SDK 10.0.10586
         * Windows 10 SDK 10.0.10240
-* **Py2Exe** (https://pypi.python.org/pypi/py2exe/0.9.2.0/#downloads) The easiest way to install this is to run the command `pip install py2exe`. The executable `build_exe.exe` should now be in your `<python dir>/Scripts` directory. You may have to add `<python dir>/Scripts` to you `%PATH%`.
-* **Numpy-STL** (https://pypi.python.org/pypi/numpy-stl) Also the easiest way to install is via `pip3 install stl`.
 * **NSIS 3** (http://nsis.sourceforge.net/Main_Page) for creating the installer 
 
 Make sure these dependencies are available from your path.
