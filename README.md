@@ -39,6 +39,7 @@ On Windows, the following dependencies are needed for building:
         * Windows 10 SDK 10.0.10586
         * Windows 10 SDK 10.0.10240
 * **Py2Exe** (https://pypi.python.org/pypi/py2exe/0.9.2.0/#downloads) The easiest way to install this is to run the command `pip install py2exe`. The executable `build_exe.exe` should now be in your `<python dir>/Scripts` directory. You may have to add `<python dir>/Scripts` to you `%PATH%`.
+* **Numpy-STL** (https://pypi.python.org/pypi/numpy-stl) Also the easiest way to install is via `pip3 install stl`.
 * **NSIS 3** (http://nsis.sourceforge.net/Main_Page) for creating the installer 
 
 Make sure these dependencies are available from your path.
