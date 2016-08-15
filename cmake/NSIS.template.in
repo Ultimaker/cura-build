@@ -539,43 +539,18 @@ FunctionEnd
 ; Component sections
 @CPACK_NSIS_COMPONENT_SECTIONS@
 
+!include "@PROJECT_SOURCE_DIR@/NSIS/FileAssociation.nsh"
+
 Section "Open STL files with Cura"
-    Push $0
-    Push $1
- 
-    ReadRegStr $1 HKCR .stl ""  ; read current file association
-    StrCmp "$1" "" NoBackup  ; is it empty
-    StrCmp "$1" "Cura.model.STL" NoBackup  ; is it our own
-        WriteRegStr HKCR .stl "backup_val" "$1"  ; backup current value
-NoBackup:
-    WriteRegStr HKCR .stl "" "Cura.model.STL"  ; set our file association
- 
-    ReadRegStr $0 HKCR Cura.model.STL ""
-    StrCmp $0 "" 0 Skip
-        WriteRegStr HKCR "Cura.model.STL" "" "Cura.model.STL"
-        WriteRegStr HKCR "Cura.model.STL\shell" "" "open"
-        WriteRegStr HKCR "Cura.model.STL\DefaultIcon" "" "$INSTDIR\Cura.exe,0"
-Skip:
-    WriteRegStr HKCR "Cura.model.STL\shell\open\command" "" '"$INSTDIR\Cura.exe" "%1"'
- 
-    Pop $1
-    Pop $0
+    ${registerExtension} "$INSTDIR\Cura.exe" ".stl" "model via Cura"
 SectionEnd
 
 Section /o "Open OBJ files with Cura"
-    WriteRegStr HKCR .obj "" "Wavefront OBJ Model File"
-    DeleteRegValue HKCR .obj "Content Type"
-    WriteRegStr HKCR "Cura OBJ model file\DefaultIcon" "" "$INSTDIR\Cura.exe,0"
-    WriteRegStr HKCR "Cura OBJ model file\shell" "" "open"
-    WriteRegStr HKCR "Cura OBJ model file\shell\open\command" "" '"$INSTDIR\Cura.exe" "%1"'
+    ${registerExtension} "$INSTDIR\Cura.exe" ".obj" "Cura.model.OBJ"
 SectionEnd
 
 Section /o "Open 3MF files with Cura"
-    WriteRegStr HKCR .3mf "" "3D Manufacturing Format"
-    DeleteRegValue HKCR .3mf "Content Type"
-    WriteRegStr HKCR "Cura 3MF model file\DefaultIcon" "" "$INSTDIR\Cura.exe,0"
-    WriteRegStr HKCR "Cura 3MF model file\shell" "" "open"
-    WriteRegStr HKCR "Cura 3MF model file\shell\open\command" "" '"$INSTDIR\Cura.exe" "%1"'
+    ${registerExtension} "$INSTDIR\Cura.exe" ".3mf" "Cura.model.3MF"
 SectionEnd
 
 ;--------------------------------
