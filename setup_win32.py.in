@@ -103,7 +103,7 @@ print("Copying resources.")
 copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "dist/resources")
 copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "dist/resources")
 
-print("Coping Uranium QML.")
+print("Copying Uranium QML.")
 copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.4/site-packages/UM/Qt/qml/UM", "dist/qml/UM")
 
 qt_lib_dir = None
