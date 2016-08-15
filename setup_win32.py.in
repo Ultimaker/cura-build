@@ -103,7 +103,7 @@ print("Copying resources.")
 copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "dist/resources")
 copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "dist/resources")
 
-print("Coping Uranium QML.")
+print("Copying Uranium QML.")
 copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.4/site-packages/UM/Qt/qml/UM", "dist/qml/UM")
 
 qt_lib_dir = None
@@ -123,13 +123,13 @@ copytree(os.path.join(qt_lib_dir, "qml"), "dist/qml")
 print("Copying Qt5 svg library")
 shutil.copy(os.path.join(qt_bin_dir, "Qt5Svg.dll"), "dist/Qt5Svg.dll")
 
-print("Copy numpy DLLs")
+print("Copying numpy DLLs")
 numpy_core_dir = os.path.dirname(numpy.core.__file__)
 for item in os.listdir(numpy_core_dir):
     if item.endswith(".dll"):
         shutil.copy(os.path.join(numpy_core_dir, item), os.path.join("dist", item))
 
-print("Copy CuraEngine")
+print("Copying CuraEngine")
 shutil.copy("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", "dist/CuraEngine.exe")
 shutil.copy("@compiler_dir@/libstdc++-6.dll", "dist/libstdc++-6.dll")
 shutil.copy("@compiler_dir@/libwinpthread-1.dll", "dist/libwinpthread-1.dll")
