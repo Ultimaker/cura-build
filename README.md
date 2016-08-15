@@ -28,9 +28,8 @@ On Windows, the following dependencies are needed for building:
   * Once CMake is installed make sure it is available on your `%PATH%`. Check this by running `cmake --version` in the Windows console.
 * **MinGW-W64** >= 4.9.04 (http://mingw-w64.org/doku.php)
   * Once installed, its `bin` directory should be available on your `%PATH%`. Test this by running `mingw32-make --version` in the Windows console.
-  * MinGW can be installed on different ways
+  * MinGW can be installed on different ways, but these were tested (without guarentees):
    * Qt5 Installer: You can install "MinGW 4.9.2" using their "Maintenance Tool" as a component from the category "Tools"
-   * MinGW w64 installer: You can choose "4.9.3" from a great list of precompiled MinGW versions
 * **Python** 3.4 (http://python.org/)
   * __NOTE__: using Python 3.5 is currently untested on Windows
 * **NumPy** (http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy)
