@@ -29,7 +29,13 @@ On Windows, the following dependencies are needed for building:
 * **MinGW-W64** >= 4.9.04 (https://wiki.qt.io/MinGW-64-bit)
   * Once installed, its `bin` directory should be available on your `%PATH%`. Test this by running `mingw32-make --version` in the Windows console.
   * MinGW can be installed on different ways, but these were tested (without guarentees):
-    * Qt5 Installer - You can install "MinGW 4.9.2" using their "Maintenance Tool" as a component from the category "Tools"
+    * MinGW w64 installer (32-/64bit): Install the correct target architecture and make sure you choose:
+      * Version := 4.9.3
+      * Architecture := i686 (here for 32bit)
+      * Threads := posix
+      * Exception := dwarf
+      * Build revision := 1
+    * Qt5 Installer (32bit only): You can install "MinGW 4.9.2" using their "Maintenance Tool" as a component from the category "Tools"
     * When looking for other resources, make sure you download the posix flavour of MinGW. It is the only version, which is C++11 compatible (for more info take a look at the Qt docs).
 * **Python** 3.4 (http://python.org/)
   * __NOTE__: using Python 3.5 is currently untested on Windows
