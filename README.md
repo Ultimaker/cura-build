@@ -171,7 +171,7 @@ sudo yum install gcc-gfortran python34.x86_64 python34-devel.x86_64 python34-num
 5. download and install PyQt5 from https://www.riverbankcomputing.com/software/pyqt/download5
 6. download and install sip from https://www.riverbankcomputing.com/software/sip/download make sure the verion is 4.18 or newer
 
-Alternative method for installing python at: https://edwards.sdsu.edu/research/installing-python3-4-and-the-scipy-stack-on-centos/
+Alternative method for installing python at: https://edwards.sdsu.edu/research/installing-python3-4-and-the-scipy-stack-on-centos/ .
 Make sure, that the PYTHONPATH can find dist-packages. 
 
 ```shell
