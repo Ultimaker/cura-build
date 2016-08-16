@@ -523,6 +523,8 @@ elseif(BUILD_OS_WINDOWS)
 endif()
 
 if(BUILD_OS_OSX)
+    set(CPACK_GENERATOR "DragNDrop")
+
     configure_file(setup_osx.py.in setup_osx.py @ONLY)
 
     add_custom_target(build_app ALL)
@@ -549,8 +551,9 @@ if(BUILD_OS_OSX)
 
     install(DIRECTORY ${CMAKE_BINARY_DIR}/dist/Cura.app DESTINATION "." USE_SOURCE_PERMISSIONS)
 
-    set(CPACK_GENERATOR "DragNDrop")
 elseif(BUILD_OS_WINDOWS)
+    set(CPACK_GENERATOR "NSIS")
+
     get_filename_component(compiler_dir ${CMAKE_CXX_COMPILER} DIRECTORY)
     configure_file(setup_win32.py.in setup_win32.py @ONLY)
 
@@ -563,6 +566,19 @@ elseif(BUILD_OS_WINDOWS)
         add_dependencies(build_exe ${name})
     endforeach()
 
+    # TODO: Find a variable which holds the needed "win32"/"win64"
+    if(BUILD_64BIT)
+        set(NSIS_SCRIPT_COPY_PATH "${CMAKE_BINARY_DIR}/_CPack_Packages/win64/${CPACK_GENERATOR}")
+    else()
+        set(NSIS_SCRIPT_COPY_PATH "${CMAKE_BINARY_DIR}/_CPack_Packages/win32/${CPACK_GENERATOR}")
+    endif()
+    
+    add_custom_command(
+        TARGET build_exe POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/${CPACK_GENERATOR} ${NSIS_SCRIPT_COPY_PATH}
+        COMMENT "Copying NSIS scripts"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    )
     add_custom_command(
         TARGET build_exe PRE_LINK
         COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/dist
@@ -590,8 +606,6 @@ elseif(BUILD_OS_WINDOWS)
     cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
     cpack_add_component(vcredist DISPLAY_NAME "Install Visual Studio 2010 Redistributable")
     cpack_add_component(arduino DISPLAY_NAME "Install Arduino Drivers")
-
-    set(CPACK_GENERATOR "NSIS")
 elseif(BUILD_OS_LINUX)
     set(CPACK_GENERATOR "DEB")
 
