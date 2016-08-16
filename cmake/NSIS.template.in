@@ -539,7 +539,7 @@ FunctionEnd
 ; Component sections
 @CPACK_NSIS_COMPONENT_SECTIONS@
 
-!include "@PROJECT_SOURCE_DIR@/NSIS/FileAssociation.nsh"
+!include "FileAssociation.nsh"
 
 Section "Open STL files with Cura"
     ${registerExtension} "$INSTDIR\Cura.exe" ".stl" "model via Cura"
