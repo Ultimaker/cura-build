@@ -860,7 +860,7 @@ Section "Uninstall"
 
   ;Unregister file assiciations
   ${UnRegisterExtension} ".stl" "Cura.model.STL"
-  ${UnRegisterExtension} ".obj" "Cura.model.OBJ
+  ${UnRegisterExtension} ".obj" "Cura.model.OBJ"
   ${UnRegisterExtension} ".3mf" "Cura.model.3MF"
 
   ;Remove the uninstaller itself.
