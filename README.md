@@ -126,6 +126,7 @@ Dependencies:
 * qml-module-qtquick-layouts (>= 5.4.0)
 * qml-module-qtquick-dialogs (>= 5.4.0)
 * qml-module-qtquick-controls (>= 5.4.0)
+* libxcb1-dev
 * zlib1g
 * build-essential
 * pkg-config
