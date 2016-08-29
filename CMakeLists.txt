@@ -17,6 +17,7 @@ option(BUILD_SCIPY "Include Scipy" ON)
 option(BUILD_PYSERIAL "Include PySerial" ON)
 option(BUILD_NUMPY_STL "Include Numpy-STL" ON)
 option(BUILD_ZEROCONF "Include python-zeroconf" ON)
+option(BUILD_COLORLOG "Include python-colorlog" ON)
 
 if(WIN32)
     option(BUILD_64BIT "Create a 64-bit build" OFF)
@@ -71,27 +72,28 @@ if(BUILD_OS_WINDOWS)
         # but fails on Win64. So we need an externally built SIP and Arcus bindings on Win64.
         set(BUILD_SIP OFF)
     endif()
-elseif(BUILD_OS_LINUX)
-    set(BUILD_PYTHON OFF)
+endif()
+
+if(BUILD_OS_WINDOWS OR BUILD_OS_OSX)
+    set(BUILD_COLORLOG OFF)
 endif()
 
 set(TAG_OR_BRANCH "master" CACHE STRING "The name of the tag or branch to build")
 set(EXTRA_REPOSITORIES "" CACHE STRING "Extra repositories to install. Expected to have a CMake based build system.")
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
-set(EXTERNALPROJECT_SITEPACKAGES_DIR ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3.4/site-packages)
 
 # Create the version-related variables
 # These can optionally be overridden from the build enviroment.
 if(DEFINED ENV{CURA_MAJOR_VERSION})
     set(CURA_MAJOR_VERSION $ENV{CURA_MAJOR_VERSION} CACHE STRING "Cura Major Version" FORCE)
 else()
-    set(CURA_MAJOR_VERSION "master" CACHE STRING "Cura Major Version")
+    set(CURA_MAJOR_VERSION "2" CACHE STRING "Cura Major Version")
 endif()
 
 if(DEFINED ENV{CURA_MINOR_VERSION})
     set(CURA_MINOR_VERSION $ENV{CURA_MINOR_VERSION} CACHE STRING "Cura Minor Version" FORCE)
 else()
-    set(CURA_MINOR_VERSION "0" CACHE STRING "Cura Minor Version")
+    set(CURA_MINOR_VERSION "2" CACHE STRING "Cura Minor Version")
 endif()
 
 if(DEFINED ENV{CURA_PATCH_VERSION})
@@ -118,7 +120,26 @@ if(BUILD_OS_WIN32)
     file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/inst/lib/python3.4/site-packages)
 endif()
 
+if(BUILD_OS_LINUX)
+    find_program (DPKG_ARCHITECTURE_FOUND "dpkg-architecture")
+    if(DPKG_ARCHITECTURE_FOUND)
+        execute_process(COMMAND ${DPKG_ARCHITECTURE_FOUND} -qDEB_HOST_MULTIARCH OUTPUT_VARIABLE CMAKE_DEBIAN_ARCH_TRIPLET OUTPUT_STRIP_TRAILING_WHITESPACE)
+        set(LIBSTDC6_REGEX "/usr/lib/${CMAKE_DEBIAN_ARCH_TRIPLET}/libstdc++.so.6*" CACHE STRING "Location of libstdc6 libraries." FORCE)
+    else()
+        set(LIBSTDC6_REGEX "/usr/lib/libstdc++.so.6*" CACHE STRING "Location of libstdc6 libraries." FORCE)
+    endif()
+endif()
+
+
+set(PYTHON_DISTPACKAGES lib/python3.4/dist-packages)
+set(PYTHON_DISTPACKAGES_FULL ${EXTERNALPROJECT_INSTALL_PREFIX}/${PYTHON_DISTPACKAGES})
 if(BUILD_PYTHON)
+    set(PYTHONINTERP_FOUND ON)
+    set(PYTHON_VERSION_MAJOR 3)
+    set(PYTHON_VERSION_MINOR 4)
+    set(PYTHON_VERSION_PATCH 3)
+    set(PYTHON_VERSION_STRING ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.${PYTHON_VERSION_PATCH})
+
     if(APPLE)
         # See http://bugs.python.org/issue21381
         # The interpreter crashes when MACOSX_DEPLOYMENT_TARGET=10.7 due to the increased stack size.
@@ -126,15 +147,17 @@ if(BUILD_PYTHON)
     endif()
 
     ExternalProject_Add(Python
-        URL https://www.python.org/ftp/python/3.4.3/Python-3.4.3.tgz
+        URL https://www.python.org/ftp/python/${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.${PYTHON_VERSION_PATCH}/Python-${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.${PYTHON_VERSION_PATCH}.tgz
+        URL_MD5 4281ff86778db65892c05151d5de738d
         PATCH_COMMAND ${patch_command}
         CONFIGURE_COMMAND ./configure --prefix=${EXTERNALPROJECT_INSTALL_PREFIX} --enable-shared --with-threads --without-pymalloc
         BUILD_IN_SOURCE 1
     )
 
-    set(PYTHON_EXECUTABLE ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/python3)
-    set(PYTHON_VERSION_MAJOR 3)
-    set(PYTHON_VERSION_MINOR 4)
+    if(BUILD_OS_LINUX)
+        set(PYTHON_EXECUTABLE_PREFIX "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" "PYTHONPATH=${PYTHON_DISTPACKAGES_FULL}")
+    endif()
+    set(PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE_PREFIX} ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/python3)    
 else()
     find_package(PythonInterp 3.4.0 REQUIRED)
     add_custom_target(Python)
@@ -230,7 +253,7 @@ if(BUILD_SIP)
             ${PYTHON_EXECUTABLE}
             configure.py
             --bindir=${EXTERNALPROJECT_INSTALL_PREFIX}/bin
-            --destdir=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages
+            --destdir=${PYTHON_DISTPACKAGES_FULL}
             --incdir=${EXTERNALPROJECT_INSTALL_PREFIX}/include
             --sipdir=${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
         )
@@ -240,7 +263,8 @@ if(BUILD_SIP)
 
     ExternalProject_Add(Sip
         DEPENDS Python
-        URL http://downloads.sourceforge.net/project/pyqt/sip/sip-4.17/sip-4.17.zip
+        URL http://downloads.sourceforge.net/project/pyqt/sip/sip-4.18/sip-4.18.zip
+        URL_MD5 e860d06782962fa02f81aeecba3d82a7
         CONFIGURE_COMMAND ${sip_command}
         BUILD_IN_SOURCE 1
     )
@@ -268,7 +292,7 @@ if(BUILD_PYQT)
             --sip ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/sip
             --qmake ${EXTERNALPROJECT_INSTALL_PREFIX}/bin/qmake
             --confirm-license
-            --destdir ${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages
+            --destdir ${PYTHON_DISTPACKAGES_FULL}
             --bindir ${EXTERNALPROJECT_INSTALL_PREFIX}/bin
             --sipdir ${EXTERNALPROJECT_INSTALL_PREFIX}/share/sip
         )
@@ -282,16 +306,10 @@ if(BUILD_PYQT)
         )
     endif()
 
-    # This patches the PyQt 5.4.2 source code to remove the "disconnectNotify" method from QPyQmlObject.
-    # This fixes a deadlock that could randomly occur when deleting QML items.
-    # This workaround should be removed as soon as a new stable release of PyQt is available that includes the fix.
-    set(pyqt_patch
-        patch qpy/QtQml/qpyqmlobject.cpp ${CMAKE_SOURCE_DIR}/qpyqmlobject.cpp.patch && patch qpy/QtQml/qpyqmlobject.h ${CMAKE_SOURCE_DIR}/qpyqmlobject.h.patch
-    )
-
     ExternalProject_Add(PyQt
         DEPENDS Python Qt Sip
-        URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.4.2/PyQt-gpl-5.4.2.tar.gz
+        URL http://downloads.sourceforge.net/project/pyqt/PyQt5/PyQt-5.6/PyQt5_gpl-5.6.tar.gz
+        URL_MD5 dbfc885c0548e024ba5260c4f44e0481
         PATCH_COMMAND ${pyqt_patch}
         CONFIGURE_COMMAND ${pyqt_command}
         BUILD_IN_SOURCE 1
@@ -311,7 +329,7 @@ if(BUILD_OS_WINDOWS)
 elseif(BUILD_OS_LINUX)
     set(python_install
         --root=${EXTERNALPROJECT_INSTALL_PREFIX}
-        --install-lib=lib/python3/dist-packages
+        --install-lib=${PYTHON_DISTPACKAGES}
     )
 endif()
 
@@ -321,6 +339,7 @@ if((BUILD_NUMPY OR BUILD_SCIPY) AND BUILD_OS_LINUX)
     set(openblas_options DYNAMIC_ARCH=1 NO_STATIC=1)
     ExternalProject_Add(OpenBLAS
         URL https://github.com/xianyi/OpenBLAS/archive/v0.2.15.tar.gz
+        URL_MD5 b1190f3d3471685f17cfd1ec1d252ac9
         CONFIGURE_COMMAND ""
         BUILD_COMMAND make ${openblas_options}
         INSTALL_COMMAND make PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} ${openblas_options} install
@@ -333,17 +352,17 @@ endif()
 if(BUILD_NUMPY)
     if(BUILD_OS_LINUX)
         # Inform numpy about using OpenBLAS
-        set(build_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${PYTHON_EXECUTABLE} setup.py build)
+        set(build_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${PYTHON_EXECUTABLE} setup.py build -j 5)
         set(install_numpy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     else()
-        set(build_numpy ${PYTHON_EXECUTABLE} setup.py build)
+        set(build_numpy ${PYTHON_EXECUTABLE} setup.py build -j 5)
         set(install_numpy ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     endif()
 
     ExternalProject_Add(Numpy
         DEPENDS Python OpenBLAS
-        URL http://downloads.sourceforge.net/project/numpy/NumPy/1.9.2/numpy-1.9.2.tar.gz
-        URL_MD5 a1ed53432dbcd256398898d35bc8e645
+        URL http://downloads.sourceforge.net/project/numpy/NumPy/1.11.1/numpy-1.11.1.tar.gz
+        URL_MD5 2f44a895a8104ffac140c3a70edbd450
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${build_numpy}
         INSTALL_COMMAND ${install_numpy}
@@ -354,16 +373,17 @@ endif()
 if(BUILD_SCIPY)
     if(BUILD_OS_LINUX)
         # Inform scipy about using OpenBLAS
-        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py build)
+        set(build_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py build -j 5)
         set(install_scipy "OPENBLAS=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/libopenblas.so" "PYTHONPATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib/python3/dist-packages/" "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     else()
-        set(build_scipy ${PYTHON_EXECUTABLE} setup.py build)
+        set(build_scipy ${PYTHON_EXECUTABLE} setup.py build -j 5)
         set(install_scipy  ${PYTHON_EXECUTABLE} setup.py install ${python_install})
     endif()
 
     ExternalProject_Add(Scipy
         DEPENDS Python Numpy
-        URL http://downloads.sourceforge.net/project/scipy/scipy/0.16.1/scipy-0.16.1.tar.gz
+        URL https://github.com/scipy/scipy/releases/download/v0.17.1/scipy-0.17.1.tar.gz
+        URL_MD5 8987b9a3e3cd79218a0a423b21c8e4de
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${build_scipy}
         INSTALL_COMMAND ${install_scipy}
@@ -415,6 +435,18 @@ if(BUILD_ZEROCONF)
     )
 endif()
 
+if(BUILD_COLORLOG)
+    ExternalProject_Add(PythonColorlog
+        DEPENDS Python
+        URL https://github.com/borntyping/python-colorlog/archive/2.7.0.tar.gz
+        URL_MD5 a39a0ab37877a0b682f493f8ce23ad0b
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_EXECUTABLE} setup.py build
+        INSTALL_COMMAND ${PYTHON_EXECUTABLE} setup.py install ${python_install}
+        BUILD_IN_SOURCE 1
+    )
+endif()
+
 if(BUILD_OS_OSX)
     set(protobuf_cxx_flags "-fPIC -std=c++11 -stdlib=libc++")
 else()
@@ -432,11 +464,18 @@ if(BUILD_OS_WIN64)
     set(ARCUS_EXTRA_ARGS -DBUILD_PYTHON=OFF)
 endif()
 
+if(BUILD_OS_LINUX)
+    set(CMAKE_COMMAND_LINUX_PREFIX "LD_LIBRARY_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/lib" "PYTHONPATH=${PYTHON_DISTPACKAGES_FULL}")
+endif()
+set(CMAKE_COMMAND_PREFIX ${CMAKE_COMMAND_LINUX_PREFIX})
+set(CMAKE_COMMAND_FULL ${CMAKE_COMMAND_PREFIX} ${CMAKE_COMMAND})
+
 ExternalProject_Add(Arcus
     DEPENDS Python Protobuf Sip
     GIT_REPOSITORY https://github.com/ultimaker/libArcus
     GIT_TAG origin/${TAG_OR_BRANCH}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${ARCUS_EXTRA_ARGS}
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
+    CMAKE_ARGS -DPYTHON_SITE_PACKAGES_DIR=${PYTHON_DISTPACKAGES}/ -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${ARCUS_EXTRA_ARGS}
 )
 
 ExternalProject_Add(CuraEngine
@@ -450,6 +489,7 @@ ExternalProject_Add(Uranium
     DEPENDS PyQt Arcus
     GIT_REPOSITORY https://github.com/ultimaker/Uranium
     GIT_TAG origin/${TAG_OR_BRANCH}
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
@@ -457,6 +497,7 @@ ExternalProject_Add(Cura
     DEPENDS Uranium CuraEngine
     GIT_REPOSITORY https://github.com/ultimaker/Cura
     GIT_TAG origin/${TAG_OR_BRANCH}
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DURANIUM_SCRIPTS_DIR= -DCURA_VERSION=${CURA_VERSION}
 )
 
@@ -464,6 +505,7 @@ ExternalProject_Add(Cura-PostProcessing
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/nallath/PostProcessingPlugin
     GIT_TAG origin/master
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
@@ -478,6 +520,7 @@ ExternalProject_Add(Cura-Doodle3D
     DEPENDS Cura
     GIT_REPOSITORY https://github.com/Doodle3D/Doodle3D-cura-plugin
     GIT_TAG origin/master
+    CMAKE_COMMAND ${CMAKE_COMMAND_FULL}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
@@ -614,17 +657,27 @@ elseif(BUILD_OS_LINUX)
     set(CPACK_INSTALLED_DIRECTORIES
         "${CMAKE_BINARY_DIR}/inst/bin;/opt/cura/bin"
         "${CMAKE_BINARY_DIR}/inst/lib;/opt/cura/lib"
-        "${CMAKE_BINARY_DIR}/inst/share;/opt/cura/share"
+        "${CMAKE_BINARY_DIR}/inst/share/applications;/usr/share/applications"
+        "${CMAKE_BINARY_DIR}/inst/share/cura;/opt/cura/share/cura"
+        "${CMAKE_BINARY_DIR}/inst/share/doc;/opt/cura/share/doc"
+        "${CMAKE_BINARY_DIR}/inst/share/mime;/usr/share/mime"
+        "${CMAKE_BINARY_DIR}/inst/share/sip;/opt/cura/sip"
+        "${CMAKE_BINARY_DIR}/inst/share/uranium;/opt/cura/share/uranium"
     )
 
     set(package_dir "_CPack_Packages/Linux/${CPACK_GENERATOR}/Cura-${CURA_VERSION}-Linux/")
     set(CPACK_INSTALL_COMMANDS
         "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/bin"
         "${CMAKE_COMMAND} -E make_directory ${package_dir}/usr/share/applications"
-        "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura ${package_dir}/usr/bin/"
-        "${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cura.desktop ${package_dir}/usr/share/applications/"
-        "${CMAKE_COMMAND} -E copy /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.20 ${package_dir}/opt/cura/lib/libstdc++.so.6"
+        "${CMAKE_COMMAND} -E rename ${CMAKE_BINARY_DIR}/inst/bin/cura ${CMAKE_BINARY_DIR}/inst/bin/cura.real"
+        "${CMAKE_COMMAND} -E copy   ${CMAKE_SOURCE_DIR}/cura          ${package_dir}/usr/bin"
     )
+
+    set(CPACK_INSTALL_COMMANDS ${CPACK_INSTALL_COMMANDS} "mkdir -pv ${package_dir}/opt/cura/lib/")
+    file(GLOB libstdc_libraries "${LIBSTDC6_REGEX}")
+    foreach(libstdc_library ${libstdc_libraries})
+        set(CPACK_INSTALL_COMMANDS ${CPACK_INSTALL_COMMANDS} "cp -rfv ${libstdc_library} ${package_dir}/opt/cura/lib/")
+    endforeach()
 endif()
 
 set(CPACK_PACKAGE_NAME "Cura")
@@ -652,7 +705,6 @@ set(CPACK_RPM_PACKAGE_REQUIRES ${RPM_REQUIRES})
 set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
 
 set(DEB_DEPENDS
-    "python3 (>= 3.4.0)"
     "libgfortran3"
 )
 string(REPLACE ";" "," DEB_DEPENDS "${DEB_DEPENDS}")
@@ -673,5 +725,12 @@ if(BUILD_OS_WIN32)
 else()
     set(CPACK_NSIS_PACKAGE_ARCHITECTURE "64")
 endif()
+
+add_custom_target(mrproper)
+add_custom_command(
+    TARGET mrproper
+    COMMAND git clean -xfd .
+    COMMENT "Cleaning directory via GIT"
+)
 
 include(CPack)
