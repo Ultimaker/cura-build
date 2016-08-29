@@ -1,6 +1,6 @@
 project(cura-build)
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.2.0)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
@@ -34,6 +34,16 @@ set(CURA_VERSION "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PAT
 if(NOT "${CURA_VERSION_EXTRA}" STREQUAL "")
     set(CURA_VERSION "${CURA_VERSION}-${CURA_VERSION_EXTRA}")
 endif()
+
+# Preparing for building into a prefix
+set(ENV{PATH} ${CMAKE_PREFIX_PATH}/bin/:$ENV{PATH} CACHE STRING "PATH" FORCE)
+set(ENV{LD_LIBRARY_PATH} ${CMAKE_PREFIX_PATH}/lib/)
+if($ENV{PYTHONPATH})
+    set(ENV{PYTHONPATH} ${CMAKE_PREFIX_PATH}/lib/python3/dist-packages/:${CMAKE_PREFIX_PATH}/lib/python3.5:${CMAKE_PREFIX_PATH}/lib/python3.5/site-packages:$ENV{PYTHONPATH})
+else()
+    set(ENV{PYTHONPATH} ${CMAKE_PREFIX_PATH}/lib/python3/dist-packages/:${CMAKE_PREFIX_PATH}/lib/python3.5:${CMAKE_PREFIX_PATH}/lib/python3.5/site-packages)
+endif()
+set(PYTHON_EXECUTABLE_PREFIXED LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH} PATH=$ENV{PATH} PYTHONPATH=$ENV{PYTHONPATH} python3)
 
 # Build projects step
 add_custom_target(projects ALL COMMENT "Building Projects...")

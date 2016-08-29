@@ -12,7 +12,7 @@ add_custom_command(
 
 add_custom_command(
     TARGET packaging PRE_BUILD
-    COMMAND ${PYTHON_EXECUTABLE} setup.py build
+    COMMAND ${PYTHON_EXECUTABLE_PREFIXED} setup.py build
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Running cx_Freeze to generate executable..."
 )
