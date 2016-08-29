@@ -455,7 +455,7 @@ ExternalProject_Add(Uranium
 
 ExternalProject_Add(Cura
     DEPENDS Uranium CuraEngine
-    GIT_REPOSITORY https://github.com/ultimaker/Cura
+    GIT_REPOSITORY https://github.com/Robo3D/Cura
     GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DURANIUM_SCRIPTS_DIR= -DCURA_VERSION=${CURA_VERSION}
 )
