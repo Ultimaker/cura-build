@@ -35,6 +35,10 @@ if(NOT "${CURA_VERSION_EXTRA}" STREQUAL "")
     set(CURA_VERSION "${CURA_VERSION}-${CURA_VERSION_EXTRA}")
 endif()
 
+# Summary
+message(STATUS "Preparing build for Cura version: ${CURA_VERSION}")
+message(STATUS "Using tag to build Cura: ${CURA_GIT_TAG}")
+
 # Preparing for building into a prefix
 set(ENV{PATH} ${CMAKE_PREFIX_PATH}/bin/:$ENV{PATH} CACHE STRING "PATH" FORCE)
 set(ENV{LD_LIBRARY_PATH} ${CMAKE_PREFIX_PATH}/lib/)
