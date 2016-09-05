@@ -1,0 +1,99 @@
+import sys
+import os.path
+
+from cx_Freeze import setup, Executable, hooks
+
+def load_scipy(finder, module):
+    finder.IncludePackage("scipy._lib")
+    finder.IncludePackage("scipy.misc")
+    finder.IncludePackage("scipy.sparse.csgraph._validation")
+
+hooks.load_scipy = load_scipy
+
+def load_pyqt5_qtquick(finder, module):
+    finder.IncludeModule("PyQt5.QtCore")
+    finder.IncludeModule("PyQt5.QtGui")
+    finder.IncludeModule("PyQt5.QtQml")
+    finder.IncludeModule("PyQt5.QtNetwork")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
+
+hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
+
+search_path = sys.path.copy()
+search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3/dist-packages/")
+search_path.insert(2, "@CMAKE_INSTALL_PREFIX@/lib/python3/dist-packages/")
+
+# Dependencies are automatically detected, but it might need
+# fine tuning.
+build_options = {
+    "build_exe": "package/usr/bin",
+    "path": search_path,
+    "packages": [
+        "xml.etree",
+        "uuid",
+        "UM",
+        "cura"
+    ],
+    "include_files": [
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura", "plugins"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium", "plugins"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3/dist-packages/UM/Qt/qml/UM", "qml/UM"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources")
+    ],
+    "optimize": 2,
+    "bin_path_includes": [
+        "/lib",
+        "/lib64",
+        "/usr/lib",
+        "/usr/lib64",
+    ],
+    "bin_excludes": [
+        "linux-vdso.so.1",
+        "libpthread.so.0",
+        "libdl.so.2",
+        "librt.so.1",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6",
+        "ld-linux-x86-64.so.2",
+        "libz.so.1",
+        "libgcc_s.so.1",
+        "libglib-2.0",
+        "librt.so.1",
+        "libcap.so.2",
+        "libGL.so.1",
+        "libglapi.so.0",
+        "libXext.so.6",
+        "libXdamage.so.1",
+        "libXfixes.so.3",
+        "libX11-xcb.so.1",
+        "libX11.so.6",
+        "libxcb-glx.so.0",
+        "libxcb-dri2.so.0",
+        "libxcb.so.1",
+        "libXxf86vm.so.1",
+        "libdrm.so.2",
+        "libexpat.so.1",
+        "libXau.so.6"
+    ]
+}
+
+base = "Win32GUI" if sys.platform == "win32" else None
+
+executables = [
+    Executable(os.path.join("@EXTERNALPROJECT_INSTALL_PREFIX@", "bin", "cura"), base = base)
+]
+
+setup(
+    name = "Cura",
+    version = "@CURA_MAJOR_VERSION@.@CURA_MINOR_VERSION@.@CURA_PATCH_VERSION@",
+    author = "Ultimaker B.V.",
+    url="http://software.ultimaker.com/",
+    description = "3D Slicer Software",
+    license="GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
+
+    options = { "build_exe": build_options },
+    executables = executables
+)
