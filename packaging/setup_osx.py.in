@@ -61,12 +61,12 @@ executables = [
 ]
 
 setup(
-    name="Cura",
+    name = "Cura",
     version = "@CURA_VERSION_MAJOR@.@CURA_VERSION_MINOR@.@CURA_VERSION_PATCH@",
     description = "3D Printing Software",
     author = "Ultimaker B.V.",
-    url="http://software.ultimaker.com/",
-    license="GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
+    url = "http://software.ultimaker.com/",
+    license = "GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
     
     options = {"build_exe": build_options, "bdist_mac": bdist_mac_options },
     executables = executables
