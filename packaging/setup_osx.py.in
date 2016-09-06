@@ -21,7 +21,7 @@ hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
 search_path = sys.path.copy()
 search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/")
-search_path.insert(2, "@CMAKE_INSTALL_PREFIX@/lib/python3.5/site-packages/")
+search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.5/site-packages/")
 
 # Dependencies are automatically detected, but it might need
 # fine tuning.
@@ -41,10 +41,10 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/UM/Qt/qml/UM", "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
-        ("@CMAKE_INSTALL_PREFIX@/lib/qml/Qt", "qml/Qt"),
-        ("@CMAKE_INSTALL_PREFIX@/lib/qml/QtQml", "qml/QtQml"),
-        ("@CMAKE_INSTALL_PREFIX@/lib/qml/QtQuick", "qml/QtQuick"),
-        ("@CMAKE_INSTALL_PREFIX@/lib/qml/QtQuick.2", "qml/QtQuick.2"),
+        ("@CMAKE_PREFIX_PATH@/lib/qml/Qt", "qml/Qt"),
+        ("@CMAKE_PREFIX_PATH@/lib/qml/QtQml", "qml/QtQml"),
+        ("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick", "qml/QtQuick"),
+        ("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick.2", "qml/QtQuick.2"),
         ("@CMAKE_BINARY_DIR@/qt.conf", ""),
     ],
     "excludes": [ ]
