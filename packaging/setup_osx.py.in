@@ -45,7 +45,6 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtQml", "qml/QtQml"),
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick", "qml/QtQuick"),
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick.2", "qml/QtQuick.2"),
-        ("@CMAKE_BINARY_DIR@/qt.conf", ""),
     ],
     "excludes": [ ]
 }
