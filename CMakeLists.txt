@@ -30,6 +30,8 @@ GetFromEnvironmentOrCache(CURA_VERSION_MINOR "0" STRING "Cura Minor Version")
 GetFromEnvironmentOrCache(CURA_VERSION_PATCH "0" STRING "Cura Patch Version")
 GetFromEnvironmentOrCache(CURA_VERSION_EXTRA "${TAG_OR_BRANCH}" STRING "Cura Extra Version Information")
 
+GetFromEnvironmentOrCache(CURA_EXTRA_PROJECTS_DIR "" STRING "Directory where extra projects to build are located.")
+
 set(CURA_VERSION "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}")
 if(NOT "${CURA_VERSION_EXTRA}" STREQUAL "")
     set(CURA_VERSION "${CURA_VERSION}-${CURA_VERSION_EXTRA}")
@@ -39,6 +41,11 @@ endif()
 add_custom_target(projects ALL COMMENT "Building Projects...")
 
 file(GLOB _projects projects/*.cmake)
+if(NOT CURA_EXTRA_PROJECTS_DIR STREQUAL "")
+    file(GLOB _extra_projects ${CURA_EXTRA_PROJECTS_DIR}/*.cmake)
+    list(APPEND _projects ${_extra_projects})
+endif()
+
 foreach(_project ${_projects})
     # Go through all files in projects/ and include them. The project files should define
     # targets for the actual projects. In addition, these files are expected to define any
