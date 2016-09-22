@@ -31,6 +31,8 @@ build_options = {
     "packages": [
         "xml.etree",
         "uuid",
+        "serial",
+        "zeroconf",
         "UM",
         "cura"
     ],
