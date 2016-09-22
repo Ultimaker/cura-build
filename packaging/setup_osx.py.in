@@ -35,7 +35,6 @@ build_options = {
         "zeroconf",
         "UM",
         "cura",
-        "pkg_resources",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
