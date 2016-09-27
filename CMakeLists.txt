@@ -483,10 +483,13 @@ ExternalProject_Add(Cura-Doodle3D
 
 
 ExternalProject_Add(fdm_materials
+    DEPENDS Cura
     GIT_REPOSITORY https://github.com/ultimaker/fdm_materials
     GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
+
+set(_last_repo fdm_materials) # To make sure ordering for extra repositories is preserved
 
 foreach(repo ${EXTRA_REPOSITORIES})
     separate_arguments(items UNIX_COMMAND "${repo}")
@@ -500,10 +503,13 @@ foreach(repo ${EXTRA_REPOSITORIES})
     endforeach()
 
     ExternalProject_Add(${name}
+        DEPENDS ${_last_repo}
         GIT_REPOSITORY ${repo}
         GIT_TAG origin/master
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} ${cmake}
     )
+
+    set(_last_repo ${name})
 endforeach()
 
 if(BUILD_OS_OSX)
