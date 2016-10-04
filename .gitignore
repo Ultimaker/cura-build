@@ -12,17 +12,21 @@ cmake_install.cmake
 # CMake - Debian
 *.deb
 
+# IDEs
+.idea
 *.pyc
 *kdev*
+*.lprof
+*~
+*.qm
+.DS_Store
+.project
+
+# Build/run side effects
 __pycache__
 docs/html
-*.lprof
 *.log
-*~
 build
-*.qm
 *.mo
 resources/i18n/en
 resources/i18n/x-test
-.DS_Store
-.project
