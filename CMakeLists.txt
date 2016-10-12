@@ -504,7 +504,7 @@ foreach(repo ${EXTRA_REPOSITORIES})
     endforeach()
 
     ExternalProject_Add(${name}
-        DEPENDS ${_last_repo}
+        DEPENDS ${_last_repo} cura-binary-data
         GIT_REPOSITORY ${repo}
         GIT_TAG origin/master
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} ${cmake}
