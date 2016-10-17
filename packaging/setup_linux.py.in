@@ -37,7 +37,9 @@ build_options = {
         "xml.etree",
         "uuid",
         "UM",
-        "cura"
+        "cura",
+        "zeroconf",
+        "serial",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura", "plugins"),
@@ -94,7 +96,6 @@ build_options = {
         "libkrb5.so.3",
         "libkrb5support.so.0",
         "libresolv.so.2",
-        "libssl.so.10",
         "libutil.so.1",
         "libXrender.so.1",
     ]
