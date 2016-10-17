@@ -42,7 +42,7 @@ build_options = {
         "serial",
     ],
     "include_files": [
-        ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", "")
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura", "plugins"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium", "plugins"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3/dist-packages/UM/Qt/qml/UM", "qml/UM"),
