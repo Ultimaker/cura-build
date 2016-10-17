@@ -10,6 +10,11 @@ def load_scipy(finder, module):
 
 hooks.load_scipy = load_scipy
 
+def load_pyqt5_qtgui(finder, module):
+    finder.IncludeModule("PyQt5.QtCore")
+
+hooks.load_PyQt5_QtGui = load_pyqt5_qtgui
+
 def load_pyqt5_qtquick(finder, module):
     finder.IncludeModule("PyQt5.QtCore")
     finder.IncludeModule("PyQt5.QtGui")
@@ -40,6 +45,9 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3/dist-packages/UM/Qt/qml/UM", "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources")
+        ("@CMAKE_PREFIX_PATH@/lib/plugins", "qt/plugins")
+        ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml")
+        ("@CMAKE_PREFIX_PATH@/lib/fonts", "qt/fonts")
     ],
     "optimize": 2,
     "bin_path_includes": [
@@ -76,7 +84,19 @@ build_options = {
         "libXxf86vm.so.1",
         "libdrm.so.2",
         "libexpat.so.1",
-        "libXau.so.6"
+        "libXau.so.6",
+        "libcrypto.so.10",
+        "libglib-2.0.so.0",
+        "libgssapi_krb5.so.",
+        "libgthread-2.0.so.0",
+        "libk5crypto.so.3",
+        "libkeyutils.so.1",
+        "libkrb5.so.3",
+        "libkrb5support.so.0",
+        "libresolv.so.2",
+        "libssl.so.10",
+        "libutil.so.1",
+        "libXrender.so.1",
     ]
 }
 
