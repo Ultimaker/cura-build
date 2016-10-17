@@ -21,7 +21,14 @@ set(PACKAGE_DIR ${CMAKE_BINARY_DIR}/package)
 
 add_custom_command(
     TARGET packaging PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy cura.desktop cura-icon.png ${PACKAGE_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy cura.desktop ${PACKAGE_DIR}
+    COMMENT "Copying icon and desktop file..."
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+
+add_custom_command(
+    TARGET packaging PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy cura-icon.png ${PACKAGE_DIR}
     COMMENT "Copying icon and desktop file..."
     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
 )
