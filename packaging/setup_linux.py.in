@@ -99,6 +99,8 @@ build_options = {
         "libresolv.so.2",
         "libutil.so.1",
         "libXrender.so.1",
+        "libcom_err.so.2",
+        "libgssapi_krb5.so.2",
     ]
 }
 
