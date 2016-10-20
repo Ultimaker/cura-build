@@ -16,7 +16,7 @@ def load_pyqt5_qtquick(finder, module):
     finder.IncludeModule("PyQt5.QtQml")
     finder.IncludeModule("PyQt5.QtNetwork")
     finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
-    
+
 hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
 search_path = sys.path.copy()
@@ -35,6 +35,7 @@ build_options = {
         "zeroconf",
         "UM",
         "cura",
+        "stl",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
@@ -68,7 +69,7 @@ setup(
     author = "Ultimaker B.V.",
     url = "http://software.ultimaker.com/",
     license = "GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
-    
+
     options = {"build_exe": build_options, "bdist_mac": bdist_mac_options },
     executables = executables
 )
