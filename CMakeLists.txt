@@ -469,7 +469,7 @@ ExternalProject_Add(Cura-PostProcessing
 
 ExternalProject_Add(cura-binary-data
     DEPENDS Cura
-    GIT_REPOSITORY https://github.com/ultimaker/cura-binary-data
+    GIT_REPOSITORY https://github.com/Ultimaker/cura-binary-data
     GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
