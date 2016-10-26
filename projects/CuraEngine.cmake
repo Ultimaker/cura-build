@@ -1,7 +1,9 @@
 if(BUILD_OS_WINDOWS)
-    set(Protobuf_LIBRARY_RELEASE ${CMAKE_PREFIX_PATH}/bin/libprotobuf.dll )
-    set(Protobuf_LITE_LIBRARY_RELEASE ${CMAKE_PREFIX_PATH}/bin/libprotobuf-lite.dll )
-    set(Protobuf_PROTOC_LIBRARY_RELEASE ${CMAKE_PREFIX_PATH}/bin/libprotoc.dll )
+    # Helping CMake on Windows to find Protobuf...
+    # Otherwise it claims there is no Protobuf, but there is!
+    set(Protobuf_LIBRARY_RELEASE ${CMAKE_PREFIX_PATH}/lib/libprotobuf.a )
+    set(Protobuf_LITE_LIBRARY_RELEASE ${CMAKE_PREFIX_PATH}/lib/libprotobuf-lite.a )
+    set(Protobuf_PROTOC_LIBRARY_RELEASE ${CMAKE_PREFIX_PATH}/lib/libprotoc.a )
 endif()
 
 find_package(Arcus 1.1 REQUIRED)
