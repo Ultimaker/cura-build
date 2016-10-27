@@ -64,7 +64,7 @@ For 64-bit builds:
 
 * PyQt 5.4 (https://riverbankcomputing.com/software/pyqt/download5, Building PyQt currently fails using MinGW 64-bit)
 * Install protobuf.wheel found in cura-build-binaries (TODO: create cura-build-binaries repo)
-* Create empty __init__.py in c:\Python34\Lib\site-packages\google (TODO: make it part of the proto.wheel installation)
+* Create empty ```__init__.py``` in c:\Python34\Lib\site-packages\google (TODO: make it part of the proto.wheel installation)
 
 ```shell
 REM 32-bit
@@ -94,35 +94,11 @@ Before make package - copy arduino to cura-build/
 
 ## Ubuntu/Linux
 
-cura-build can build Ubuntu/Debian packages of Cura.
-
-Dependencies:
-
-* python3 (>= 3.4.0)
-* python3-dev (>= 3.4.0)
-* python3-pyqt5 (>= 5.4.0)
-* python3-pyqt5.qtopengl (>= 5.4.0)
-* python3-pyqt5.qtquick (>= 5.4.0)
-* python3-pyqt5.qtsvg (>= 5.4.0)
-* python3-numpy (>= 1.8.0)
-* python3-serial (>= 2.6)
-* python3-opengl (>= 3.0)
-* python3-setuptools
-* python3-dev
-* qml-module-qtquick2 (>= 5.4.0)
-* qml-module-qtquick-window2 (>= 5.4.0)
-* qml-module-qtquick-layouts (>= 5.4.0)
-* qml-module-qtquick-dialogs (>= 5.4.0)
-* qml-module-qtquick-controls (>= 5.4.0)
-* zlib1g
-* build-essential
-* cmake
-* gfortran
+cura-build can build AppImage packages of Cura.
 
 To build, make sure these dependencies are installed, then clone this repository and run the following commands from your clone:
 
 ```shell
-sudo apt-get install gfortran python3 python3-dev python3-pyqt5 python3-pyqt5.qtopengl python3-pyqt5.qtquick python3-pyqt5.qtsvg python3-numpy python3-serial python3-opengl python3-setuptools qml-module-qtquick2 qml-module-qtquick-window2 qml-module-qtquick-layouts qml-module-qtquick-dialogs qml-module-qtquick-controls gfortran
 git clone http://github.com/Ultimaker/cura-build.git
 cd cura-build
 ```
@@ -134,6 +110,7 @@ cmake ..
 make
 make package
 ```
+
 ## CentOS/Linux
 
 cura-build can build CentOS/RHEL packages of Cura.
