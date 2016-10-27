@@ -25,3 +25,7 @@ build
 resources/i18n/en
 resources/i18n/x-test
 .DS_Store
+
+# Eclipse+PyDev
+.project
+.pydevproject
