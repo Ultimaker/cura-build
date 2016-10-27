@@ -19,6 +19,12 @@ if(SIGN_PACKAGE)
     set(BUILD_PACKAGE ON)
 endif()
 
+# This should care that our CMAKE_PREFIX_PATH is absolute at the end...
+get_filename_component(CMAKE_PREFIX_PATH
+                       ${CMAKE_PREFIX_PATH}
+                       ABSOLUTE
+                       CACHE FORCE)
+
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 
 GetFromEnvironmentOrCache(TAG_OR_BRANCH "master" STRING "The name of the tag or branch to build")
