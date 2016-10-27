@@ -9,9 +9,7 @@ _CPack_Packages/
 cmake_install.cmake
 /inst/
 
-# CMake - Debian
-*.deb
-
+# Various files
 *.pyc
 *kdev*
 __pycache__
