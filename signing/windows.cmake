@@ -6,10 +6,12 @@
 set(WINDOWS_IDENTITIY_PFX_FILE "THE_PFX_FILE_IS_MISSING_HERE!" CACHE STRING "PFX file, which represents the identity of the developer.")
 set(WINDOWS_IDENTITIY_PFX_PASSWORD "" CACHE STRING "Password, which unlocks the PFX file (optional)")
 
-set(signtool_OPTIONS "/fd SHA256 /a /f ${WINDOWS_IDENTITIY_PFX_FILE} /f /p ${WINDOWS_IDENTITIY_PFX_PASSWORD}")
+set(signtool_OPTIONS /fd SHA256 /a /f ${WINDOWS_IDENTITIY_PFX_FILE})
 
-if(${WINDOWS_IDENTITIY_PFX_PASSWORD})
-    set(signtool_OPTIONS ${signtool_OPTIONS} "/p ${WINDOWS_IDENTITIY_PFX_PASSWORD}")
+if(NOT ${WINDOWS_IDENTITIY_PFX_PASSWORD} EQUAL "")
+    set(signtool_OPTIONS ${signtool_OPTIONS} /p ${WINDOWS_IDENTITIY_PFX_PASSWORD})
+else()
+    message(FATAL_ERROR "You can't sign your executables without passing your password here!") # Sadly...
 endif()
 
 include(CPackComponent)
@@ -48,7 +50,7 @@ set(CPACK_NSIS_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
 
 include(CPack)
 
-if(EXISTS WINDOWS_IDENTITIY_PFX_FILE)
+if(EXISTS ${WINDOWS_IDENTITIY_PFX_FILE})
     message(STATUS "Signing executables with: " ${WINDOWS_IDENTITIY_PFX_FILE})
     if(${WINDOWS_IDENTITIY_PFX_PASSWORD})
         message(WARNING "USE WITH CAUTION: Password for the PFX file has been set!")
@@ -57,21 +59,35 @@ if(EXISTS WINDOWS_IDENTITIY_PFX_FILE)
     # Signing Cura.exe
     add_custom_command(
         TARGET signing PRE_BUILD
-        COMMAND signtool sign ${signtool_OPTIONS} ${CMAKE_BINARY_DIR}/package/Cura.exe
+        COMMAND signtool sign ${signtool_OPTIONS} Cura.exe
         ## Other optional options:
         # /tr timestampServerUrl 
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/build
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/package
+    )
+
+    # Signing CuraEngine.exe
+    add_custom_command(
+        TARGET signing PRE_BUILD
+        COMMAND signtool sign ${signtool_OPTIONS} CuraEngine.exe
+        ## Other optional options:
+        # /tr timestampServerUrl 
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/package
     )
 
     # Signing the installer
+    add_custom_target(sign_installer) # Sadly "TARGET package POST_BUILD" can't be used in the following add_custom_command()
+    if(${BUILD_OS_WIN32})
+        set(CURA_INSTALLER_NAME ${CPACK_NSIS_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-win32.exe)
+    else()
+        set(CURA_INSTALLER_NAME ${CPACK_NSIS_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-win64.exe)
+    endif()
     add_custom_command(
-        TARGET package POST_BUILD
-        COMMAND signtool sign ${signtool_OPTIONS} ${CMAKE_BINARY_DIR}/${CPACK_PACKAGE_FILE_NAME}.exe
+        TARGET sign_installer
+        COMMAND signtool sign ${signtool_OPTIONS} ${CURA_INSTALLER_NAME}
         ## Other optional options:
         # /tr timestampServerUrl 
-        ## NOTE: IN CASE CPACK_PACKAGE_FILE_NAME DOESN'T WORK: ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CURA_MINOR_VERSION}.${CURA_PATCH_VERSION}-${CURA_VERSION}-win32.exe
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/build
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 else()
-    message(WARNING "Could not find the PFX file. Skipping signing...")
+    message(FATAL_ERROR "Could not find the PFX file. Can not sign the executables!")
 endif()
