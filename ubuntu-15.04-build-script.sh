@@ -26,7 +26,7 @@ cd ../..
 
 cd libArcus
 mkdir build && cd build
-cmake .. -DPYTHON_SITE_PACKAGES_DIR=/usr/lib/python3.4/dist-packages
+cmake .. -DPYTHON_SITE_PACKAGES_DIR=/usr/lib/python3.5/dist-packages
 make -j4
 sudo make install
 cd ../../
@@ -39,7 +39,7 @@ cd ../../
 
 cd Uranium
 mkdir build && cd build
-cmake .. -DPYTHON_SITE_PACKAGES_DIR=/usr/lib/python3.4/dist-packages -DURANIUM_PLUGINS_DIR=/usr/lib/python3.4/dist-packages
+cmake .. -DPYTHON_SITE_PACKAGES_DIR=/usr/lib/python3.5/dist-packages -DURANIUM_PLUGINS_DIR=/usr/lib/python3.5/dist-packages
 sudo make install
 cd ../..
 

@@ -37,7 +37,7 @@ On Windows, the following dependencies are needed for building:
       * Build revision := 1
     * Qt5 Installer (32bit only): You can install "MinGW 4.9.2" using their "Maintenance Tool" as a component from the category "Tools"
     * When looking for other resources, make sure you download the posix flavour of MinGW. It is the only version, which is C++11 compatible (for more info take a look at the Qt docs).
-* **Python** 3.4 (http://python.org/)
+* **Python** 3.5 (http://python.org/)
   * __NOTE__: using Python 3.5 is currently untested on Windows
 * **NumPy** (http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy)
   * __NOTE__: make sure to get the NON-MKL version!
@@ -110,22 +110,22 @@ cura-build can build Ubuntu/Debian packages of Cura.
 
 Dependencies:
 
-* python3 (>= 3.4.0)
-* python3-dev (>= 3.4.0)
-* python3-pyqt5 (>= 5.4.0)
-* python3-pyqt5.qtopengl (>= 5.4.0)
-* python3-pyqt5.qtquick (>= 5.4.0)
-* python3-pyqt5.qtsvg (>= 5.4.0)
+* python3 (>= 3.5.0)
+* python3-dev (>= 3.5.0)
+* python3-pyqt5 (>= 5.6.0)
+* python3-pyqt5.qtopengl (>= 5.6.0)
+* python3-pyqt5.qtquick (>= 5.6.0)
+* python3-pyqt5.qtsvg (>= 5.6.0)
 * python3-numpy (>= 1.8.0)
 * python3-serial (>= 2.6)
 * python3-opengl (>= 3.0)
 * python3-setuptools
 * python3-dev
-* qml-module-qtquick2 (>= 5.4.0)
-* qml-module-qtquick-window2 (>= 5.4.0)
-* qml-module-qtquick-layouts (>= 5.4.0)
-* qml-module-qtquick-dialogs (>= 5.4.0)
-* qml-module-qtquick-controls (>= 5.4.0)
+* qml-module-qtquick2 (>= 5.6.0)
+* qml-module-qtquick-window2 (>= 5.6.0)
+* qml-module-qtquick-layouts (>= 5.6.0)
+* qml-module-qtquick-dialogs (>= 5.6.0)
+* qml-module-qtquick-controls (>= 5.6.0)
 * libxcb1-dev
 * libx11-dev
 * zlib1g
@@ -174,7 +174,7 @@ To build, make sure these dependencies are installed, then clone this repository
 ```shell
 sudo yum install gcc-gfortran python34.x86_64 python34-devel.x86_64 python34-numpy.x86_64 pyserial.noarch PyOpenGL.noarch python34-setuptools.noarch wxPython.x86_64 libstdc++-static.x86_64 libstdc++-devel.x86_64 openssl.x86_64 openblas-devel.x86_64 python34-numpy-f2py.x86_64
 ```
-1. download and install scipy from https://github.com/scipy/scipy/releases be sure to use python 3.4, eg. using sudo python3 setup.py 2. install (version in repository is for python 2.7)
+1. download and install scipy from https://github.com/scipy/scipy/releases be sure to use python 3.5, eg. using sudo python3 setup.py 2. install (version in repository is for python 2.7)
 3. download and install CMake from https://cmake.org/download/ and configure CMake to use ssl
 4. download and install Qt5 from https://www.qt.io/download/
 5. download and install PyQt5 from https://www.riverbankcomputing.com/software/pyqt/download5
