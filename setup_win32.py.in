@@ -77,9 +77,7 @@ includes = [x for x in includes if x not in [
                 "scipy.special.generate_ufuncs",
                 "scipy.special._testutils",
                 "scipy.linalg._testutils",
-                "scipy._lib._testutils",
-                "scipy.cluster._hierarchy.cp35-win_amd64",
-                "scipy.cluster._vq.cp35-win_amd64"]]
+                "scipy._lib._testutils"] and "cp35-win_amd64" not in x]
 
 print("Removing previous distribution package")
 shutil.rmtree("dist", True)
