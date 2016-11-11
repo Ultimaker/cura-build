@@ -48,7 +48,7 @@ if(EXISTS ${WINDOWS_IDENTITIY_PFX_FILE})
         set(CURA_INSTALLER_NAME ${CPACK_NSIS_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-win64.exe)
     endif()
     add_custom_command(
-        TARGET sign_installer
+        TARGET signing_installer
         COMMAND ${SIGNTOOL_EXECUTABLE} sign ${signtool_OPTIONS} ${CURA_INSTALLER_NAME}
         ## Other optional options:
         # /tr timestampServerUrl 
