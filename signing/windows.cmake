@@ -89,5 +89,5 @@ if(EXISTS ${WINDOWS_IDENTITIY_PFX_FILE})
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 else()
-    message(FATAL_ERROR "Could not find the PFX file. Can not sign the executables!")
+    message(WARNING "Could not find the PFX file. Can not sign the executables!")
 endif()
