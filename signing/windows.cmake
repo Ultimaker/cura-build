@@ -3,6 +3,8 @@
 # -> C:\Program Files (x86)\Windows Kits\10\bin\x86\signtool.exe
 # * Manual: https://msdn.microsoft.com/de-de/library/8s9b9yaz(v=vs.110).aspx
 
+find_package(Signtool REQUIRED)
+
 set(WINDOWS_IDENTITIY_PFX_FILE "THE_PFX_FILE_IS_MISSING_HERE!" CACHE STRING "PFX file, which represents the identity of the developer.")
 set(WINDOWS_IDENTITIY_PFX_PASSWORD "" CACHE STRING "Password, which unlocks the PFX file (optional)")
 
@@ -23,7 +25,7 @@ if(EXISTS ${WINDOWS_IDENTITIY_PFX_FILE})
     # Signing Cura.exe
     add_custom_command(
         TARGET signing PRE_BUILD
-        COMMAND signtool sign ${signtool_OPTIONS} Cura.exe
+        COMMAND ${SIGNTOOL_EXECUTABLE} sign ${signtool_OPTIONS} Cura.exe
         ## Other optional options:
         # /tr timestampServerUrl 
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/package
@@ -32,7 +34,7 @@ if(EXISTS ${WINDOWS_IDENTITIY_PFX_FILE})
     # Signing CuraEngine.exe
     add_custom_command(
         TARGET signing PRE_BUILD
-        COMMAND signtool sign ${signtool_OPTIONS} CuraEngine.exe
+        COMMAND ${SIGNTOOL_EXECUTABLE} sign ${signtool_OPTIONS} CuraEngine.exe
         ## Other optional options:
         # /tr timestampServerUrl 
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/package
@@ -47,7 +49,7 @@ if(EXISTS ${WINDOWS_IDENTITIY_PFX_FILE})
     endif()
     add_custom_command(
         TARGET sign_installer
-        COMMAND signtool sign ${signtool_OPTIONS} ${CURA_INSTALLER_NAME}
+        COMMAND ${SIGNTOOL_EXECUTABLE} sign ${signtool_OPTIONS} ${CURA_INSTALLER_NAME}
         ## Other optional options:
         # /tr timestampServerUrl 
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
