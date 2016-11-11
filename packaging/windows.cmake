@@ -71,6 +71,9 @@ set(CPACK_NSIS_MENU_LINKS
     "https://ultimaker.com/en/support/software" "Cura Online Documentation"
     "https://github.com/ultimaker/cura" "Cura Development Resources"
 )
+
+# Needed to call the correct vcredist_x["32", "64"] executable
+# TODO: Use a variable, which is already known. For example CPACK_SYSTEM_NAME -> "win32"
 if(BUILD_OS_WIN32)
     set(CPACK_NSIS_PACKAGE_ARCHITECTURE "32")
 else()
@@ -83,6 +86,7 @@ include(CPack)
 
 add_custom_command(
     TARGET build_bundle POST_BUILD
+    # NOTE: Needs testing here, whether CPACK_SYSTEM_NAME is working good for 64bit builds, too.
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/NSIS ${CMAKE_BINARY_DIR}/_CPack_Packages/${CPACK_SYSTEM_NAME}/NSIS
     COMMENT "Copying NSIS scripts"
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
