@@ -4,7 +4,7 @@ find_package(cx_freeze 5.0 REQUIRED)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/setup_win32.py.in setup.py @ONLY)
 add_custom_target(build_bundle)
 add_dependencies(packaging build_bundle)
-add_dependencies(build_bundle cura-binary-data)
+add_dependencies(build_bundle projects)
 
 # TODO: Find a variable which holds the needed "win32"/"win64"
 #       There is a CPACK* variable which holds this variable, but it doesn't exist at this moment here...
