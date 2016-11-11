@@ -553,6 +553,10 @@ Section /o "Open 3MF files with Cura"
     ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "Cura.model.3MF"
 SectionEnd
 
+Section /o "Open X3D files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "Cura.model.X3D"
+SectionEnd
+
 ;--------------------------------
 ; Define some macro setting for the gui
 @CPACK_NSIS_INSTALLER_MUI_ICON_CODE@
@@ -862,6 +866,7 @@ Section "Uninstall"
   ${UnRegisterExtension} ".stl" "Cura.model.STL"
   ${UnRegisterExtension} ".obj" "Cura.model.OBJ"
   ${UnRegisterExtension} ".3mf" "Cura.model.3MF"
+  ${UnRegisterExtension} ".x3d" "Cura.model.X3D"
 
   ;Remove the uninstaller itself.
   Delete "$INSTDIR\Uninstall.exe"
