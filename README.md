@@ -30,8 +30,6 @@ On Windows, the following dependencies are needed for building:
   You'll need to download a .whl from this site for Python 3.5 and install it via `pip install <your_whl_file>.whl`.
 * **SciPy** (http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy)
   You'll need to download a .whl from this site for Python 3.5 and install it via `pip install <your_whl_file>.whl`.
-* **Protobuf** (https://pypi.python.org/pypi/protobuf/3.1.0.post1)
-  It can be easyly installed via `pip3 install protobuf`
 * **PySerial** from https://pypi.python.org/pypi/pyserial/3.2.1
   It can be easyly installed via `pip3 install pyserial`
 * **PyQt5** from https://pypi.python.org/pypi/PyQt5/5.7
