@@ -14,42 +14,6 @@ else()
     message(FATAL_ERROR "You can't sign your executables without passing your password here!") # Sadly...
 endif()
 
-include(CPackComponent)
-
-cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
-cpack_add_component(vcredist DISPLAY_NAME "Install Visual Studio 2010 Redistributable")
-cpack_add_component(arduino DISPLAY_NAME "Install Arduino Drivers")
-
-set(CPACK_PACKAGE_NAME "Cura")
-set(CPACK_PACKAGE_VENDOR "Ultimaker")
-set(CPACK_PACKAGE_VERSION_MAJOR ${CURA_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${CURA_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${CURA_VERSION_PATCH})
-set(CPACK_PACKAGE_VERSION ${CURA_VERSION})
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cura 3D Printing Software")
-set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
-set(CPACK_PACKAGE_CONTACT "Arjen Hiemstra <a.hiemstra@ultimaker.com>")
-
-set(CPACK_PACKAGE_EXECUTABLES Cura "Cura ${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cura ${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}")
-
-set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
-set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
-set(CPACK_NSIS_MUI_FINISHPAGE_RUN "Cura.exe")
-set(CPACK_NSIS_MENU_LINKS
-    "https://ultimaker.com/en/support/software" "Cura Online Documentation"
-    "https://github.com/ultimaker/cura" "Cura Development Resources"
-)
-if(BUILD_OS_WIN32)
-    set(CPACK_NSIS_PACKAGE_ARCHITECTURE "32")
-else()
-    set(CPACK_NSIS_PACKAGE_ARCHITECTURE "64")
-endif()
-
-set(CPACK_NSIS_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
-
-include(CPack)
-
 if(EXISTS ${WINDOWS_IDENTITIY_PFX_FILE})
     message(STATUS "Signing executables with: " ${WINDOWS_IDENTITIY_PFX_FILE})
     if(${WINDOWS_IDENTITIY_PFX_PASSWORD})
