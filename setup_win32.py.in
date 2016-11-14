@@ -1,12 +1,13 @@
 # Copyright (c) 2015 Ultimaker B.V.
 # Cura is released under the terms of the AGPLv3 or higher.
 
-from distutils.core import setup
-import py2exe
+from cx_Freeze import setup, Executable, hooks
+import glob
 import UM
 import UM.Qt
 import cura
 import os
+import sys
 import re
 import shutil
 import site
@@ -16,6 +17,22 @@ import numpy
 import numpy.core
 import stl
 import stl.mesh
+
+def load_scipy_patched(finder, module):
+    """the scipy module loads items within itself in a way that causes
+        problems without the entire package and a number of other subpackages
+        being present."""
+    finder.IncludePackage("scipy._lib")  # Changed include from scipy.lib to scipy._lib
+    finder.IncludePackage("scipy.misc")
+hooks.load_scipy = load_scipy_patched
+
+def load_pyqt5_qtquick(finder, module):
+    finder.IncludeModule("PyQt5.QtCore")
+    finder.IncludeModule("PyQt5.QtGui")
+    finder.IncludeModule("PyQt5.QtQml")
+    finder.IncludeModule("PyQt5.QtNetwork")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
+hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
 # work around the limitation that shutil.copytree does not allow the target directory to exist
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -82,6 +99,18 @@ includes = [x for x in includes if x not in [
 print("Removing previous distribution package")
 shutil.rmtree("dist", True)
 
+base = None
+if sys.platform == "win32":
+    base = "Win32GUI"
+
+executables = [
+    Executable(script="@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py",
+               base="Win32GUI",
+               targetName = "Cura.exe"
+               icon="@CMAKE_SOURCE_DIR@/cura.ico"
+               )
+]
+
 setup(
     name="Cura",
     version="@CURA_MAJOR_VERSION@.@CURA_MINOR_VERSION@.@CURA_PATCH_VERSION@",
@@ -90,10 +119,18 @@ setup(
     url="http://software.ultimaker.com/",
     license="GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
     scripts=["inst/bin/cura_app.py"],
-    windows=[{"script": "inst/bin/cura_app.py", "dest_name": "Cura", "icon_resources": [(1, "@CMAKE_SOURCE_DIR@/cura.ico")]}],
     #console=[{"script": "cura_app.py"}],
-    options={"py2exe": {"skip_archive": False, "includes": includes}}
+    options={"build_exe": {"packages": includes, "excludes": ["tkinter"]}},
+    executables = executables
 )
+
+if not os.path.isdir("dist"):
+    os.mkdir("dist")
+
+build_path = "build\\exe.win-amd64-3.5"
+for fname in os.listdir(build_path):
+    print("Moving " + fname)
+    shutil.move(os.path.join(build_path, fname), os.path.join("dist", fname))
 
 print("Copying Cura plugins.")
 copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", "dist/plugins", ignore = shutil.ignore_patterns("OBJWriter", "MLPWriter", "MLPReader"))
@@ -113,8 +150,8 @@ if os.path.exists("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/plugins"):
     qt_bin_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/bin"
 else:
     import PyQt5.QtCore
-    qt_lib_dir = os.path.dirname(PyQt5.QtCore.__file__)
-    qt_bin_dir = os.path.dirname(PyQt5.QtCore.__file__)
+    qt_lib_dir = os.path.join(os.path.dirname(PyQt5.QtCore.__file__), "Qt")
+    qt_bin_dir = os.path.join(os.path.dirname(PyQt5.QtCore.__file__), "Qt", "bin")
 
 print("Copying Qt5 plugins")
 copytree(os.path.join(qt_lib_dir, "plugins"), "dist/PyQt5/plugins")
@@ -137,5 +174,3 @@ try:
     shutil.copy("@compiler_dir@/libgcc_s_seh-1.dll", "dist/libgcc_s_seh-1.dll")
 except FileNotFoundError:
     shutil.copy("@compiler_dir@/libgcc_s_dw2-1.dll", "dist/libgcc_s_dw2-1.dll")
-
-os.rename("dist/cura_app.exe", "dist/Cura.exe")

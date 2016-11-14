@@ -608,8 +608,8 @@ elseif(BUILD_OS_WINDOWS)
     )
     add_custom_command(
         TARGET build_exe POST_BUILD
-        COMMAND ${PYTHON_EXECUTABLE} setup_win32.py py2exe
-        COMMENT "Running py2exe"
+        COMMAND ${PYTHON_EXECUTABLE} setup_win32.py build
+        COMMENT "Running cx_Freeze"
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 
