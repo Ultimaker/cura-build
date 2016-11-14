@@ -940,6 +940,112 @@ SectionEnd
 Function .onInit
   StrCmp "@CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL@" "ON" 0 inst
 
+lookFor14121:  
+  ; Cura 14.12.1
+  ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura_14.12.1" "UninstallString"
+  StrCmp $0 "" lookFor15044
+
+  MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
+  "Cura 14.12.1 is already installed. $\n$\nDo you want to uninstall the old version before installing the new one?" \
+  IDYES uninst_14121 IDNO lookFor15044
+
+uninst_14121:
+  ClearErrors
+  StrLen $2 "\Uninstall.exe"
+  StrCpy $3 $0 -$2 # remove "\uninstall.exe" from UninstallString to get path
+  ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
+
+  IfErrors uninst_failed lookFor15044
+
+lookFor15044:  
+  ; Cura 15.04.6
+  ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura_15.04.4" "UninstallString"
+  StrCmp $0 "" lookFor15045
+
+  MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
+  "Cura 15.04.4 is already installed. $\n$\nDo you want to uninstall the old version before installing the new one?" \
+  IDYES uninst_15044 IDNO lookFor15045
+
+uninst_15044:
+  ClearErrors
+  StrLen $2 "\Uninstall.exe"
+  StrCpy $3 $0 -$2 # remove "\uninstall.exe" from UninstallString to get path
+  ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
+
+  IfErrors uninst_failed lookFor15045
+
+lookFor15045:  
+  ; Cura 15.04.5
+  ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura_15.04.5" "UninstallString"
+  StrCmp $0 "" lookFor15046
+
+  MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
+  "Cura 15.04.5 is already installed. $\n$\nDo you want to uninstall the old version before installing the new one?" \
+  IDYES uninst_15045 IDNO lookFor15046
+
+uninst_15045:
+  ClearErrors
+  StrLen $2 "\Uninstall.exe"
+  StrCpy $3 $0 -$2 # remove "\uninstall.exe" from UninstallString to get path
+  ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
+
+  IfErrors uninst_failed lookFor15046
+
+lookFor15046:  
+  ; Cura 15.04.6
+  ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura_15.04.6" "UninstallString"
+  StrCmp $0 "" lookFor21
+
+  MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
+  "Cura 15.04.6 is already installed. $\n$\nDo you want to uninstall the old version before installing the new one?" \
+  IDYES uninst_15046 IDNO lookFor21
+
+uninst_15046:
+  ClearErrors
+  StrLen $2 "\Uninstall.exe"
+  StrCpy $3 $0 -$2 # remove "\uninstall.exe" from UninstallString to get path
+  ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
+
+  IfErrors uninst_failed lookFor21
+
+lookFor21:  
+  ; Cura 2.1
+  ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura 2.1" "UninstallString"
+  StrCmp $0 "" lookFor23
+
+  MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
+  "Cura 2.1 is already installed. $\n$\nDo you want to uninstall the old version before installing the new one?" \
+  IDYES uninst_21 IDNO lookFor23
+
+uninst_21:
+  ClearErrors
+  StrLen $2 "\Uninstall.exe"
+  StrCpy $3 $0 -$2 # remove "\Uninstall.exe" from UninstallString to get path
+  ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
+
+  IfErrors uninst_failed lookFor23
+
+lookFor23:  
+  ; Cura 2.3
+  ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura 2.3" "UninstallString"
+  StrCmp $0 "" lookForCurrentVersion
+
+  MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
+  "Cura 2.3 is already installed. $\n$\nDo you want to uninstall the old version before installing the new one?" \
+  IDYES uninst_23 IDNO lookForCurrentVersion
+
+uninst_23:
+  ClearErrors
+  StrLen $2 "\Uninstall.exe"
+  StrCpy $3 $0 -$2 # remove "\Uninstall.exe" from UninstallString to get path
+  ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
+
+  IfErrors uninst_failed lookForCurrentVersion
+
+lookForCurrentVersion:
+  ;StrCmp "@CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL@" "ON" 0 inst
+
+  ; Cura (current)
   ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "UninstallString"
   StrCmp $0 "" inst
 
@@ -948,7 +1054,6 @@ Function .onInit
   IDYES uninst IDNO inst
   Abort
 
-;Run the uninstaller
 uninst:
   ClearErrors
   StrLen $2 "\Uninstall.exe"
@@ -956,6 +1061,7 @@ uninst:
   ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
 
   IfErrors uninst_failed inst
+
 uninst_failed:
   MessageBox MB_OK|MB_ICONSTOP "Uninstall failed."
   Abort
