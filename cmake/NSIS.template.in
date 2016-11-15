@@ -937,12 +937,17 @@ SectionEnd
 ; Choose different default installation folder based on SV_ALLUSERS...
 ; "Program Files" for AllUsers, "My Documents" for JustMe...
 
+; Needed to remove " from the old uninstaller paths
+!include "CharStrStrip.nsh"
+
 Function .onInit
   StrCmp "@CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL@" "ON" 0 inst
+  
 
 lookFor14121:  
   ; Cura 14.12.1
   ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura_14.12.1" "UninstallString"
+  ${CharStrip} '"' $0 $0
   StrCmp $0 "" lookFor15044
 
   MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
@@ -951,7 +956,7 @@ lookFor14121:
 
 uninst_14121:
   ClearErrors
-  StrLen $2 "\Uninstall.exe"
+  StrLen $2 "\uninstall.exe"
   StrCpy $3 $0 -$2 # remove "\uninstall.exe" from UninstallString to get path
   ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
 
@@ -960,6 +965,7 @@ uninst_14121:
 lookFor15044:  
   ; Cura 15.04.6
   ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura_15.04.4" "UninstallString"
+  ${CharStrip} '"' $0 $0
   StrCmp $0 "" lookFor15045
 
   MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
@@ -968,7 +974,7 @@ lookFor15044:
 
 uninst_15044:
   ClearErrors
-  StrLen $2 "\Uninstall.exe"
+  StrLen $2 "\uninstall.exe"
   StrCpy $3 $0 -$2 # remove "\uninstall.exe" from UninstallString to get path
   ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
 
@@ -977,6 +983,7 @@ uninst_15044:
 lookFor15045:  
   ; Cura 15.04.5
   ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura_15.04.5" "UninstallString"
+  ${CharStrip} '"' $0 $0
   StrCmp $0 "" lookFor15046
 
   MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
@@ -985,7 +992,7 @@ lookFor15045:
 
 uninst_15045:
   ClearErrors
-  StrLen $2 "\Uninstall.exe"
+  StrLen $2 "\uninstall.exe"
   StrCpy $3 $0 -$2 # remove "\uninstall.exe" from UninstallString to get path
   ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
 
@@ -994,6 +1001,7 @@ uninst_15045:
 lookFor15046:  
   ; Cura 15.04.6
   ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Cura_15.04.6" "UninstallString"
+  ${CharStrip} '"' $0 $0
   StrCmp $0 "" lookFor21
 
   MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
@@ -1002,7 +1010,7 @@ lookFor15046:
 
 uninst_15046:
   ClearErrors
-  StrLen $2 "\Uninstall.exe"
+  StrLen $2 "\uninstall.exe"
   StrCpy $3 $0 -$2 # remove "\uninstall.exe" from UninstallString to get path
   ExecWait '$0 _?=$3' ;Do not copy the uninstaller to a temp file
 
