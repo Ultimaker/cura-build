@@ -62,7 +62,7 @@ executables = [
     Executable(script="@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py",
                base="Win32GUI",
                targetName = "Cura.exe",
-               icon="@CMAKE_SOURCE_DIR@/cura.ico"
+               icon="@CMAKE_SOURCE_DIR@/packaging/cura.ico"
                )
 ]
 
