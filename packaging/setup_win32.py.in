@@ -58,6 +58,15 @@ build_options = {
     "excludes": [ ]
 }
 
+# Extra libraries for numpy.core*
+print("Copy numpy DLLs")
+numpy_core_dir = os.path.dirname(numpy.core.__file__)
+for item in os.listdir(numpy_core_dir):
+    if item.endswith(".dll"):
+        dll_abspath = os.path.join(numpy_core_dir, item)
+        print("Appending MKL library: " + dll_abspath)
+        build_options["include_files"].append((dll_abspath, ""),)
+
 executables = [
     Executable(script="@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py",
                base="Win32GUI",
