@@ -44,8 +44,8 @@ build_options = {
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", ""),
-        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura", "plugins"),
-        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium", "plugins"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura/plugins", ""),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", ""),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/UM/Qt/qml/UM", "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
