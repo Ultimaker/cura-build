@@ -564,6 +564,14 @@ SectionEnd
 @CPACK_NSIS_INSTALLER_MUI_COMPONENTS_DESC@
 @CPACK_NSIS_INSTALLER_MUI_FINISHPAGE_RUN_CODE@
 
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION "LaunchCuraLink"
+
+Function LaunchCuraLink
+  ; Start Cura on the finish page using our recently installed link from the start menu
+  Exec '"$WINDIR\explorer.exe" "$SMPROGRAMS\$STARTMENU_FOLDER\@CPACK_PACKAGE_NAME@ @CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@.@CPACK_PACKAGE_VERSION_PATCH@.lnk"'
+FunctionEnd
+
 ;--------------------------------
 ;Pages
   !insertmacro MUI_PAGE_WELCOME
