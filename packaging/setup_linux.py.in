@@ -40,7 +40,6 @@ build_options = {
         "cura",
         "zeroconf",
         "serial",
-        "stl",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
