@@ -50,7 +50,6 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/plugins", "qt/plugins"),
         ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml"),
-        ("@CMAKE_PREFIX_PATH@/lib/fonts", "qt/fonts"),
     ],
     "optimize": 2,
     "bin_path_includes": [
