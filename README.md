@@ -119,8 +119,8 @@ Dependencies:
 * python3-numpy (>= 1.8.0)
 * python3-serial (>= 2.6)
 * python3-opengl (>= 3.0)
+* python3-sip (>= 4.18)
 * python3-setuptools
-* python3-dev
 * qml-module-qtquick2 (>= 5.6.0)
 * qml-module-qtquick-window2 (>= 5.6.0)
 * qml-module-qtquick-layouts (>= 5.6.0)
