@@ -141,12 +141,12 @@ else()
 endif()
 
 if(BUILD_QT)
-    set(qt_url http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz)
+    set(qt_url http://download.qt.io/archive/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz)
     set(qt_md5 59f0216819152b77536cf660b015d784)
 
     # Qt uses different sources for Windows 
     if(BUILD_OS_WINDOWS)
-        set(qt_url http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.zip)
+        set(qt_url http://download.qt.io/archive/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.zip)
         set(qt_md5 d071cdaa1b8f34fb49f6deac94039c2c)
     endif()
 
