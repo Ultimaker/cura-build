@@ -435,28 +435,28 @@ endif()
 
 ExternalProject_Add(Arcus
     DEPENDS Python Protobuf Sip
-    GIT_REPOSITORY https://github.com/ultimaker/libArcus
+    GIT_REPOSITORY https://github.com/Ultimaker/libArcus
     GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DBUILD_EXAMPLES=OFF -DBUILD_STATIC=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${ARCUS_EXTRA_ARGS}
 )
 
 ExternalProject_Add(CuraEngine
     DEPENDS Arcus
-    GIT_REPOSITORY https://github.com/ultimaker/CuraEngine
+    GIT_REPOSITORY https://github.com/Ultimaker/CuraEngine
     GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCURA_ENGINE_VERSION=${CURA_VERSION} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 )
 
 ExternalProject_Add(Uranium
     DEPENDS PyQt Arcus
-    GIT_REPOSITORY https://github.com/ultimaker/Uranium
+    GIT_REPOSITORY https://github.com/Ultimaker/Uranium
     GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
 
 ExternalProject_Add(Cura
     DEPENDS Uranium CuraEngine
-    GIT_REPOSITORY https://github.com/ultimaker/Cura
+    GIT_REPOSITORY https://github.com/Robo3D/Cura
     GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DURANIUM_SCRIPTS_DIR= -DCURA_VERSION=${CURA_VERSION} -DCMAKE_MODULE_PATH=${EXTERNALPROJECT_INSTALL_PREFIX}/share/cmake-${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/Modules/
 )
@@ -470,7 +470,7 @@ ExternalProject_Add(Cura-PostProcessing
 
 ExternalProject_Add(cura-binary-data
     DEPENDS Cura
-    GIT_REPOSITORY https://github.com/ultimaker/cura-binary-data
+    GIT_REPOSITORY https://github.com/Ultimaker/cura-binary-data
     GIT_TAG origin/${TAG_OR_BRANCH}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
 )
