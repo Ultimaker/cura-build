@@ -539,20 +539,22 @@ FunctionEnd
 ; Component sections
 @CPACK_NSIS_COMPONENT_SECTIONS@
 
-Section "Open STL files with Cura"
-    WriteRegStr HKCR .stl "" "STL Model File"
-    DeleteRegValue HKCR .stl "Content Type"
-    WriteRegStr HKCR "Cura STL model file\DefaultIcon" "" "$INSTDIR\Cura.exe,0"
-    WriteRegStr HKCR "Cura STL model file\shell" "" "open"
-    WriteRegStr HKCR "Cura STL model file\shell\open\command" "" '"$INSTDIR\Cura.exe" "%1"'
+!include "FileAssociation.nsh"
+
+Section /o "Open 3MF files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "Cura.model.3MF"
 SectionEnd
 
 Section /o "Open OBJ files with Cura"
-    WriteRegStr HKCR .obj "" "Wavefront OBJ Model File"
-    DeleteRegValue HKCR .obj "Content Type"
-    WriteRegStr HKCR "Cura OBJ model file\DefaultIcon" "" "$INSTDIR\Cura.exe,0"
-    WriteRegStr HKCR "Cura OBJ model file\shell" "" "open"
-    WriteRegStr HKCR "Cura OBJ model file\shell\open\command" "" '"$INSTDIR\Cura.exe" "%1"'
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".obj" "Cura.model.OBJ"
+SectionEnd
+
+Section "Open STL files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "Cura.model.STL"
+SectionEnd
+
+Section /o "Open X3D files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "Cura.model.X3D"
 SectionEnd
 
 ;--------------------------------
@@ -859,6 +861,12 @@ Section "Uninstall"
   ;Remove the add/remove program
   Delete "$INSTDIR\AddRemove.exe"
 !endif
+
+  ;Unregister file assiciations
+  ${UnRegisterExtension} ".3mf" "Cura.model.3MF"
+  ${UnRegisterExtension} ".obj" "Cura.model.OBJ"
+  ${UnRegisterExtension} ".stl" "Cura.model.STL"
+  ${UnRegisterExtension} ".x3d" "Cura.model.X3D"
 
   ;Remove the uninstaller itself.
   Delete "$INSTDIR\Uninstall.exe"

@@ -1,4 +1,4 @@
-project(cura-build)
+project(cura-build NONE)
 
 cmake_minimum_required(VERSION 2.8.12)
 
@@ -18,6 +18,12 @@ option(SIGN_PACKAGE "Perform signing of the created package. Implies BUILD_PACKA
 if(SIGN_PACKAGE)
     set(BUILD_PACKAGE ON)
 endif()
+
+# This should care that our CMAKE_PREFIX_PATH is absolute at the end...
+get_filename_component(CMAKE_PREFIX_PATH
+                       ${CMAKE_PREFIX_PATH}
+                       ABSOLUTE
+                       CACHE FORCE)
 
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 

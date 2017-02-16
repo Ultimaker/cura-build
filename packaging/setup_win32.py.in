@@ -1,141 +1,88 @@
-# Copyright (c) 2015 Ultimaker B.V.
-# Cura is released under the terms of the AGPLv3 or higher.
+#  Needed build-ins
+import sys
+import os.path
 
-from distutils.core import setup
-import py2exe
-import UM
-import UM.Qt
-import cura
-import os
-import re
-import shutil
-import site
-import Arcus
-import scipy
+# Importing preinstalled modules to get their paths
+import PyQt5
 import numpy
-import numpy.core
-import stl
-import stl.mesh
 
-# work around the limitation that shutil.copytree does not allow the target directory to exist
-def copytree(src, dst, symlinks=False, ignore=None):
-    if not os.path.exists(dst):
-        os.makedirs(dst)
-    for item in os.listdir(src):
-        s = os.path.join(src, item)
-        d = os.path.join(dst, item)
-        if os.path.isdir(s):
-            copytree(s, d, symlinks, ignore)
-        else:
-            shutil.copy2(s, d)
+from cx_Freeze import setup, Executable, hooks
 
-def findSubPackages(root_package_path, package_name):
-    includes = []
-    for dirpath, dirnames, filenames in os.walk(os.path.dirname(root_package_path)):
-        if "__" in dirpath:
-            continue
-            
-        if "tests" in dirnames:
-            dirnames.remove("tests")
-            
-        module_path = dirpath.replace(os.path.dirname(root_package_path), package_name)
-        module_path = module_path.split(os.path.sep)
-        module_name = ".".join(module_path)
-        if os.path.isfile(dirpath + "/__init__.py"):
-            includes.append(module_name)
-            for filename in filenames:
-                if "__" not in filename and os.path.splitext(filename)[1] in [".py", ".pyd"]:
-                    includes.append(module_name + "." + os.path.splitext(filename)[0])
-    return includes
+def load_scipy(finder, module):
+    finder.IncludePackage("scipy._lib")
+    finder.IncludePackage("scipy.misc")
+    finder.IncludePackage("scipy.sparse.csgraph._validation")
 
-includes = [
-    "sip", 
-    "ctypes",
-    "uuid",
-    "UM",
-    "PyQt5.QtNetwork", 
-    "PyQt5._QOpenGLFunctions_2_0",
-    "serial",
-    "Arcus",
-    "xml.etree",
-    "xml.etree.ElementTree",
-    "cura",
-    "cura.OneAtATimeIterator",
-    "zeroconf"
-]
+hooks.load_scipy = load_scipy
 
-# Include all the UM modules in the includes. As py2exe fails to properly find all the dependencies due to the plugin architecture.
-includes += findSubPackages(UM.__file__, "UM")
-includes += findSubPackages(cura.__file__, "cura")
-includes += findSubPackages(scipy.__file__, "scipy")
-includes += findSubPackages(stl.__file__, "stl")
+def load_pyqt5_qtquick(finder, module):
+    finder.IncludeModule("PyQt5.QtCore")
+    finder.IncludeModule("PyQt5.QtGui")
+    finder.IncludeModule("PyQt5.QtQml")
+    finder.IncludeModule("PyQt5.QtNetwork")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
 
-# Filter out the known bad apples.
-includes = [x for x in includes if x not in [
-                "scipy.interpolate.interpnd_info",
-                "scipy.misc.pilutil",
-                "scipy.special.generate_ufuncs",
-                "scipy.special._testutils",
-                "scipy.linalg._testutils",
-                "scipy._lib._testutils"]]
+hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
-print("Removing previous distribution package")
-shutil.rmtree("dist", True)
+search_path = sys.path.copy()
+search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/")
+search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.5/site-packages/")
 
-setup(
-    name="Cura",
-    version="@CURA_MAJOR_VERSION@.@CURA_MINOR_VERSION@.@CURA_PATCH_VERSION@",
-    author="Ultimaker",
-    author_email="a.hiemstra@ultimaker.com",
-    url="http://software.ultimaker.com/",
-    license="GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
-    scripts=["inst/bin/cura_app.py"],
-    windows=[{"script": "inst/bin/cura_app.py", "dest_name": "Cura", "icon_resources": [(1, "@CMAKE_SOURCE_DIR@/cura.ico")]}],
-    #console=[{"script": "cura_app.py"}],
-    options={"py2exe": {"skip_archive": False, "includes": includes}}
-)
+# Dependencies are automatically detected, but it might need
+# fine tuning.
+build_options = {
+    "build_exe": "package",
+    "path": search_path,
+    "packages": [
+        "xml.etree",
+        "uuid",
+        "serial",
+        "zeroconf",
+        "UM",
+        "cura",
+        "stl",
+    ],
+    "include_files": [
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", ""),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura/plugins", ""),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", ""),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/UM/Qt/qml/UM", "qml/UM"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
+        # Preinstalled PyQt5 installation
+        (PyQt5.__path__[0] + "/Qt/qml/Qt", "qml/Qt"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtQml", "qml/QtQml"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtQuick", "qml/QtQuick"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
+    ],
+    "excludes": [ ]
+}
 
-print("Copying Cura plugins.")
-copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", "dist/plugins", ignore = shutil.ignore_patterns("OBJWriter", "MLPWriter", "MLPReader"))
-copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura/plugins", "dist/plugins")
-
-print("Copying resources.")
-copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "dist/resources")
-copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "dist/resources")
-
-print("Coping Uranium QML.")
-copytree("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.4/site-packages/UM/Qt/qml/UM", "dist/qml/UM")
-
-qt_lib_dir = None
-qt_bin_dir = None
-if os.path.exists("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/plugins"):
-    qt_lib_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib"
-    qt_bin_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/bin"
-else:
-    import PyQt5.QtCore
-    qt_lib_dir = os.path.dirname(PyQt5.QtCore.__file__)
-    qt_bin_dir = os.path.dirname(PyQt5.QtCore.__file__)
-
-print("Copying Qt5 plugins")
-copytree(os.path.join(qt_lib_dir, "plugins"), "dist/PyQt5/plugins")
-print("Copying QtQuick plugins")
-copytree(os.path.join(qt_lib_dir, "qml"), "dist/qml")
-print("Copying Qt5 svg library")
-shutil.copy(os.path.join(qt_bin_dir, "Qt5Svg.dll"), "dist/Qt5Svg.dll")
-
+# Extra libraries for numpy.core*
 print("Copy numpy DLLs")
 numpy_core_dir = os.path.dirname(numpy.core.__file__)
 for item in os.listdir(numpy_core_dir):
     if item.endswith(".dll"):
-        shutil.copy(os.path.join(numpy_core_dir, item), os.path.join("dist", item))
+        dll_abspath = os.path.join(numpy_core_dir, item)
+        print("Appending MKL library: " + dll_abspath)
+        build_options["include_files"].append((dll_abspath, ""),)
 
-print("Copy CuraEngine")
-shutil.copy("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", "dist/CuraEngine.exe")
-shutil.copy("@compiler_dir@/libstdc++-6.dll", "dist/libstdc++-6.dll")
-shutil.copy("@compiler_dir@/libwinpthread-1.dll", "dist/libwinpthread-1.dll")
-try:
-    shutil.copy("@compiler_dir@/libgcc_s_seh-1.dll", "dist/libgcc_s_seh-1.dll")
-except FileNotFoundError:
-    shutil.copy("@compiler_dir@/libgcc_s_dw2-1.dll", "dist/libgcc_s_dw2-1.dll")
+executables = [
+    Executable(script="@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py",
+               base="Win32GUI",
+               targetName = "Cura.exe",
+               icon="@CMAKE_SOURCE_DIR@/cura.ico"
+               )
+]
 
-os.rename("dist/cura_app.exe", "dist/Cura.exe")
+setup(
+    name = "Cura",
+    version = "@CURA_VERSION_MAJOR@.@CURA_VERSION_MINOR@.@CURA_VERSION_PATCH@",
+    description = "3D Printing Software",
+    author = "Ultimaker B.V.",
+    url = "http://software.ultimaker.com/",
+    license = "GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
+
+    options = {"build_exe": build_options},
+    executables = executables
+)
