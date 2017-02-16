@@ -541,16 +541,20 @@ FunctionEnd
 
 !include "FileAssociation.nsh"
 
-Section "Open STL files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "Cura.model.STL"
+Section /o "Open 3MF files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "Cura.model.3MF"
 SectionEnd
 
 Section /o "Open OBJ files with Cura"
     ${RegisterExtension} "$INSTDIR\Cura.exe" ".obj" "Cura.model.OBJ"
 SectionEnd
 
-Section /o "Open 3MF files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "Cura.model.3MF"
+Section "Open STL files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "Cura.model.STL"
+SectionEnd
+
+Section /o "Open X3D files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "Cura.model.X3D"
 SectionEnd
 
 ;--------------------------------
@@ -859,9 +863,10 @@ Section "Uninstall"
 !endif
 
   ;Unregister file assiciations
-  ${UnRegisterExtension} ".stl" "Cura.model.STL"
-  ${UnRegisterExtension} ".obj" "Cura.model.OBJ"
   ${UnRegisterExtension} ".3mf" "Cura.model.3MF"
+  ${UnRegisterExtension} ".obj" "Cura.model.OBJ"
+  ${UnRegisterExtension} ".stl" "Cura.model.STL"
+  ${UnRegisterExtension} ".x3d" "Cura.model.X3D"
 
   ;Remove the uninstaller itself.
   Delete "$INSTDIR\Uninstall.exe"

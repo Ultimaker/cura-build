@@ -14,8 +14,11 @@ cmake_install.cmake
 
 # IDEs
 .idea
-*.pyc
 *kdev*
+.project
+.pydevproject
+
+# Various files
 *.lprof
 *~
 *.qm
@@ -23,6 +26,7 @@ cmake_install.cmake
 .project
 
 # Build/run side effects
+*.pyc
 __pycache__
 docs/html
 *.log

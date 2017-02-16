@@ -1,0 +1,88 @@
+#  Needed build-ins
+import sys
+import os.path
+
+# Importing preinstalled modules to get their paths
+import PyQt5
+import numpy
+
+from cx_Freeze import setup, Executable, hooks
+
+def load_scipy(finder, module):
+    finder.IncludePackage("scipy._lib")
+    finder.IncludePackage("scipy.misc")
+    finder.IncludePackage("scipy.sparse.csgraph._validation")
+
+hooks.load_scipy = load_scipy
+
+def load_pyqt5_qtquick(finder, module):
+    finder.IncludeModule("PyQt5.QtCore")
+    finder.IncludeModule("PyQt5.QtGui")
+    finder.IncludeModule("PyQt5.QtQml")
+    finder.IncludeModule("PyQt5.QtNetwork")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
+
+hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
+
+search_path = sys.path.copy()
+search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/")
+search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.5/site-packages/")
+
+# Dependencies are automatically detected, but it might need
+# fine tuning.
+build_options = {
+    "build_exe": "package",
+    "path": search_path,
+    "packages": [
+        "xml.etree",
+        "uuid",
+        "serial",
+        "zeroconf",
+        "UM",
+        "cura",
+        "stl",
+    ],
+    "include_files": [
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", ""),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura/plugins", ""),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", ""),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/UM/Qt/qml/UM", "qml/UM"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
+        # Preinstalled PyQt5 installation
+        (PyQt5.__path__[0] + "/Qt/qml/Qt", "qml/Qt"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtQml", "qml/QtQml"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtQuick", "qml/QtQuick"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
+    ],
+    "excludes": [ ]
+}
+
+# Extra libraries for numpy.core*
+print("Copy numpy DLLs")
+numpy_core_dir = os.path.dirname(numpy.core.__file__)
+for item in os.listdir(numpy_core_dir):
+    if item.endswith(".dll"):
+        dll_abspath = os.path.join(numpy_core_dir, item)
+        print("Appending MKL library: " + dll_abspath)
+        build_options["include_files"].append((dll_abspath, ""),)
+
+executables = [
+    Executable(script="@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py",
+               base="Win32GUI",
+               targetName = "Cura.exe",
+               icon="@CMAKE_SOURCE_DIR@/cura.ico"
+               )
+]
+
+setup(
+    name = "Cura",
+    version = "@CURA_VERSION_MAJOR@.@CURA_VERSION_MINOR@.@CURA_VERSION_PATCH@",
+    description = "3D Printing Software",
+    author = "Ultimaker B.V.",
+    url = "http://software.ultimaker.com/",
+    license = "GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
+
+    options = {"build_exe": build_options},
+    executables = executables
+)
