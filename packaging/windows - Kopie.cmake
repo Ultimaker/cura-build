@@ -75,7 +75,11 @@ set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Cura")
 # CPackNSIS
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
+set(CPACK_NSIS_INSTALL_ROOT ${CMAKE_BINARY_DIR}/package_nsis)
 set(CPACK_NSIS_INSTALLED_ICON_NAME "Cura.ico")
+#set(CPACK_NSIS_MUI_ICON "cura.ico")
+#set(CPACK_NSIS_MUI_UNIICON "cura.ico")
+set(CPACK_NSIS_MUI_FINISHPAGE_RUN "Cura.exe")
 set(CPACK_NSIS_MENU_LINKS
     "https://ultimaker.com/en/support/software" "Cura Online Documentation"
     "https://github.com/ultimaker/cura" "Cura Development Resources"
@@ -98,4 +102,22 @@ add_custom_command(
     # NOTE: Needs testing here, whether CPACK_SYSTEM_NAME is working good for 64bit builds, too.
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/NSIS ${CMAKE_BINARY_DIR}/_CPack_Packages/${CPACK_SYSTEM_NAME}/NSIS
     COMMENT "Copying NSIS scripts"
+)
+add_custom_command(
+    TARGET build_bundle POST_BUILD
+    # NOTE: Needs testing here, whether CPACK_SYSTEM_NAME is working good for 64bit builds, too.
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/packaging/cura.ico ${CMAKE_BINARY_DIR}/_CPack_Packages/${CPACK_SYSTEM_NAME}/NSIS
+    COMMENT "Copying cura.ico to NSIS"
+)
+add_custom_command(
+    TARGET build_bundle POST_BUILD
+    # NOTE: Needs testing here, whether CPACK_SYSTEM_NAME is working good for 64bit builds, too.
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/packaging/NSIS_header.bmp ${CMAKE_BINARY_DIR}/_CPack_Packages/${CPACK_SYSTEM_NAME}/NSIS
+    COMMENT "Copying NSIS_header.bmp to NSIS"
+)
+add_custom_command(
+    TARGET build_bundle POST_BUILD
+    # NOTE: Needs testing here, whether CPACK_SYSTEM_NAME is working good for 64bit builds, too.
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/packaging/NSIS_wizard.bmp ${CMAKE_BINARY_DIR}/_CPack_Packages/${CPACK_SYSTEM_NAME}/NSIS
+    COMMENT "Copying NSIS_wizard.bmp to NSIS"
 )
