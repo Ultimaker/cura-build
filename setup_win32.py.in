@@ -32,6 +32,7 @@ def load_pyqt5_qtquick(finder, module):
     finder.IncludeModule("PyQt5.QtQml")
     finder.IncludeModule("PyQt5.QtNetwork")
     finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_4_1_Core")
 hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
 # work around the limitation that shutil.copytree does not allow the target directory to exist
@@ -170,6 +171,7 @@ print("Copying CuraEngine")
 shutil.copy("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", "dist/CuraEngine.exe")
 shutil.copy("@compiler_dir@/libstdc++-6.dll", "dist/libstdc++-6.dll")
 shutil.copy("@compiler_dir@/libwinpthread-1.dll", "dist/libwinpthread-1.dll")
+shutil.copy("@compiler_dir@/libgomp-1.dll", "dist/libgomp-1.dll")
 try:
     shutil.copy("@compiler_dir@/libgcc_s_seh-1.dll", "dist/libgcc_s_seh-1.dll")
 except FileNotFoundError:
