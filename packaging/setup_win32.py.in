@@ -23,9 +23,9 @@ def load_numpy(finder, module):
         "mkl_avx.dll",
         "mkl_avx2.dll",
         "mkl_avx512.dll",
-        "mkl_def.dll"
+        "mkl_def.dll",
         "mkl_mc.dll",
-        "mkl_mc3.dll"
+        "mkl_mc3.dll",
         "libiomp5md.dll",
         "libimalloc.dll",
     ]
