@@ -61,6 +61,8 @@ search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.5/site-packages/")
 # fine tuning.
 build_options = {
     "build_exe": "package",
+    "zip_include_packages": "*",
+    "zip_exclude_packages": "",
     "path": search_path,
     "packages": [
         "xml.etree",
