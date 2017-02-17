@@ -8,10 +8,38 @@ import numpy
 
 from cx_Freeze import setup, Executable, hooks
 
+def load_numpy(finder, module):
+    finder.IncludePackage("numpy.core._methods")
+    finder.IncludePackage("numpy._globals")
+    finder.IncludePackage("numpy.lib.format")
+    finder.IncludePackage("numpy.linalg._umath_linalg")
+
+    # Include all MKL files that are needed to get Numpy with MKL working.
+    npy_core_dir = os.path.join(module.path[0], "core")
+    required_mkl_files = [
+        "mkl_intel_thread.dll",
+        "mkl_core.dll",
+        "mkl_msg.dll",
+        "mkl_avx.dll",
+        "mkl_avx2.dll",
+        "mkl_avx512.dll",
+        "mkl_p4.dll",
+        "mkl_p4m.dll",
+        "mkl_p4m3.dll",
+        "libiomp5md.dll",
+        "libimalloc.dll",
+    ]
+
+    for file in required_mkl_files:
+        finder.IncludeFiles(os.path.join(npy_core_dir, file), file)
+
+hooks.load_numpy = load_numpy
+
 def load_scipy(finder, module):
     finder.IncludePackage("scipy._lib")
     finder.IncludePackage("scipy.misc")
     finder.IncludePackage("scipy.sparse.csgraph._validation")
+    finder.IncludePackage("scipy.sparse._csparsetools")
 
 hooks.load_scipy = load_scipy
 
@@ -58,15 +86,6 @@ build_options = {
     ],
     "excludes": [ ]
 }
-
-# Extra libraries for numpy.core*
-print("Copy numpy DLLs")
-numpy_core_dir = os.path.dirname(numpy.core.__file__)
-for item in os.listdir(numpy_core_dir):
-    if item.endswith(".dll"):
-        dll_abspath = os.path.join(numpy_core_dir, item)
-        print("Appending MKL library: " + dll_abspath)
-        build_options["include_files"].append((dll_abspath, ""),)
 
 executables = [
     Executable(script="@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py",
