@@ -28,6 +28,7 @@ def load_numpy(finder, module):
         "mkl_mc3.dll",
         "libiomp5md.dll",
         "libimalloc.dll",
+        "libmmd.dll",
     ]
 
     for file in required_mkl_files:
