@@ -3,14 +3,6 @@ import os.path
 
 from cx_Freeze import setup, Executable, hooks
 
-def load_numpy(finder, module):
-    finder.IncludePackage("numpy.core._methods")
-    finder.IncludePackage("numpy._globals")
-    finder.IncludePackage("numpy.lib.format")
-    finder.IncludePackage("numpy.linalg._umath_linalg")
-
-hooks.load_numpy = load_numpy
-
 def load_scipy(finder, module):
     finder.IncludePackage("scipy._lib")
     finder.IncludePackage("scipy.misc")
