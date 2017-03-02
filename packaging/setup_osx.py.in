@@ -7,6 +7,7 @@ def load_scipy(finder, module):
     finder.IncludePackage("scipy._lib")
     finder.IncludePackage("scipy.misc")
     finder.IncludePackage("scipy.sparse.csgraph._validation")
+    finder.IncludePackage("scipy.sparse._csparsetools")
 
 hooks.load_scipy = load_scipy
 
@@ -50,7 +51,8 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick", "qml/QtQuick"),
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick.2", "qml/QtQuick.2"),
     ],
-    "excludes": [ ]
+    "excludes": [ ],
+    "zip_include_packages": [ "PyQt5" ],
 }
 
 bdist_mac_options = {
