@@ -42,6 +42,7 @@ build_options = {
         "cura",
         "zeroconf",
         "serial",
+        "Savitar",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),

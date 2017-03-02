@@ -74,6 +74,7 @@ build_options = {
         "UM",
         "cura",
         "stl",
+        "Savitar",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", ""),
