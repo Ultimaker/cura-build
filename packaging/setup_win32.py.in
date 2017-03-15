@@ -19,10 +19,8 @@ def load_numpy(finder, module):
     required_mkl_files = [
         "mkl_intel_thread.dll",
         "mkl_core.dll",
-        "mkl_msg.dll",
         "mkl_avx.dll",
         "mkl_avx2.dll",
-        "mkl_avx512.dll",
         "mkl_def.dll",
         "mkl_mc.dll",
         "mkl_mc3.dll",
