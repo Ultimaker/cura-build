@@ -1,6 +1,7 @@
 #  Needed build-ins
 import sys
 import os.path
+import platform
 
 # Importing preinstalled modules to get their paths
 import PyQt5
@@ -21,13 +22,23 @@ def load_numpy(finder, module):
         "mkl_core.dll",
         "mkl_avx.dll",
         "mkl_avx2.dll",
-        "mkl_def.dll",
-        "mkl_mc.dll",
-        "mkl_mc3.dll",
         "libiomp5md.dll",
         "libimalloc.dll",
         "libmmd.dll",
     ]
+
+    if platform.architecture()[0] == "32bit":
+        required_mkl_files.extend([
+            "mkl_p4.dll",
+            "mkl_p4m.dll",
+            "mkl_p4m3.dll",
+        ])
+    else:
+        required_mkl_files.extend([
+            "mkl_def.dll",
+            "mkl_mc.dll",
+            "mkl_mc3.dll",
+        ])
 
     for file in required_mkl_files:
         finder.IncludeFiles(os.path.join(npy_core_dir, file), file)
