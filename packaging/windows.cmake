@@ -45,7 +45,7 @@ endif()
 include(CPackComponent)
 
 cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
-cpack_add_component(vcredist DISPLAY_NAME "Install Visual Studio 2010 Redistributable")
+cpack_add_component(vcredist DISPLAY_NAME "Install Visual Studio 2015 Redistributable")
 cpack_add_component(arduino DISPLAY_NAME "Install Arduino Drivers")
 
 set(CPACK_GENERATOR "NSIS")
