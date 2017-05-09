@@ -940,6 +940,11 @@ SectionEnd
 ; Needed to remove " from the old uninstaller paths
 !include "CharStrStrip.nsh"
 
+; Uninstall a previous version of Cura.
+; Parameters are:
+; _NAME: Display name
+; _VERSION: Registry entry to get the Uninstall executable from.
+; _ID: A unique ID to track this instance.
 !macro uninstallVersion _NAME _VERSION _ID
   Push $0
 
