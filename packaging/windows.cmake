@@ -75,7 +75,7 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY "Cura ${CURA_VERSION_MAJOR}.${CURA_VERSION_M
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
 set(CPACK_NSIS_INSTALLED_ICON_NAME "Cura.ico")
-set(CPACK_NSIS_MUI_FINISHPAGE_RUN "Cura.exe")
+set(CPACK_NSIS_MUI_FINISHPAGE_RUN "\"$WINDIR\\explorer.exe\"\ Cura.exe") # Run Cura unelevated, see http://mdb-blog.blogspot.nl/2013/01/nsis-lunch-program-as-user-from-uac.html
 set(CPACK_NSIS_MENU_LINKS
     "https://ultimaker.com/en/support/software" "Cura Online Documentation"
     "https://github.com/ultimaker/cura" "Cura Development Resources"
