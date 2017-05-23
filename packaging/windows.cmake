@@ -28,15 +28,15 @@ add_custom_command(
     COMMENT "Copying cura.ico as Cura.ico into package/"
 )
 
-install(DIRECTORY ${EXTERNALPROJECT_INSTALL_PREFIX}/arduino
-        DESTINATION "."
-        COMPONENT "arduino"
-)
-
 install(DIRECTORY ${CMAKE_BINARY_DIR}/package/
         DESTINATION "."
         USE_SOURCE_PERMISSIONS
-        COMPONENT "cura"
+        COMPONENT "_cura" # Note: _ prefix is necessary to make sure the Cura component is always listed first
+)
+
+install(DIRECTORY ${EXTERNALPROJECT_INSTALL_PREFIX}/arduino
+        DESTINATION "."
+        COMPONENT "arduino"
 )
 
 if(BUILD_OS_WIN32)
@@ -53,7 +53,7 @@ endif()
 
 include(CPackComponent)
 
-cpack_add_component(cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
+cpack_add_component(_cura DISPLAY_NAME "Cura Executable and Data Files" REQUIRED)
 cpack_add_component(vcredist DISPLAY_NAME "Install Visual Studio 2015 Redistributable")
 cpack_add_component(arduino DISPLAY_NAME "Install Arduino Drivers")
 
