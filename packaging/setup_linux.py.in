@@ -43,6 +43,7 @@ build_options = {
         "zeroconf",
         "serial",
         "Savitar",
+        "PyQt5.QtDBus",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
