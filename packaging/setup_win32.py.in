@@ -85,6 +85,7 @@ build_options = {
         "stl",
         "Savitar",
         "PyQt5.QtDBus",
+        "comtypes",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", ""),
