@@ -100,7 +100,8 @@ build_options = {
         (PyQt5.__path__[0] + "/Qt/qml/QtQuick", "qml/QtQuick"),
         (PyQt5.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
     ],
-    "excludes": [ ]
+    "excludes": [ ],
+    "replace_paths": [("*", "")],
 }
 
 executables = [
