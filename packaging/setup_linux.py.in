@@ -27,7 +27,7 @@ def load_pyqt5_qtquick(finder, module):
 hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
 search_path = sys.path.copy()
-if os.path.isdir("/etc/debian_version"):
+if os.path.exists("/etc/debian_version"):
     python_externalproject_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3/dist-packages/"
     python_install_dir = "@CMAKE_INSTALL_PREFIX@/lib/python3/dist-packages/"
 else:
