@@ -55,7 +55,7 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura", "plugins"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium", "plugins"),
-        (os.path.join(python_externalproject_dir, "/UM/Qt/qml/UM"), "qml/UM"),
+        (os.path.join(python_externalproject_dir, "UM/Qt/qml/UM"), "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/plugins", "qt/plugins"),
