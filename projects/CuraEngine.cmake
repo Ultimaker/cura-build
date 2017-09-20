@@ -1,7 +1,7 @@
 find_package(Arcus 1.1 REQUIRED)
 
 if(BUILD_OS_WINDOWS)
-	set(extra_cmake_args -DArcus_DIR=${CMAKE_PREFIX_PATH}/lib-mingw/cmake/Arcus)
+    set(extra_cmake_args -DArcus_DIR=${CMAKE_PREFIX_PATH}/lib-mingw/cmake/Arcus)
 endif()
 
 ExternalProject_Add(CuraEngine
