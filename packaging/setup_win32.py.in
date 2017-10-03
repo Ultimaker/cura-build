@@ -101,6 +101,7 @@ build_options = {
         (PyQt5.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
     ],
     "excludes": [ ],
+    "bin_includes": ["libeay32", "ssleay32"],
     "replace_paths": [("*", "")],
 }
 
