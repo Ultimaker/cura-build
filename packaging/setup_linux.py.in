@@ -68,6 +68,10 @@ build_options = {
         "/usr/lib",
         "/usr/lib64",
     ],
+    "bin_includes": [
+        "libssl",
+        "libcrypto",
+    ],
     "bin_excludes": [
         "linux-vdso.so.1",
         "libpthread.so.0",
