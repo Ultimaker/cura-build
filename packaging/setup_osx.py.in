@@ -68,7 +68,7 @@ executables = [
 ]
 
 setup(
-    name = "Cura",
+    name = "Ultimaker Cura",
     version = "@CURA_VERSION_MAJOR@.@CURA_VERSION_MINOR@.@CURA_VERSION_PATCH@",
     description = "3D Printing Software",
     author = "Ultimaker B.V.",
