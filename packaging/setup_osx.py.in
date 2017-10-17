@@ -73,7 +73,7 @@ setup(
     description = "3D Printing Software",
     author = "Ultimaker B.V.",
     url = "http://software.ultimaker.com/",
-    license = "GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)",
+    license = "GNU LESSER GENERAL PUBLIC LICENSE (LGPL)",
 
     options = {"build_exe": build_options, "bdist_mac": bdist_mac_options },
     executables = executables
