@@ -60,7 +60,7 @@ build_options = {
 bdist_mac_options = {
     "iconfile": "@CMAKE_SOURCE_DIR@/packaging/cura.icns",
     "custom_info_plist": "@CMAKE_BINARY_DIR@/Info.plist",
-    "bundle_name": "Cura"
+    "bundle_name": "Ultimaker Cura"
 }
 
 executables = [
