@@ -64,6 +64,19 @@ def load_pyqt5_qtquick(finder, module):
 
 hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
+def load_pyqt5_qtnetwork(finder, module):
+    finder.IncludeModule("PyQt5.QtCore")
+
+    qt_path = os.path.join(os.path.dirname(PyQt5.QtCore.__file__), "Qt", "bin")
+    required_ssl_files = [
+        "libeay32.dll",
+        "ssleay32.dll",
+    ]
+    for file_name in required_ssl_files:
+        finder.IncludeFiles(os.path.join(qt_path, file_name), file_name)
+
+hooks.load_PyQt5_QtNetwork = load_pyqt5_qtnetwork
+
 search_path = sys.path.copy()
 search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/")
 search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.5/site-packages/")
@@ -101,7 +114,6 @@ build_options = {
         (PyQt5.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
     ],
     "excludes": [ ],
-    "bin_includes": ["libeay32", "ssleay32"],
     "replace_paths": [("*", "")],
 }
 
