@@ -7,7 +7,7 @@
     <key>CFBundleName</key>
     <string>Cura</string>
     <key>CFBundleDisplayName</key>
-    <string>Cura</string>
+    <string>Ultimaker Cura</string>
     <key>CFBundleVersion</key>
     <string>@CURA_VERSION@</string>
     <key>CFBundleDevelopmentRegion</key>
