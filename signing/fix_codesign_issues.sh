@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd Cura.app/Contents/MacOS
+pushd "Ultimaker Cura.app/Contents/MacOS"
 
 dirs=`find . -type d -depth 1`
 
