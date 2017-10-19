@@ -991,6 +991,7 @@ Function .onInit
   !insertmacro uninstallVersion "Cura 2.3" "Cura 2.3" "23"
   !insertmacro uninstallVersion "Cura 2.4" "Cura 2.4" "24"
   !insertmacro uninstallVersion "Cura 2.5" "Cura 2.5" "25"
+  !insertmacro uninstallVersion "Cura 3.0" "Cura 3.0" "30"
   !insertmacro uninstallVersion "Cura" "@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "latest"
 
 inst:
