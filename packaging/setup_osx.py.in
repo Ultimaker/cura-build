@@ -60,7 +60,7 @@ build_options = {
 bdist_mac_options = {
     "iconfile": "@CMAKE_SOURCE_DIR@/packaging/cura.icns",
     "custom_info_plist": "@CMAKE_BINARY_DIR@/Info.plist",
-    "bundle_name": "Cura"
+    "bundle_name": "Ultimaker Cura"
 }
 
 executables = [
@@ -68,7 +68,7 @@ executables = [
 ]
 
 setup(
-    name = "Cura",
+    name = "Ultimaker Cura",
     version = "@CURA_VERSION_MAJOR@.@CURA_VERSION_MINOR@.@CURA_VERSION_PATCH@",
     description = "3D Printing Software",
     author = "Ultimaker B.V.",
