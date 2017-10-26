@@ -12,7 +12,7 @@ add_custom_command(
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/build
 )
 
-install(DIRECTORY ${CMAKE_BINARY_DIR}/build/Cura.app DESTINATION "." USE_SOURCE_PERMISSIONS)
+install(DIRECTORY "${CMAKE_BINARY_DIR}/build/Ultimaker Cura.app" DESTINATION "." USE_SOURCE_PERMISSIONS)
 
 set(CPACK_PACKAGE_NAME "Ultimaker Cura")
 set(CPACK_PACKAGE_VENDOR "Ultimaker")
