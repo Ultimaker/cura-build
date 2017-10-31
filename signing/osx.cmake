@@ -8,13 +8,13 @@ add_custom_command(
 
 add_custom_command(
     TARGET signing PRE_BUILD
-    COMMAND codesign -s ${OSX_CODESIGN_IDENTITY} --deep Cura.app
+    COMMAND codesign -s ${OSX_CODESIGN_IDENTITY} --deep "Ultimaker Cura.app"
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/build
 )
 
-install(DIRECTORY ${CMAKE_BINARY_DIR}/build/Cura.app DESTINATION "." USE_SOURCE_PERMISSIONS)
+install(DIRECTORY "${CMAKE_BINARY_DIR}/build/Ultimaker Cura.app" DESTINATION "." USE_SOURCE_PERMISSIONS)
 
-set(CPACK_PACKAGE_NAME "Cura")
+set(CPACK_PACKAGE_NAME "Ultimaker Cura")
 set(CPACK_PACKAGE_VENDOR "Ultimaker")
 set(CPACK_PACKAGE_VERSION_MAJOR ${CURA_MAJOR_VERSION})
 set(CPACK_PACKAGE_VERSION_MINOR ${CURA_MINOR_VERSION})
