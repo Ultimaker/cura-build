@@ -743,11 +743,13 @@ Section "-Core installation"
   IntCmp $vcredist_selected 0 +2
   ExecWait '"$INSTDIR\vcredist_x@CPACK_NSIS_PACKAGE_ARCHITECTURE@.exe" /install /quiet /norestart'
 
-  IntCmp $arduino_selected 0 +6
+  IntCmp $arduino_selected 0 +8
   ${If} ${RunningX64}
     ExecWait '"$INSTDIR\arduino\dpinst-amd64.exe" /lm /sw'
+    ExecWait '"$INSTDIR\arduino\FTDI USB Drivers\dpinst-amd64.exe" /lm /sw'
   ${Else}
     ExecWait '"$INSTDIR\arduino\dpinst-x86.exe" /lm /sw'
+    ExecWait '"$INSTDIR\arduino\FTDI USB Drivers\dpinst-x86.exe" /lm /sw'
   ${EndIf}
 
 @CPACK_NSIS_EXTRA_INSTALL_COMMANDS@
