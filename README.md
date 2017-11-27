@@ -60,7 +60,6 @@ compiler=mingw32
 
 For 64-bit builds:
 
-* PyQt 5.4 (https://riverbankcomputing.com/software/pyqt/download5, Building PyQt currently fails using MinGW 64-bit)
 * Install protobuf.wheel found in cura-build-binaries (TODO: create cura-build-binaries repo)
 * Create empty ```__init__.py``` in c:\Python34\Lib\site-packages\google (TODO: make it part of the proto.wheel installation)
 
