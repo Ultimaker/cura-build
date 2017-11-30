@@ -16,7 +16,7 @@ add_custom_command(
 add_custom_command(
     TARGET build_bundle POST_BUILD
     COMMAND ${PYTHON_EXECUTABLE} setup.py build_exe
-    COMMENT "Running cx_Freeze"
+    COMMENT "running cx_Freeze"
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
