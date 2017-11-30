@@ -25,7 +25,7 @@ add_custom_command(
     # NOTE: Needs testing here, whether CPACK_SYSTEM_NAME is working good for 64bit builds, too.
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/packaging/cura.ico ${CMAKE_BINARY_DIR}/package/
     COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_BINARY_DIR}/package/cura.ico ${CMAKE_BINARY_DIR}/package/Cura.ico
-    COMMENT "Copying cura.ico as Cura.ico into package/"
+    COMMENT "copying cura.ico as Cura.ico into package/"
 )
 
 install(DIRECTORY ${CMAKE_BINARY_DIR}/package/
