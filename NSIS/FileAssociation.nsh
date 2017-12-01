@@ -127,7 +127,11 @@ _____________________________________________________________________________
 ;  StrCmp "$1" "$R1" NoBackup  ; or the same value, as ours now,
 ;  WriteRegStr HKCR "$R2" "backup_val" "$1"  ; then backup the current value.
 ;NoBackup:
-  WriteRegStr HKCR "$R2" "" "$R1" ; Setting default association
+  ; Setting default association
+  WriteRegStr HKCR "$R2" "" "$R1"
+  ; Also an instruction to set the default association
+  ; Probably a key for more recent Windows versions
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\$R2\UserChoice" "ProgId" "$R1"
 
   ReadRegStr $0 HKCR "$R1" ""
   StrCmp $0 "" 0 Skip
