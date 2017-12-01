@@ -542,19 +542,19 @@ FunctionEnd
 !include "FileAssociation.nsh"
 
 Section /o "Open 3MF files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "Cura.model.3MF"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "3MF model file"
 SectionEnd
 
 Section /o "Open OBJ files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".obj" "Cura.model.OBJ"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".obj" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.obj.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "OBJ model file"
 SectionEnd
 
 Section "Open STL files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "Cura.model.STL"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.stl.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "STL model file"
 SectionEnd
 
 Section /o "Open X3D files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "Cura.model.X3D"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "X3D model file"
 SectionEnd
 
 ;--------------------------------
@@ -863,10 +863,10 @@ Section "Uninstall"
 !endif
 
   ;Unregister file assiciations
-  ${UnRegisterExtension} ".3mf" "Cura.model.3MF"
-  ${UnRegisterExtension} ".obj" "Cura.model.OBJ"
-  ${UnRegisterExtension} ".stl" "Cura.model.STL"
-  ${UnRegisterExtension} ".x3d" "Cura.model.X3D"
+  ${UnRegisterExtension} ".3mf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".obj" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.obj.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".stl" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.stl.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".x3d" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
 
   ;Remove executable from MUIcache
   DeleteRegKey HKCR "Software\Microsoft\Windows\Shell\MuiCache\$INSTDIR\Cura.exe.FriendlyAppName"
