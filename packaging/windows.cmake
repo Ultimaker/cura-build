@@ -9,7 +9,7 @@ add_custom_command(
     TARGET build_bundle PRE_LINK
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/package
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/package
-    COMMENT "Cleaning old package/ directory"
+    COMMENT "cleaning old package/ directory"
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
