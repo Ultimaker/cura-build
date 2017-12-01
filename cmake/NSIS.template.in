@@ -998,7 +998,8 @@ Function .onInit
   !insertmacro uninstallVersion "Cura 2.6" "Cura 2.6" "26"
   !insertmacro uninstallVersion "Cura 2.7" "Cura 2.7" "27"
   !insertmacro uninstallVersion "Cura 3.0" "Cura 3.0" "30"
-  !insertmacro uninstallVersion "Ultimaker Cura 3.0" "Ultimaker Cura 3.0" "U30"
+  !insertmacro uninstallVersion "Ultimaker Cura 3.0" "Ultimaker Cura 3.0" "U30" ; Name change during 3.0 release
+  !insertmacro uninstallVersion "Ultimaker Cura 3.1" "Ultimaker Cura 3.1" "U31" ; Probably for some nightly builds inside UM
   !insertmacro uninstallVersion "Ultimaker Cura @CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "latest"
 
 inst:
