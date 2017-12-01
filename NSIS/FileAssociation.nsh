@@ -131,7 +131,8 @@ _____________________________________________________________________________
   WriteRegStr HKCR "$R2" "" "$R1"
   ; Also an instruction to set the default association
   ; Probably a key for more recent Windows versions
-  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\$R2\UserChoice" "ProgId" "$R1"
+  ; -> Giving it up. We need a way to update the "Hash", too.
+  ; WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\$R2\UserChoice" "ProgId" "$R1"
 
   ReadRegStr $0 HKCR "$R1" ""
   StrCmp $0 "" 0 Skip
@@ -192,6 +193,9 @@ Skip:
 ;  StrCmp $1 "" 0 Restore ; if backup="" then delete the whole key
   DeleteRegKey /ifempty HKCR "$R0\OpenWithProgids"
   WriteRegStr HKCR "$R0" "" ""  ; BETTER: Setting it to nothing, if it was ours. The user can choose what she/he wants to use afterwards
+  ; Emptying the key - In my opinion safer then removing it.
+  ; However, see above to see why this is turned off.
+  ;WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\$R2\UserChoice" "ProgId" ""
   DeleteRegKey /ifempty HKCR "$R0"
 ;  Goto NoOwn
 
