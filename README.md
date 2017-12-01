@@ -25,21 +25,6 @@ On Windows, the following dependencies are needed for building:
 * **git for windows** (https://git-for-windows.github.io/) The `git` command should be available on your `%PATH%`. Make sure that the `cmd` directory in the git for windows installation directory is on the `%PATH%` and *not* its `bin` directory, otherwise mingw32 will complain about `sh.exe` being on the path.
 * **CMake** (http://www.cmake.org/) Once CMake is installed make sure it is available on your `%PATH%`. Check this by running `cmake --version` in the Windows console.
 * **MinGW-W64** >= 5.3.0 (http://mingw-w64.org/doku.php) Once installed, its `bin` directory should be available on your `%PATH%`. Test this by running `mingw32-make --version` in the Windows console.
-* **Python** 3.5 (http://python.org/, note that the version "3.5" is hardcoded across this project)
-* **NumPy** (http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy)
-  You'll need to download a .whl from this site for Python 3.5 and install it via `pip install <your_whl_file>.whl`.
-* **SciPy** (http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy)
-  You'll need to download a .whl from this site for Python 3.5 and install it via `pip install <your_whl_file>.whl`.
-* **PySerial** from https://pypi.python.org/pypi/pyserial/3.2.1
-  It can be easyly installed via `pip3 install pyserial`
-* **PyQt5** from https://pypi.python.org/pypi/PyQt5/5.7
-  It can be easyly installed via `pip3 install PyQt5`
-* **SIP** from https://pypi.python.org/pypi/SIP/4.18.1
-  It can be easyly installed via `pip3 install sip`
-* **Zeroconf** from https://pypi.python.org/pypi/zeroconf/0.17.6
-  It can be easyly installed via `pip3 install zeroconf`
-* **NumPy-STL** from https://pypi.python.org/pypi/numpy-stl/2.0.0
-  It can be easyly installed via `pip3 install numpy-stl`
 * **Microsoft Visual Studio 2015 (community edition)**: 
   Install Programming languages: Visual c++ (all), Python Tools for Visual Studio (Nov 2015)
   Windows & Web Development: Universal Windows App Development Tools (Tools 1.2 & windows 10 SDK-10/0/10586; Windows 10 SDK -10.0.10240)
