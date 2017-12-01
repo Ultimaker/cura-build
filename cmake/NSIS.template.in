@@ -869,7 +869,8 @@ Section "Uninstall"
   ${UnRegisterExtension} ".x3d" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
 
   ;Remove executable from MUIcache
-  DeleteRegKey HKCR "Software\Microsoft\Windows\Shell\MuiCache\$INSTDIR\Cura.exe.FriendlyAppName"
+  DeleteRegKey HKCR "Local Settings\Software\Microsoft\Windows\Shell\MuiCache\$INSTDIR\Cura.exe.ApplicationCompany"
+  DeleteRegKey HKCR "Local Settings\Software\Microsoft\Windows\Shell\MuiCache\$INSTDIR\Cura.exe.FriendlyAppName"
 
   ;Remove the uninstaller itself.
   Delete "$INSTDIR\Uninstall.exe"
