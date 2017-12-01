@@ -22,6 +22,7 @@ make
 
 On Windows, the following dependencies are needed for building:
 
+* **cura-build-environment** (https://github.com/Ultimaker/cura-build-environment) This bundle of CMake scripts will build most dependencies and install them into a prefix. This one is then used to build a package for a distribution using `cura-build`.
 * **git for windows** (https://git-for-windows.github.io/) The `git` command should be available on your `%PATH%`. Make sure that the `cmd` directory in the git for windows installation directory is on the `%PATH%` and *not* its `bin` directory, otherwise mingw32 will complain about `sh.exe` being on the path.
 * **CMake** (http://www.cmake.org/) Once CMake is installed make sure it is available on your `%PATH%`. Check this by running `cmake --version` in the Windows console.
 * **MinGW-W64** >= 5.3.0 (http://mingw-w64.org/doku.php) Once installed, its `bin` directory should be available on your `%PATH%`. Test this by running `mingw32-make --version` in the Windows console.
