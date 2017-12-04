@@ -152,8 +152,8 @@ Skip:
 ;  WriteRegStr HKCR "$R1\shell\print\command" "" '"$R3" "%1"'
 
 ; Uncomment if you want a "Slice with Ultimaker Cura".. Oh my god!
-  WriteRegStr HKCR "$R1\shell\slice" "" "Slice with Ultimaker Cura"
-  WriteRegStr HKCR "$R1\shell\slice\command" "" '"$R3" "%1"'
+;  WriteRegStr HKCR "$R1\shell\slice" "" "Slice with Ultimaker Cura"
+:  WriteRegStr HKCR "$R1\shell\slice\command" "" '"$R3" "%1"'
 
   Pop $1 ; Recover value of $1
   Pop $0 ; Recover value of $0
