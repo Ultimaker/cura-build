@@ -129,10 +129,9 @@ _____________________________________________________________________________
 ;NoBackup:
   ; Setting default association
   WriteRegStr HKCR "$R2" "" "$R1"
-  ; Also an instruction to set the default association
-  ; Probably a key for more recent Windows versions
-  ; -> Giving it up. We need a way to update the "Hash", too.
-  ; WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\$R2\UserChoice" "ProgId" "$R1"
+  ; Also an instruction to set the default association for Explorer
+  ; The change takes effect after restarting explorer.exe
+  DeleteRegKey /ifempty HKCR "Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\$R2"
 
   ReadRegStr $0 HKCR "$R1" ""
   StrCmp $0 "" 0 Skip
