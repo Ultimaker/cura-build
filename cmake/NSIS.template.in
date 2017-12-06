@@ -745,9 +745,9 @@ Section "-Core installation"
 
   IntCmp $arduino_selected 0 +6
   ${If} ${RunningX64}
-    ExecWait '"$INSTDIR\arduino\dpinst64.exe" /lm /sw'
+    ExecWait '"$INSTDIR\arduino\dpinst-amd64.exe" /lm /s'
   ${Else}
-    ExecWait '"$INSTDIR\arduino\dpinst32.exe" /lm /sw'
+    ExecWait '"$INSTDIR\arduino\dpinst-amd64.exe" /lm /s'
   ${EndIf}
 
 @CPACK_NSIS_EXTRA_INSTALL_COMMANDS@
