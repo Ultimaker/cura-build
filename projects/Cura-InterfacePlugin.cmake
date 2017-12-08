@@ -4,8 +4,8 @@ ExternalProject_Add(Cura-OctoPrint
     GIT_TAG origin/master
     CMAKE_GENERATOR "NMake Makefiles"
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
-    BUILD_COMMAND mingw32-make
-    INSTALL_COMMAND mingw32-make install
+    BUILD_COMMAND nmake
+    INSTALL_COMMAND nmake install
 )
 
 SetProjectDependencies(TARGET Cura-OctoPrint DEPENDS Cura)
