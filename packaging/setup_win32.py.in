@@ -122,13 +122,19 @@ executables = [
                base="Win32GUI",
                targetName = "Cura.exe",
                icon="@CMAKE_SOURCE_DIR@/packaging/cura.ico"
-               )
+               ),
+    Executable(script="@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py",
+               base="Console",
+               targetName = "CuraCLI.exe",
+               icon="@CMAKE_SOURCE_DIR@/packaging/cura.ico"
+               ),
+    
 ]
 
 setup(
     name = "Ultimaker Cura",
     version = "@CURA_VERSION_MAJOR@.@CURA_VERSION_MINOR@.@CURA_VERSION_PATCH@",
-    description = "3D Printing Software",
+    description = "Ultimaker Cura - 3D Printing Software",
     author = "Ultimaker B.V.",
     url = "http://software.ultimaker.com/",
     license = "GNU LESSER GENERAL PUBLIC LICENSE (LGPL)",
