@@ -113,7 +113,7 @@ build_options = {
         (PyQt5.__path__[0] + "/Qt/qml/QtQuick", "qml/QtQuick"),
         (PyQt5.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
     ],
-    "include_msvcr": True
+    "include_msvcr": True,
     "excludes": [ ],
     "replace_paths": [("*", "")],
 }
