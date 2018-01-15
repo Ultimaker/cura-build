@@ -31,15 +31,16 @@ On Windows, the following dependencies are needed for building:
 * **SciPy** (http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy)
   You'll need to download a .whl from this site for Python 3.5 and install it via `pip install <your_whl_file>.whl`.
 * **PySerial** from https://pypi.python.org/pypi/pyserial/3.2.1
-  It can be easyly installed via `pip3 install pyserial`
+  It can be easily installed via `pip3 install pyserial`
 * **PyQt5** from https://pypi.python.org/pypi/PyQt5/5.7
-  It can be easyly installed via `pip3 install PyQt5`
+  It can be easily installed via `pip3 install PyQt5`
 * **SIP** from https://pypi.python.org/pypi/SIP/4.18.1
-  It can be easyly installed via `pip3 install sip`
+  It can be easily installed via `pip3 install sip`
 * **Zeroconf** from https://pypi.python.org/pypi/zeroconf/0.17.6
-  It can be easyly installed via `pip3 install zeroconf`
+  It can be easily installed via `pip3 install zeroconf`
 * **NumPy-STL** from https://pypi.python.org/pypi/numpy-stl/2.0.0
-  It can be easyly installed via `pip3 install numpy-stl`
+  It can be easily installed via `pip3 install numpy-stl`
+* **LibArcus** from https://github.com/Ultimaker/libArcus
 * **Microsoft Visual Studio 2015 (community edition)**: 
   Install Programming languages: Visual c++ (all), Python Tools for Visual Studio (Nov 2015)
   Windows & Web Development: Universal Windows App Development Tools (Tools 1.2 & windows 10 SDK-10/0/10586; Windows 10 SDK -10.0.10240)
