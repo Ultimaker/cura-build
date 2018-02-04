@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 2.8.12)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+# Force to use "lib" as LIBDIR - ARCH uses "lib64" or "lib32" for example.
+set(CMAKE_INSTALL_LIBDIR "lib" CACHE FILEPATH "" FORCE)
+
 include(ExternalProject)
 include(GNUInstallDirs)
 
