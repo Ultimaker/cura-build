@@ -84,7 +84,7 @@ cd cura-build
 mkdir build
 cd build
 ..\env_win64.bat
-cmake -G "MinGW Makefiles" -DBUILD_64BIT:BOOL=ON ..
+cmake -G "MinGW Makefiles" ..
 mingw32-make
 mingw32-make package
 ```
