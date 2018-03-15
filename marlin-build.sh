@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e
 
 #Set path to Arduino headers and compilers and such.
@@ -9,12 +11,12 @@ CURA_VERSION=3.3.0
 #Get the cura-binary-data repository to push updated firmware to (always clean pull).
 rm -rf cura-binary-data
 git clone git@github.com:Ultimaker/cura-binary-data.git
-cd cura-binary-data
+pushd cura-binary-data
 git checkout master #TODO: Set this properly?
 git pull #Just to be sure, in case the repository already existed.
 rm cura/resources/firmware/commit-ids.txt #Reset these files.
 rm cura/resources/firmware/sha1hashes.txt
-cd ..
+popd
 
 rm -rf build
 mkdir build
@@ -34,7 +36,7 @@ function makeAndCopy
 	if [ ! -d $2 ]; then
 	    git clone https://github.com/Ultimaker/$2.git
 	fi
-    cd $2
+    pushd "${2}"
     git checkout $3
     git pull #Just to be sure.
     cd Marlin
@@ -42,7 +44,7 @@ function makeAndCopy
     #make HARDWARE_MOTHERBOARD=$4 BUILD_DIR=../../build/$1 DEFINES=$5
     commitid="$(git rev-parse HEAD)"
     echo $1: $commitid >> ../../cura-binary-data/cura/resources/firmware/commit-ids.txt
-    cd ../..
+    popd
     cp build/$1/Marlin.hex cura-binary-data/cura/resources/firmware/$1.hex
     sha1sum build/$1/Marlin.hex >> cura-binary-data/cura/resources/firmware/sha1hashes.txt
 }
