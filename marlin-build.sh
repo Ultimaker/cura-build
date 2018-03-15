@@ -1,8 +1,10 @@
+set -e
+
 #Set path to Arduino headers and compilers and such.
 ARDUINO_PATH=/usr/share/arduino
 PATH=${ARDUINO_PATH}/hardware/tools/avr/bin:${ARDUINO_PATH}/hardware/tools/avr/tools/bin:$PATH
 ARDUINO_VERSION=105
-CURA_VERSION=2.3
+CURA_VERSION=3.3.0
 
 #Get the cura-binary-data repository to push updated firmware to (always clean pull).
 rm -rf cura-binary-data
@@ -13,6 +15,9 @@ git pull #Just to be sure, in case the repository already existed.
 rm cura/resources/firmware/commit-ids.txt #Reset these files.
 rm cura/resources/firmware/sha1hashes.txt
 cd ..
+
+rm -rf build
+mkdir build
 
 #Helper functions.
 
@@ -26,7 +31,9 @@ function makeAndCopy
     echo "Building $1.hex"
     rm -rf build/$1 #Remove any old build objects.
     mkdir build/$1
-    git clone https://github.com/Ultimaker/$2.git
+	if [ ! -d $2 ]; then
+	    git clone https://github.com/Ultimaker/$2.git
+	fi
     cd $2
     git checkout $3
     git pull #Just to be sure.
