@@ -9,11 +9,9 @@ ARDUINO_VERSION=105
 CURA_VERSION=3.3.0
 
 #Get the cura-binary-data repository to push updated firmware to (always clean pull).
-rm -rf cura-binary-data
-git clone git@github.com:Ultimaker/cura-binary-data.git
 pushd cura-binary-data
-git checkout master #TODO: Set this properly?
-git pull #Just to be sure, in case the repository already existed.
+git fetch
+git reset --hard origin/master
 rm cura/resources/firmware/commit-ids.txt #Reset these files.
 rm cura/resources/firmware/sha1hashes.txt
 popd
@@ -37,8 +35,8 @@ function makeAndCopy
 	    git clone https://github.com/Ultimaker/$2.git
 	fi
     pushd "${2}"
-    git checkout $3
-    git pull #Just to be sure.
+    git fetch
+    git reset --hard "origin/${3}"
     cd Marlin
     make HARDWARE_MOTHERBOARD=$4 ARDUINO_INSTALL_DIR=${ARDUINO_PATH} ARDUINO_VERSION=${ARDUINO_VERSION} BUILD_DIR=../../build/$1 DEFINES="$5"
     #make HARDWARE_MOTHERBOARD=$4 BUILD_DIR=../../build/$1 DEFINES=$5
