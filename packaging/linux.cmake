@@ -28,6 +28,13 @@ add_custom_command(
 
 add_custom_command(
     TARGET packaging PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy cura.xml ${PACKAGE_DIR}/usr/share/mime/packages/
+    COMMENT "Copying MIME types file..."
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+
+add_custom_command(
+    TARGET packaging PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy cura-icon.png ${PACKAGE_DIR}
     COMMENT "Copying icon and desktop file..."
     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <!-- Associates file extensions with MIME types in the AppImage package. -->
+    <mime-type type="application/vnd.ms-3mfdocument">
+        <comment>3D Manufacturing Format Document</comment>
+        <icon name="unknown" />
+        <glob-deleteall />
+        <glob pattern="*.3mf" />
+    </mime-type>
+    <mime-type type="application/sla">
+        <comment>Computer-aided design and manufacturing format</comment>
+        <icon name="unknown" />
+        <glob-deleteall />
+        <glob pattern="*.stl" />
+    </mime-type>
+    <mime-type type="application/prs.wavefront-obj">
+        <sub-class-of type="text/plain" />
+        <comment>Wavefront 3D Object file</comment>
+        <icon name="unknown" />
+        <glob-deleteall />
+        <glob pattern="*.obj" />
+    </mime-type>
+    <mime-type type="image/bmp">
+        <comment>Bitmap image</comment>
+        <icon name="unknown" />
+        <magic priority="50">
+            <match type="string" offset="0" value="BM" />
+        </magic>
+        <glob-deleteall />
+        <glob pattern="*.bmp" />
+    </mime-type>
+    <mime-type type="image/png">
+        <comment>Portable network graphics image format</comment>
+        <icon name="unknown" />
+        <magic priority="50">
+            <match type="string" offset="0" value="\x89PNG" />
+        </magic>
+        <glob-deleteall />
+        <glob pattern="*.png" />
+    </mime-type>
+    <mime-type type="image/jpg">
+        <comment>JPEG image</comment>
+        <icon name="unknown" />
+        <magic priority="50">
+            <match type="string" offset="0" value="\xFF\xD8\xFF\xDB" />
+            <match type="string" offset="0" value="\xFF\xD8\xFF\xE0" />
+            <match type="string" offset="0" value="\xFF\xD8\xFF\xE1" />
+        </magic>
+        <glob-deleteall />
+        <glob pattern="*.jpg" />
+        <glob pattern="*.jpeg" />
+    </mime-type>
+    <mime-type type="image/gif">
+        <comment>Graphics interchange format</comment>
+        <icon name="unknown" />
+        <magic priority="50">
+            <match type="string" offset="0" value="GIF87a" />
+            <match type="string" offset="0" value="GIF89a" />
+        </magic>
+        <glob-deleteall />
+        <glob pattern="*.gif" />
+    </mime-type>
+</mime-info>
