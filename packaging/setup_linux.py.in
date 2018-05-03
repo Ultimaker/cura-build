@@ -77,6 +77,7 @@ build_options = {
         "/usr/lib64",
     ],
     "bin_includes": [
+        "libssl3",
         "libssl",
         "libcrypto",
     ],
