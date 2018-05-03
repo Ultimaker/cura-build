@@ -121,6 +121,8 @@ build_options = {
         "libXrender.so.1",
         "libcom_err.so.2",
         "libgssapi_krb5.so.2",
+        "libcrypt.so.10",
+        "libssl.so.10",
     ]
 }
 
