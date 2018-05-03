@@ -120,8 +120,6 @@ build_options = {
         (PyQt5.__path__[0] + "/Qt/qml/QtQml", "qml/QtQml"),
         (PyQt5.__path__[0] + "/Qt/qml/QtQuick", "qml/QtQuick"),
         (PyQt5.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
-        (PyQt5.__path__[0] + "/Qt/qml/QtCharts", "qml/QtCharts"),
-        (PyQt5.__path__[0] + "/Qt/qml/QtDataVisualization", "qml/QtDataVisualization"),
         (PyQt5.__path__[0] + "/Qt/qml/QtGraphicalEffects", "qml/QtGraphicalEffects"),
     ],
     "excludes": [ ],
