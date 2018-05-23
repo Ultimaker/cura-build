@@ -47,6 +47,8 @@ build_options = {
         "UM",
         "cura",
         "zeroconf",
+        "requests",
+        "idna",
         "serial",
         "Savitar",
         "PyQt5.QtDBus",
@@ -70,6 +72,7 @@ build_options = {
         "/usr/lib64",
     ],
     "bin_includes": [
+        "libssl3",
         "libssl",
         "libcrypto",
     ],
