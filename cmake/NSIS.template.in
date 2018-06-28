@@ -773,6 +773,10 @@ FunctionEnd
 ;--------------------------------
 ; determine admin versus local install
 Function un.onInit
+  VAR /GLOBAL UserAppDataDir
+  VAR /GLOBAL UserLocalAppDataDir
+  StrCpy $UserAppDataDir "$APPDATA"
+  StrCpy $UserLocalAppDataDir "$LOCALAPPDATA"
 
   ClearErrors
   UserInfo::GetName
@@ -836,6 +840,13 @@ FunctionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
+  Var /GLOBAL CuraVersionDir
+  StrCpy $CuraVersionDir "@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  MessageBox MB_YESNO "Do you want to remove all your configuration files?" IDYES true
+  true:
+    RMDir /r "$UserAppDataDir\cura\$CuraVersionDir"
+    RMDir /r "$UserLocalAppDataDir\cura\$CuraVersionDir"
+
   ReadRegStr $START_MENU SHCTX \
    "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "StartMenu"
   ;MessageBox MB_OK "Start menu is in: $START_MENU"
