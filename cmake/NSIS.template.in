@@ -842,10 +842,11 @@ FunctionEnd
 Section "Uninstall"
   Var /GLOBAL CuraVersionDir
   StrCpy $CuraVersionDir "@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
-  MessageBox MB_YESNO "Do you want to remove all your configuration files?" IDYES true
-  true:
+  MessageBox MB_YESNO "Do you want to remove all your configuration files?" IDYES remove_user_dir_yes IDNO remove_user_dir_no
+  remove_user_dir_yes:
     RMDir /r "$UserAppDataDir\cura\$CuraVersionDir"
     RMDir /r "$UserLocalAppDataDir\cura\$CuraVersionDir"
+  remove_user_dir_no:
 
   ReadRegStr $START_MENU SHCTX \
    "Software\Microsoft\Windows\CurrentVersion\Uninstall\@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "StartMenu"
