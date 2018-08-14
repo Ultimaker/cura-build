@@ -67,9 +67,12 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/plugins", "qt/plugins"),
         ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml"),
+        ("@CMAKE_PREFIX_PATH@/lib/libgeos.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.so", ""),
     ],
     "optimize": 2,
     "bin_path_includes": [
+        "@CMAKE_PREFIX_PATH@/lib",
         "/lib",
         "/lib64",
         "/usr/lib",
@@ -79,8 +82,6 @@ build_options = {
         "libssl3",
         "libssl",
         "libcrypto",
-        "libgeos.so.3.6.2",
-        "libgeos_c.so.1.10.2",
     ],
     "bin_excludes": [
         "linux-vdso.so.1",

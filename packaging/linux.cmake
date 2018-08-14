@@ -23,8 +23,6 @@ add_custom_command(
     TARGET packaging PRE_BUILD
     COMMAND ln -s libcrypto.so.10 libcrypto.so
     COMMAND ln -s libssl.so.10 libssl.so
-    COMMAND ln -s libgeos.so.3.6.2 libgeos.so
-    COMMAND ln -s libgeos_c.so.1.10.2 libgeos_c.so
     COMMENT "Creating symbolic links to libssl files and libgoes files..."
     WORKING_DIRECTORY ${PACKAGE_DIR}/usr/bin
 )
