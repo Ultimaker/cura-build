@@ -50,7 +50,6 @@ build_options = {
         "requests",
         "idna",
         "serial",
-        "geos",
         "shapely",
         "networkx",
         "trimesh",

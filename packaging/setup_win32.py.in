@@ -110,7 +110,6 @@ build_options = {
         "UM",
         "cura",
         "stl",
-        "geos",
         "shapely",
         "networkx",
         "trimesh",
