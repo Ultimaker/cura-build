@@ -76,12 +76,17 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY "Ultimaker Cura ${CURA_VERSION_MAJOR}.${CURA
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
 set(CPACK_NSIS_INSTALLED_ICON_NAME "Cura.ico")
+set(CPACK_NSIS_MUI_ICON ${CMAKE_SOURCE_DIR}\\\\packaging\\\\cura.ico)   # note: fails with forward '/'
+set(CPACK_NSIS_MUI_UNIICON ${CMAKE_SOURCE_DIR}\\\\packaging\\\\cura.ico)
+set(CPACK_PACKAGE_ICON ${CMAKE_SOURCE_DIR}/packaging\\\\cura.ico)
 set(CPACK_NSIS_MENU_LINKS
     "https://ultimaker.com/en/support/software" "Online Documentation"
     "https://github.com/ultimaker/cura" "Development Resources"
 )
 
-set(CPACK_NSIS_INSTALLER_MUI_FINISHPAGE_RUN_CODE "!define MUI_FINISHPAGE_RUN \\\"$WINDIR\\\\explorer.exe\\\"\n!define MUI_FINISHPAGE_RUN_PARAMETERS \\\"$INSTDIR\\\\Cura.exe\\\"")
+set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP ${CMAKE_SOURCE_DIR}\\\\packaging\\\\cura_banner.bmp)    # note: fails with forward '/'
+set(CPACK_NSIS_MUI_UNWELCOMEFINISHPAGE_BITMAP ${CMAKE_SOURCE_DIR}\\\\packaging\\\\cura_banner.bmp)
+set(CPACK_NSIS_INSTALLER_MUI_FINISHPAGE_RUN_CODE "!define MUI_FINISHPAGE_RUN \\\"$WINDIR\\\\explorer.exe\\\"\n!define MUI_FINISHPAGE_RUN_PARAMETERS \\\"$INSTDIR\\\\Cura.exe\\\"")	# Hack to ensure Cura is not started with admin rights
 
 # Needed to call the correct vcredist_x["32", "64"] executable
 # TODO: Use a variable, which is already known. For example CPACK_SYSTEM_NAME -> "win32"
