@@ -50,6 +50,13 @@ add_custom_command(
 
 add_custom_command(
     TARGET packaging PRE_BUILD
+    COMMAND ${CMAKE_CURRENT_LIST_DIR}/linux_mod_rpath.sh ${PACKAGE_DIR}/usr/bin/
+    COMMENT "Modify RPATH for ELFs..."
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+
+add_custom_command(
+    TARGET packaging PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${APPIMAGEKIT_APPRUN_EXECUTABLE} ${PACKAGE_DIR}
     COMMENT "Copying AppRun executable..."
 )
