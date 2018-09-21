@@ -3,7 +3,6 @@
 scriptdir=$(dirname $0)
 
 export PYTHONPATH=$scriptdir/lib/python3.5
-export LD_LIBRARY_PATH=$scriptdir
 export QT_PLUGIN_PATH=$scriptdir/qt/plugins
 export QML2_IMPORT_PATH=$scriptdir/qt/qml
 export QT_QPA_FONTDIR=/usr/share/fonts
