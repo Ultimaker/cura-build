@@ -33,6 +33,7 @@ build_options = {
     "path": search_path,
     "packages": [
         "appdirs",
+        "packaging",
         "xml.etree",
         "uuid",
         "serial",
