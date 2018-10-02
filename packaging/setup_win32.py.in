@@ -11,6 +11,10 @@ import shapely
 
 from cx_Freeze import setup, Executable, hooks
 
+
+zip_includes = []
+
+
 def load_numpy(finder, module):
     finder.IncludePackage("numpy.core._methods")
     finder.IncludePackage("numpy._globals")
@@ -54,6 +58,23 @@ def load_scipy(finder, module):
     finder.IncludePackage("scipy.sparse._csparsetools")
 
 hooks.load_scipy = load_scipy
+
+# Trimesh data files
+trimesh_resources_path = os.path.join(os.path.dirname(trimesh.__file__), "resources")
+trimesh_resources_required_files = [
+    "blender.py.template",
+    "collada.dae.template",
+    "dxf.json.template",
+    "ply.template",
+    "svg.xml.template",
+    "units_to_inches.json",
+    "viewer.html.template",
+    "yafaray.xml.template",
+]
+for file_name in trimesh_resources_required_files:
+    item = (os.path.join(trimesh_resources_path, file_name), os.path.join("trimesh", "resources", file_name))
+    zip_includes.append(item)
+
 
 def load_pyqt5_qtquick(finder, module):
     finder.IncludeModule("PyQt5.QtCore")
@@ -136,6 +157,7 @@ build_options = {
         (PyQt5.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
         (PyQt5.__path__[0] + "/Qt/qml/QtGraphicalEffects", "qml/QtGraphicalEffects"),
     ],
+    "zip_includes": zip_includes,
     "excludes": [ ],
     "replace_paths": [("*", "")],
 }
