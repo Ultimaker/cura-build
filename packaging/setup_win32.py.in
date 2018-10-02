@@ -101,6 +101,7 @@ build_options = {
     "zip_exclude_packages": "certifi",
     "path": search_path,
     "packages": [
+        "appdirs",
         "xml.etree",
         "uuid",
         "serial",
