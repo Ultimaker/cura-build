@@ -42,6 +42,8 @@ build_options = {
     "build_exe": "package/usr/bin",
     "path": search_path,
     "packages": [
+        "appdirs",
+        "packaging",
         "xml.etree",
         "uuid",
         "UM",
