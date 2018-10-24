@@ -7,7 +7,7 @@
 
 
 # (Optional) Minimum OSX version for deployment
-if [ -z "${CURA_TARGET_OSX_VERSION}" ]; then
+if [ -n "${CURA_TARGET_OSX_VERSION}" ]; then
     echo "Using ${CURA_TARGET_OSX_VERSION} as the minimum OSX version."
     export MACOSX_DEPLOYMENT_TARGET="${CURA_TARGET_OSX_VERSION}"
     export CMAKE_OSX_DEPLOYMENT_TARGET="${CURA_TARGET_OSX_VERSION}"
