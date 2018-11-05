@@ -44,6 +44,7 @@
 
   !include Sections.nsh
   !Include Library.nsh
+  !include "x64.nsh"
 
 ;--- Component support macros: ---
 ; The code for the add/remove functionality is from:
