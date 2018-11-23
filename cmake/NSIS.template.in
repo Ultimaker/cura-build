@@ -742,6 +742,8 @@ Section "-Core installation"
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
+  ; Do not install the VS C++ redistributable package in silent installation
+  IfSilent +3
   IntCmp $vcredist_selected 0 +2
   ExecWait '"$INSTDIR\vcredist_x@CPACK_NSIS_PACKAGE_ARCHITECTURE@.exe" /install /quiet /norestart'
 
