@@ -476,21 +476,21 @@ FunctionEnd
 !insertmacro StrStr "un."
 
 Function Trim ; Added by Pelaca
-	Exch $R1
-	Push $R2
+  Exch $R1
+  Push $R2
 Loop:
-	StrCpy $R2 "$R1" 1 -1
-	StrCmp "$R2" " " RTrim
-	StrCmp "$R2" "$\n" RTrim
-	StrCmp "$R2" "$\r" RTrim
-	StrCmp "$R2" ";" RTrim
-	GoTo Done
+  StrCpy $R2 "$R1" 1 -1
+  StrCmp "$R2" " " RTrim
+  StrCmp "$R2" "$\n" RTrim
+  StrCmp "$R2" "$\r" RTrim
+  StrCmp "$R2" ";" RTrim
+  GoTo Done
 RTrim:
-	StrCpy $R1 "$R1" -1
-	Goto Loop
+  StrCpy $R1 "$R1" -1
+  Goto Loop
 Done:
-	Pop $R2
-	Exch $R1
+  Pop $R2
+  Exch $R1
 FunctionEnd
 
 Function ConditionalAddToRegisty
@@ -1029,6 +1029,7 @@ Function .onInit
   !insertmacro uninstallVersion "Ultimaker Cura 3.3" "Ultimaker Cura 3.3" "U33"
   !insertmacro uninstallVersion "Ultimaker Cura 3.4" "Ultimaker Cura 3.4" "U34"
   !insertmacro uninstallVersion "Ultimaker Cura 3.5" "Ultimaker Cura 3.5" "U35"
+  !insertmacro uninstallVersion "Ultimaker Cura 3.6" "Ultimaker Cura 3.6" "U36"
   !insertmacro uninstallVersion "Ultimaker Cura @CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "latest"
 
 inst:
