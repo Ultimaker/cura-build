@@ -70,6 +70,7 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml"),
         ("@CMAKE_PREFIX_PATH@/lib/libgeos.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.so", ""),
+        ("/etc/pki/tls/openssl.cnf", ""),   # We probably can remove this when we compile a dedicated OpenSSL
     ],
     "optimize": 2,
     "bin_path_includes": [
