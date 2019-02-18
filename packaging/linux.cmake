@@ -12,7 +12,7 @@ add_custom_command(
 
 add_custom_command(
     TARGET packaging PRE_BUILD
-    COMMAND LD_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib ${PYTHON_EXECUTABLE} setup.py build
+    COMMAND ${Python3_EXECUTABLE} setup.py build
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Running cx_Freeze to generate executable..."
 )
@@ -66,6 +66,6 @@ set(APPIMAGE_FILENAME "Cura-${CURA_VERSION}.AppImage")
 add_custom_command(
     TARGET packaging POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_BINARY_DIR}/${APPIMAGE_FILENAME}
-    COMMAND ${APPIMAGEKIT_ASSISTANT_EXECUTABLE} ${CMAKE_BINARY_DIR}/package ${APPIMAGE_FILENAME}
+    COMMAND ${APPIMAGEKIT_APPIMAGETOOL_EXECUTABLE} --appimage-extract-and-run ${CMAKE_BINARY_DIR}/package ${APPIMAGE_FILENAME}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
