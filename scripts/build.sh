@@ -13,6 +13,21 @@ set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ROOT_DIR="${SCRIPT_DIR}/.."
 
+# Cura release configurations
+CURA_VERSION_MAJOR="${CURA_VERSION_MAJOR:-4}"
+CURA_VERSION_MINOR="${CURA_VERSION_MINOR:-1}"
+CURA_VERSION_PATCH="${CURA_VERSION_PATCH:-99}"
+CURA_VERSION_EXTRA="${CURA_VERSION_EXTRA:-docker}"
+CURA_BUILD_NAME="${CURA_BUILD_NAME:-docker}"
+
+CURA_SDK_VERSION="${CURA_SDK_VERSION:-6.0.0}"
+CURA_CLOUD_API_ROOT="${CURA_CLOUD_API_ROOT:-https://api.ultimaker.com}"
+CURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION:-1}"
+CURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT:-https://account.ultimaker.com}"
+
+LIBCHARON_BRANCH_OR_TAG="${LIBCHARON_BRANCH_OR_TAG:-WIP_fix_cura_build_docker}"
+
+
 # Docker image to use for building the AppImage
 cura_build_env_image="cura-build-env:centos7"
 
@@ -22,10 +37,24 @@ pushd "${ROOT_DIR}" > /dev/null
 mkdir -p appimages
 
 # Run docker to create the AppImage
+#
+# Environment variables:
+#  - CURA_APPIMAGES_OUTPUT_DIR : Where AppImages will be put inside docker container
+#
 docker run \
   --name cura-builder \
   -it --rm \
   --volume "$(pwd)":/home/ultimaker/src \
   --env CURA_APPIMAGES_OUTPUT_DIR=/home/ultimaker/src/appimages \
+  --env CURA_VERSION_MAJOR="${CURA_VERSION_MAJOR}" \
+  --env CURA_VERSION_MINOR="${CURA_VERSION_MINOR}" \
+  --env CURA_VERSION_PATCH="${CURA_VERSION_PATCH}" \
+  --env CURA_VERSION_EXTRA="${CURA_VERSION_EXTRA}" \
+  --env CURA_BUILD_NAME="${CURA_BUILD_NAME}" \
+  --env CURA_SDK_VERSION="${CURA_SDK_VERSION}" \
+  --env CURA_CLOUD_API_ROOT="${CURA_CLOUD_API_ROOT}" \
+  --env CURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION}" \
+  --env CURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT}" \
+  --env LIBCHARON_BRANCH_OR_TAG="${LIBCHARON_BRANCH_OR_TAG}" \
   "${cura_build_env_image}" \
   /home/ultimaker/src/scripts/build_in_docker.sh
