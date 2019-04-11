@@ -56,33 +56,6 @@ On Windows, the following dependencies are needed for building:
 
 Make sure these dependencies are available from your path.
 
-Additionally, for 32-bit builds:
-
-* Perl (http://www.activestate.com/activeperl, Required to build Qt)
-* Create in the user directory a file named pydistutils.cfg with the following contents:
-```shell
-[build]
-compiler=mingw32
-```
-
-For 64-bit builds:
-
-* PyQt 5.4 (https://riverbankcomputing.com/software/pyqt/download5, Building PyQt currently fails using MinGW 64-bit)
-* Install protobuf.wheel found in cura-build-binaries (TODO: create cura-build-binaries repo)
-* Create empty ```__init__.py``` in c:\Python34\Lib\site-packages\google (TODO: make it part of the proto.wheel installation)
-
-```shell
-REM 32-bit
-git clone git@github.com:Ultimaker/cura-build.git
-cd cura-build
-mkdir build
-cd build
-..\env_win32.bat
-cmake -G "MinGW Makefiles" ..
-mingw32-make
-mingw32-make package
-```
-
 ```shell
 REM 64-bit
 git clone git@github.com:Ultimaker/cura-build.git
