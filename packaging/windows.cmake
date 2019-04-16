@@ -28,6 +28,20 @@ add_custom_command(
     COMMENT "copying cura.ico as Cura.ico into package/"
 )
 
+#
+# CURA-6074
+# QTBUG-57832
+# Patch Qt dialogplugin.dll to avoid adding all available drives as shortcuts for FileDialog.
+#
+if(BUILD_OS_WINDOWS)
+    add_custom_command(
+        TARGET build_bundle POST_BUILD
+        # NOTE: Needs testing here, whether CPACK_SYSTEM_NAME is working good for 64bit builds, too.
+        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/packaging/patch_qt5.10_dialogplugin.py ${CMAKE_BINARY_DIR}/package
+        COMMENT "CURA-6074 Patching dialogplugin.dll in ${CMAKE_BINARY_DIR}/package"
+    )
+endif()
+
 install(DIRECTORY ${CMAKE_BINARY_DIR}/package/
         DESTINATION "."
         USE_SOURCE_PERMISSIONS
