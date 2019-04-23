@@ -70,7 +70,7 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml"),
         ("@CMAKE_PREFIX_PATH@/lib/libgeos.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.so", ""),
-        ("@CMAKE_PREFIX_PATH@/ssl/openssl.cnf", ""),
+        ("/etc/pki/tls/openssl.cnf", ""),   # We probably can remove this when we compile a dedicated OpenSSL
     ],
     "optimize": 2,
     "bin_path_includes": [
@@ -79,6 +79,11 @@ build_options = {
         "/lib64",
         "/usr/lib",
         "/usr/lib64",
+    ],
+    "bin_includes": [
+        "libssl3",
+        "libssl",
+        "libcrypto",
     ],
     "bin_excludes": [
         "linux-vdso.so.1",
@@ -96,8 +101,6 @@ build_options = {
         "librt.so.1",
         "libcap.so.2",
         "libGL.so.1",
-        "libGLX.so.0",
-        "libGLdispatch.so.0",
         "libglapi.so.0",
         "libXext.so.6",
         "libXdamage.so.1",

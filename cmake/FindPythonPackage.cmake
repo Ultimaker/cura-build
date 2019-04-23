@@ -1,4 +1,4 @@
-find_package(Python3 QUIET COMPONENTS  Interpreter Development)
+find_package(PythonInterp 3.4.0 QUIET)
 
 include(CMakeParseArguments)
 
@@ -23,7 +23,7 @@ function(FindPythonPackage)
         set(_VERSION_PROPERTY "__version__")
     endif()
 
-    if(NOT Python3_Interpreter_FOUND)
+    if(NOT PYTHONINTERP_FOUND)
         if(_REQUIRED)
             message(FATAL_ERROR "Could not find Python interpreter for required dependency ${_MODULE_NAME}")
         else()
@@ -32,9 +32,9 @@ function(FindPythonPackage)
         endif()
     endif()
 
-    if(Python3_Interpreter_FOUND)
+    if(PYTHONINTERP_FOUND)
         execute_process(
-            COMMAND ${Python3_EXECUTABLE} -c "import ${_MODULE_NAME}; print(${_MODULE_NAME}.__file__, ${_MODULE_NAME}.${_VERSION_PROPERTY})"
+            COMMAND ${PYTHON_EXECUTABLE} -c "import ${_MODULE_NAME}; print(${_MODULE_NAME}.__file__, ${_MODULE_NAME}.${_VERSION_PROPERTY})"
             RESULT_VARIABLE _process_status
             OUTPUT_VARIABLE _process_output
 #             ERROR_QUIET
