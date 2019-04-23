@@ -1,4 +1,3 @@
-
 ExternalProject_Add(fdm_materials
     GIT_REPOSITORY https://github.com/ultimaker/fdm_materials
     GIT_TAG origin/${FDMMATERIALS_BRANCH_OR_TAG}
