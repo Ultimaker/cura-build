@@ -1,4 +1,15 @@
-find_package(Python3 QUIET COMPONENTS  Interpreter Development)
+# FIXME: Remove the code for CMake <3.12 once we have switched over completely.
+# FindPython3 is a new module since CMake 3.12. It deprecates FindPythonInterp and FindPythonLibs.
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+    # Use FindPythonInterp and FindPythonLibs for CMake <3.12
+    find_package(PythonInterp 3.4 REQUIRED)
+
+    # Define variables that are available in FindPython3, so there's no need to branch off in the later part.
+    set(Python3_EXECUTABLE ${PYTHON_EXECUTABLE})
+else()
+    # Use FindPython3 for CMake >=3.12
+    find_package(Python3 3.4 REQUIRED COMPONENTS Interpreter Development)
+endif()
 
 include(CMakeParseArguments)
 
