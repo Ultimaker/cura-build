@@ -15,7 +15,7 @@ add_custom_command(
 
 add_custom_command(
     TARGET build_bundle POST_BUILD
-    COMMAND ${PYTHON_EXECUTABLE} setup.py build_exe
+    COMMAND ${Python3_EXECUTABLE} setup.py build_exe
     COMMENT "running cx_Freeze"
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
@@ -37,7 +37,7 @@ if(BUILD_OS_WINDOWS)
     add_custom_command(
         TARGET build_bundle POST_BUILD
         # NOTE: Needs testing here, whether CPACK_SYSTEM_NAME is working good for 64bit builds, too.
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/packaging/patch_qt5.10_dialogplugin.py ${CMAKE_BINARY_DIR}/package
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/packaging/patch_qt5.10_dialogplugin.py ${CMAKE_BINARY_DIR}/package
         COMMENT "CURA-6074 Patching dialogplugin.dll in ${CMAKE_BINARY_DIR}/package"
     )
 endif()
