@@ -542,6 +542,10 @@ FunctionEnd
 
 !include "FileAssociation.nsh"
 
+Section /o "Open AMF files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".amf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "AMF model file"
+SectionEnd
+
 Section /o "Open 3MF files with Cura"
     ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "3MF model file"
 SectionEnd
