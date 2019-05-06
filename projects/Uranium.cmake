@@ -2,9 +2,9 @@ find_package(PythonInterp 3.5.0 REQUIRED)
 if(NOT BUILD_OS_WINDOWS)
     # Only ask for Qt5 where it is actually built via cura-build-environment.
     # On Windows we are using PyQt5 to provide our libraries prebuilt.
-    find_package(Qt5 5.6.0 REQUIRED Core Qml Quick Widgets)
+    find_package(Qt5 5.10.0 REQUIRED Core Qml Quick Widgets)
 endif()
-find_package(PyQt 5.6 REQUIRED)
+find_package(PyQt 5.10 REQUIRED)
 find_package(SciPy 0.17 REQUIRED)
 
 ExternalProject_Add(Uranium
