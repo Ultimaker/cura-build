@@ -57,6 +57,13 @@ add_custom_command(
 
 add_custom_command(
     TARGET packaging PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy cura.appdata.xml ${PACKAGE_DIR}/usr/share/metainfo/
+    COMMENT "Installing AppStream metadata..."
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+
+add_custom_command(
+    TARGET packaging PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy ${APPIMAGEKIT_APPRUN_EXECUTABLE} ${PACKAGE_DIR}
     COMMENT "Copying AppRun executable..."
 )
