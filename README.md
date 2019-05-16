@@ -4,6 +4,33 @@ This repository contains build scripts used to build Cura and all dependencies f
 
 The build has a number of dependencies. Ideally, these dependencies should be installed by the [cura-build-environment](https://github.com/Ultimaker/cura-build-environment) repository. Even with cura-build-environment though, some things may still be missing from your system that we haven't thought of.
 
+## (WIP) Build with docker (for Linux AppImage only)
+
+To build Linux AppImage with docker, you first need to have a working cura-build-environment docker image. Please check
+the `WIP_fix_docker` branch in [cura-build-environment repository](https://github.com/ultimaker/cura-build-environment).
+
+Assume that you have a working cura-build-environment docker image tagged as `cura-build-env:centos7`. To build an
+AppImage, run:
+
+```
+./scripts/build.sh
+```
+
+If the build is successful, the resulting AppImage will placed in the `appimages/` directory.
+
+To configure your AppImage build, you can use the following environment variables:
+
+ - `CURA_VERSION_MAJOR`: Major version number of Cura (default `4`)
+ - `CURA_VERSION_MINOR`: Minor version number of Cura (default `1`)
+ - `CURA_VERSION_PATCH`: Patch version number of Cura (default `99`)
+ - `CURA_VERSION_EXTRA`: Extra version string of Cura, which will be appended after `x.y.z` with `-<extra>`
+                         (default `docker`)
+ - `CURA_BUILD_NAME`: FIXME: default to `docker`, probably no use.
+ - `CURA_SDK_VERSION`:   SDK version of Cura in the form of semantic versioning (default `6.0.0`)
+ - `CURA_CLOUD_API_ROOT`: Root URL of Cura Cloud API (default `https://api.ultimaker.com`)
+ - `CURA_CLOUD_API_VERSION`: Cura Cloud API version to use (default `1`)
+ - `CURA_CLOUD_ACCOUNT_API_ROOT`: Root URL of Cura Cloud Account API (default `https://account.ultimaker.com`)
+
 ## OS X
 
 1. Install CMake (available via [homebrew](http://brew.sh/) or [cmake.org](http://www.cmake.org/))
