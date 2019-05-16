@@ -33,8 +33,6 @@ export CURA_CLOUD_API_ROOT="${CURA_CLOUD_API_ROOT:-https://api.ultimaker.com}"
 export CURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION:-1}"
 export CURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT:-https://account.ultimaker.com}"
 
-export LIBCHARON_BRANCH_OR_TAG="${LIBCHARON_BRANCH_OR_TAG:-master}"
-
 # Set up development environment variables
 source /opt/rh/devtoolset-7/enable
 export PATH="${CURA_BUILD_ENV_PATH}/bin:${PATH}"
@@ -52,7 +50,6 @@ cmake3 "${ROOT_DIR}" \
     -DCURA_CLOUD_API_ROOT="${CURA_CLOUD_API_ROOT}" \
     -DCURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION}" \
     -DCURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT}" \
-    -DLIBCHARON_BRANCH_OR_TAG="${LIBCHARON_BRANCH_OR_TAG}" \
     -DSIGN_PACKAGE=OFF
 make
 

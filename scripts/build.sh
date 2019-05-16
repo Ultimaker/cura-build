@@ -25,9 +25,6 @@ CURA_CLOUD_API_ROOT="${CURA_CLOUD_API_ROOT:-https://api.ultimaker.com}"
 CURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION:-1}"
 CURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT:-https://account.ultimaker.com}"
 
-LIBCHARON_BRANCH_OR_TAG="${LIBCHARON_BRANCH_OR_TAG:-master}"
-
-
 # Docker image to use for building the AppImage
 cura_build_env_image="cura-build-env:centos7"
 
@@ -55,6 +52,5 @@ docker run \
   --env CURA_CLOUD_API_ROOT="${CURA_CLOUD_API_ROOT}" \
   --env CURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION}" \
   --env CURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT}" \
-  --env LIBCHARON_BRANCH_OR_TAG="${LIBCHARON_BRANCH_OR_TAG}" \
   "${cura_build_env_image}" \
   /home/ultimaker/src/scripts/build_in_docker.sh
