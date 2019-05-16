@@ -33,7 +33,7 @@ export CURA_CLOUD_API_ROOT="${CURA_CLOUD_API_ROOT:-https://api.ultimaker.com}"
 export CURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION:-1}"
 export CURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT:-https://account.ultimaker.com}"
 
-export LIBCHARON_BRANCH_OR_TAG="${LIBCHARON_BRANCH_OR_TAG:-WIP_fix_cura_build_docker}"
+export LIBCHARON_BRANCH_OR_TAG="${LIBCHARON_BRANCH_OR_TAG:-master}"
 
 # Set up development environment variables
 source /opt/rh/devtoolset-7/enable
