@@ -78,7 +78,7 @@ On Windows, the following dependencies are needed for building:
   Install Programming languages: Visual c++ (all), Python Tools for Visual Studio (Nov 2015)
   Windows & Web Development: Universal Windows App Development Tools (Tools 1.2 & windows 10 SDK-10/0/10586; Windows 10 SDK -10.0.10240)
 * **cx_Freeze** (https://pypi.python.org/pypi/cx_Freeze)
-  The easiest way to install this is to use a wheel (*.whl file) and install it via `pip install <your_whl_file>.whl`. You may have to add `<python dir>/Scripts` to you `%PATH%`. (Last tested version was: cx_Freeze-5.0-cp35-cp35m-win_amd64.whl)
+  The easiest way to install this is to use a wheel (*.whl file) and install it via `pip install <your_whl_file>.whl`. You may have to add `<python dir>/Scripts` to your `%PATH%`. (Last tested version was: cx_Freeze-5.0-cp35-cp35m-win_amd64.whl)
 * **NSIS 3** (http://nsis.sourceforge.net/Main_Page) for creating the installer. Additional NSIS scripts are shipped with this project.
 
 Make sure these dependencies are available from your path.
@@ -99,7 +99,14 @@ Before make package - copy arduino to cura-build/
 
 ## Ubuntu/Linux
 
-cura-build can build AppImage packages of Cura.
+cura-build can build AppImage packages of Cura. The following dependencies are required:
+
+* `apt install git cmake gcc python3`
+* `python3 -m pip install numpy scipy pyserial pyqt5 sip trimesh shapely zeroconf numpy-stl`
+* **LibArcus** from https://github.com/Ultimaker/libArcus
+* **cx_Freeze** (https://pypi.python.org/pypi/cx_Freeze)
+  The easiest way to install this is to use a wheel (*.whl file) and install it via `pip install <your_whl_file>.whl`. You may have to add `<python dir>/Scripts` to your `PATH`.
+* **AppImageKit** from https://github.com/AppImage/AppImageKit
 
 To build, make sure these dependencies are installed, then clone this repository and run the following commands from your clone:
 
