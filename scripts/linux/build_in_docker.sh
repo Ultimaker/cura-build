@@ -7,7 +7,7 @@ set -e
 
 # Get where this script resides
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-ROOT_DIR="${SCRIPT_DIR}/.."
+ROOT_DIR="${SCRIPT_DIR}/../.."
 
 # Make sure that cura-build-environment is present
 if [[ -z "${CURA_BUILD_ENV_PATH}" ]]; then

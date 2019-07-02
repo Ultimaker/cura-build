@@ -11,7 +11,7 @@ set -e
 
 # Get where this script resides
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-ROOT_DIR="${SCRIPT_DIR}/.."
+ROOT_DIR="${SCRIPT_DIR}/../.."
 
 # Cura release configurations
 CURA_VERSION_MAJOR="${CURA_VERSION_MAJOR:-0}"
