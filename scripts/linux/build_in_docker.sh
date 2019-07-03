@@ -48,6 +48,7 @@ cmake3 "${ROOT_DIR}" \
     -DCURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT}" \
     -DSIGN_PACKAGE=OFF
 make
+make package
 
 # Copy the appimage to the output directory
 chmod a+x Cura-*.AppImage
