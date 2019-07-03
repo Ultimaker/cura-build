@@ -25,7 +25,6 @@ To configure your AppImage build, you can use the following environment variable
  - `CURA_VERSION_PATCH`: Patch version number of Cura (default `99`)
  - `CURA_VERSION_EXTRA`: Extra version string of Cura, which will be appended after `x.y.z` with `-<extra>`
                          (default `docker`)
- - `CURA_BUILD_NAME`: FIXME: default to `docker`, probably no use.
  - `CURA_SDK_VERSION`:   SDK version of Cura in the form of semantic versioning (default `6.0.0`)
  - `CURA_CLOUD_API_ROOT`: Root URL of Cura Cloud API (default `https://api.ultimaker.com`)
  - `CURA_CLOUD_API_VERSION`: Cura Cloud API version to use (default `1`)

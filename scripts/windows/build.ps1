@@ -25,9 +25,6 @@ Function BuildCura {
       [string]$CuraVersionExtra = "",
 
     [Parameter(Mandatory=$true)]
-      [string]$CuraBuildName,
-
-    [Parameter(Mandatory=$true)]
       [string]$CuraCloudApiRoot = "https://api.ultimaker.com",
     [Parameter(Mandatory=$true)]
       [Int32][ValidatePattern("[0-9]+")]$CuraCloudApiVersion,
@@ -56,7 +53,6 @@ Function BuildCura {
     --env CURA_VERSION_MINOR=$CuraVersionMinor `
     --env CURA_VERSION_PATCH=$CuraVersionPatch `
     --env CURA_VERSION_EXTRA=$CuraVersionExtra `
-    --env CURA_BUILD_NAME=$CuraBuildName `
     --env CURA_CLOUD_API_ROOT=$CuraCloudApiRoot `
     --env CURA_CLOUD_API_VERSION=$CuraCloudApiVersion `
     --env CURA_CLOUD_ACCOUNT_API_ROOT=$CuraCloudAccountApiRoot `
