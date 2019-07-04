@@ -10,6 +10,7 @@ ExternalProject_Add(Cura
                -DCURA_DEBUGMODE=${CURA_ENABLE_DEBUGMODE}
                -DCURA_CLOUD_API_ROOT=${CURA_CLOUD_API_ROOT}
                -DCURA_CLOUD_API_VERSION=${CURA_CLOUD_API_VERSION}
+               -DCURA_CLOUD_ACCOUNT_API_ROOT=${CURA_CLOUD_ACCOUNT_API_ROOT}
 )
 
 SetProjectDependencies(TARGET Cura DEPENDS Uranium CuraEngine)
