@@ -25,6 +25,7 @@ foreach(extra_repository ${EXTRA_REPOSITORIES})
     ExternalProject_Add(${extra_repository_name}
         GIT_REPOSITORY ${extra_repository_url}
         GIT_TAG origin/master
+        GIT_SHALLOW 1
         CMAKE_ARGS ${extra_repository_cmake_opts}
     )
 
