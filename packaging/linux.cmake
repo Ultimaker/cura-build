@@ -19,10 +19,14 @@ add_custom_command(
 
 set(PACKAGE_DIR ${CMAKE_BINARY_DIR}/package)
 
+set(CURA_VERSION_DIGITS "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}")
+configure_file(${CMAKE_CURRENT_LIST_DIR}/cura.desktop.in ${CMAKE_CURRENT_LIST_DIR}/cura.desktop @ONLY)
+
 add_custom_command(
     TARGET packaging PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy cura.desktop ${PACKAGE_DIR}
-    COMMENT "Copying icon and desktop file..."
+    COMMAND mkdir -p ${PACKAGE_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy cura.desktop ${PACKAGE_DIR}/cura.desktop
+    COMMENT "Copying desktop file ..."
     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
 )
 
