@@ -542,33 +542,33 @@ FunctionEnd
 
 !include "FileAssociation.nsh"
 
-Section /o "Open AMF files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".amf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "AMF model file"
+Section /o "Open 3MF files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "3D Manufacturing Format"
 SectionEnd
 
-Section /o "Open 3MF files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "3MF model file"
+Section /o "Open AMF files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".amf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Additive Manufacturing Format"
 SectionEnd
 
 Section /o "Open OBJ files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".obj" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.obj.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "OBJ model file"
-SectionEnd
-
-Section "Open STL files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.stl.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "STL model file"
-SectionEnd
-
-Section /o "Open X3D files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "X3D model file"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".obj" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.obj.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Wavefront OBJ"
 SectionEnd
 
 Section /o "Open PLY files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".ply" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.ply.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "PLY model file"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".ply" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.ply.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Stanford Triangle Format"
+SectionEnd
+
+Section "Open STL files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.stl.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Stereolithography Mesh"
+SectionEnd
+
+Section /o "Open X3D files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "XML-based 3D model"
 SectionEnd
 
 Section /o "Open GCODE files with Cura"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".gcode" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.gcode.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "GCODE model file"
-    ${RegisterExtension} "$INSTDIR\Cura.exe" ".g"     "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.g.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"     "GCODE model file"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".gcode" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.gcode.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "G-code toolpath"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".g"     "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.g.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"     "G-code toolpath"
 SectionEnd
 
 ;--------------------------------
