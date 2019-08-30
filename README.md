@@ -67,6 +67,8 @@ On Windows, the following dependencies are needed for building:
   It can be easily installed via `pip3 install sip`
 * **Trimesh** from https://pypi.python.org/pypi/trimesh/2.32.1
   It can be easily installed via `pip3 install trimesh`
+* **PyCollada** from https://pypi.org/project/pycollada/0.6
+  It can be easily installed via `pip3 install pycollada`
 * **Shapely** from https://pypi.python.org/pypi/Shapely/1.6.4.post2
   It can be easily installed via `pip3 install shapely[vectorized]`. If it doesn't work, you'll need to download a .whl from https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely for Python 3.5 and install it via `pip install <your_whl_file>.whl`.
 * **Zeroconf** from https://pypi.python.org/pypi/zeroconf/0.17.6
