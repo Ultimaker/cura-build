@@ -67,6 +67,7 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtGraphicalEffects", "qml/QtGraphicalEffects"),
         ("@CMAKE_PREFIX_PATH@/lib/libgeos.dylib", "lib/python3.5/shapely/.dylibs/libgeos.dylib"),
         ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.1.dylib", "lib/python3.5/shapely/.dylibs/libgeos_c.1.dylib"),
+        ("@CMAKE_PREFIX_PATH@/lib/libopenctm.dylib", ""),  # For opening .CTM files
     ],
     "excludes": [ ],
     "zip_include_packages": [ "PyQt5" ],

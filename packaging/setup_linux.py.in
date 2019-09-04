@@ -69,8 +69,9 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/plugins", "qt/plugins"),
         ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml"),
-        ("@CMAKE_PREFIX_PATH@/lib/libgeos.so", ""),
-        ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libgeos.so", ""),    # For shapely
+        ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.so", ""),  # For shapely
+        ("@CMAKE_PREFIX_PATH@/lib/libopenctm.so", ""), # For opening .CTM files
         ("@CMAKE_PREFIX_PATH@/openssl.cnf", ""),
     ],
     "optimize": 2,

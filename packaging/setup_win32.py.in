@@ -77,7 +77,6 @@ for file_name in trimesh_resources_required_files:
     item = (os.path.join(trimesh_resources_path, file_name), os.path.join("trimesh", "resources", file_name))
     zip_includes.append(item)
 
-
 def load_pyqt5_qtquick(finder, module):
     finder.IncludeModule("PyQt5.QtCore")
     finder.IncludeModule("PyQt5.QtGui")
@@ -153,6 +152,7 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/UM/Qt/qml/UM", "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
+        ("@CMAKE_PREFIX_PATH@/bin/openctm.dll", ""), # For opening .CTM files
         # Preinstalled PyQt5 installation
         (PyQt5.__path__[0] + "/Qt/qml/Qt", "qml/Qt"),
         (PyQt5.__path__[0] + "/Qt/qml/QtQml", "qml/QtQml"),
