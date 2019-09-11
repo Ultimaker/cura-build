@@ -19,7 +19,6 @@ add_custom_command(
 
 set(PACKAGE_DIR ${CMAKE_BINARY_DIR}/package)
 
-set(CURA_VERSION_DIGITS "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}")
 configure_file(${CMAKE_CURRENT_LIST_DIR}/cura.desktop.in ${CMAKE_CURRENT_LIST_DIR}/cura.desktop @ONLY)
 
 add_custom_command(
