@@ -15,6 +15,19 @@ include(SetProjectDependencies)
 option(BUILD_PACKAGE "Create a package with the build of Cura" ON)
 option(SIGN_PACKAGE "Perform signing of the created package. Implies BUILD_PACKAGE" ON)
 
+set(CURA_MSI_PRODUCT_GUID "" CACHE STRING "The Product GUID for Cura MSI")
+set(CURA_MSI_UPGRADE_GUID "" CACHE STRING "The Upgrade GUID for Cura MSI")
+
+# Cura MSI product GUID and upgrade GUID
+if(BUILD_PACKAGE)
+    if(NOT DEFINED CURA_MSI_PRODUCT_GUID)
+        message(STATUS "CURA_MSI_PRODUCT_GUID must be provided.")
+    endif()
+    if(NOT DEFINED CURA_MSI_UPGRADE_GUID)
+        message(STATUS "CURA_MSI_UPGRADE_GUID must be provided.")
+    endif()
+endif()
+
 if(SIGN_PACKAGE)
     set(BUILD_PACKAGE ON)
 endif()
