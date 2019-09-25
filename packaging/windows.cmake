@@ -54,25 +54,13 @@ if(CPACK_GENERATOR MATCHES "NSIS64" OR CPACK_GENERATOR MATCHES "NSIS")
             DESTINATION "."
             COMPONENT "arduino"
     )
-    if(BUILD_OS_WIN32)
-        install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x32.exe
-                DESTINATION "."
-                COMPONENT "vcredist"
-                )
-    else()
-        install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x64.exe
-                DESTINATION "."
-                COMPONENT "vcredist"
-                )
-    endif()
 
-    # Needed to call the correct vcredist_x["32", "64"] executable
-    # TODO: Use a variable, which is already known. For example CPACK_SYSTEM_NAME -> "win32"
-    if(BUILD_OS_WIN32)
-        set(CPACK_NSIS_PACKAGE_ARCHITECTURE "32")
-    else()
-        set(CPACK_NSIS_PACKAGE_ARCHITECTURE "64")
-    endif()
+    install(FILES ${EXTERNALPROJECT_INSTALL_PREFIX}/vcredist_x64.exe
+            DESTINATION "."
+            COMPONENT "vcredist"
+    )
+
+    set(CPACK_NSIS_PACKAGE_ARCHITECTURE "64")
 
     include(packaging/cpackconfig_nsis.cmake)
     include(CPack)
