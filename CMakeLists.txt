@@ -4,6 +4,12 @@ cmake_minimum_required(VERSION 3.6)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+option(BUILD_OFFLINE "Build offline (use target 'update' to update sources)." ON)
+
+if(BUILD_OFFLINE)
+	set_property(DIRECTORY PROPERTY EP_UPDATE_DISCONNECTED 1)
+endif()
+
 include(ExternalProject)
 include(GNUInstallDirs)
 
@@ -73,6 +79,8 @@ if(NOT CURA_EXTRA_PROJECTS_DIR STREQUAL "")
     file(GLOB _extra_projects ${CURA_EXTRA_PROJECTS_DIR}/*.cmake)
     list(APPEND _projects ${_extra_projects})
 endif()
+
+add_custom_target(update COMMENT "Updating Projects...")
 
 foreach(_project ${_projects})
     # Go through all files in projects/ and include them. The project files should define
