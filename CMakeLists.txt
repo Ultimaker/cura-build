@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.6)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-option(BUILD_OFFLINE "Build offline (use target 'update' to update sources)." ON)
+option(BUILD_OFFLINE "Build offline (use target 'update' to update sources)." OFF)
 
 if(BUILD_OFFLINE)
 	set_property(DIRECTORY PROPERTY EP_UPDATE_DISCONNECTED 1)
