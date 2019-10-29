@@ -45,6 +45,7 @@ build_options = {
     "packages": [
         "appdirs",
         "packaging",
+        "cryptography",
         "xml.etree",
         "uuid",
         "UM",
