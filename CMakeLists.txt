@@ -21,8 +21,10 @@ include(SetProjectDependencies)
 option(BUILD_PACKAGE "Create a package with the build of Cura" ON)
 option(SIGN_PACKAGE "Perform signing of the created package. Implies BUILD_PACKAGE" ON)
 
-set(CURA_MSI_PRODUCT_GUID "" CACHE STRING "The Product GUID for Cura MSI")
-set(CURA_MSI_UPGRADE_GUID "" CACHE STRING "The Upgrade GUID for Cura MSI")
+set(CURA_BUILDTYPE          "" CACHE STRING "Build type of Cura, eg. 'testing'")
+set(CURA_NO_INSTALL_PLUGINS "" CACHE STRING "A list of plugins to exclude from installation, should be separated by ';'.")
+set(CURA_MSI_PRODUCT_GUID   "" CACHE STRING "The Product GUID for Cura MSI")
+set(CURA_MSI_UPGRADE_GUID   "" CACHE STRING "The Upgrade GUID for Cura MSI")
 
 # Cura MSI product GUID and upgrade GUID
 if(BUILD_PACKAGE)
