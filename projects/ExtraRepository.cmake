@@ -25,10 +25,13 @@ foreach(extra_repository ${EXTRA_REPOSITORIES})
     ExternalProject_Add(${extra_repository_name}
         GIT_REPOSITORY ${extra_repository_url}
         GIT_TAG origin/master
+        STEP_TARGETS update
         GIT_SHALLOW 1
         CMAKE_ARGS ${extra_repository_cmake_opts}
     )
 
     SetProjectDependencies(TARGET ${extra_repository_name} DEPENDS Cura)
+
+    add_dependencies(update ${extra_repository_name}-update)
 
 endforeach()

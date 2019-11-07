@@ -9,6 +9,7 @@ ExternalProject_Add(Cura
     GIT_REPOSITORY https://github.com/ultimaker/Cura
     GIT_TAG origin/${CURA_BRANCH_OR_TAG}
     GIT_SHALLOW 1
+    STEP_TARGETS update
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
                -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
                -DURANIUM_SCRIPTS_DIR=
@@ -22,3 +23,5 @@ ExternalProject_Add(Cura
 )
 
 SetProjectDependencies(TARGET Cura DEPENDS Uranium CuraEngine)
+
+add_dependencies(update Cura-update)

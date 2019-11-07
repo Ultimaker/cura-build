@@ -18,6 +18,7 @@ ExternalProject_Add(CuraEngine
     GIT_REPOSITORY https://github.com/ultimaker/CuraEngine
     GIT_TAG origin/${CURAENGINE_BRANCH_OR_TAG}
     GIT_SHALLOW 1
+    STEP_TARGETS update
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
                -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
@@ -29,3 +30,5 @@ ExternalProject_Add(CuraEngine
 )
 
 SetProjectDependencies(TARGET CuraEngine)
+
+add_dependencies(update CuraEngine-update)
