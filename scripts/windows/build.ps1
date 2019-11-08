@@ -32,7 +32,10 @@ Function BuildCura {
     [Parameter(Mandatory=$true)]
       [Int32][ValidatePattern("[0-9]+")]$CuraCloudApiVersion,
     [Parameter(Mandatory=$true)]
-      [string]$CuraCloudAccountApiRoot = "https://account.ultimaker.com"
+      [string]$CuraCloudAccountApiRoot = "https://account.ultimaker.com",
+
+    [Parameter(Mandatory=$true)]
+      [string]$CuraWindowsInstallerType = "EXE"
   )
 
   $outputDirName = "windows-installers"
@@ -40,6 +43,19 @@ Function BuildCura {
   New-Item $outputDirName -ItemType "directory" -Force
   $repoRoot = Join-Path $PSScriptRoot -ChildPath "..\.." -Resolve
   $outputRoot = Join-Path (Get-Location).Path -ChildPath $outputDirName -Resolve
+
+  if ($CuraWindowsInstallerType = "EXE") {
+    $CPACK_GENERATOR = "NSIS"
+  }
+  elseif ($CuraWindowsInstallerType = "MSI") {
+    $CPACK_GENERATOR = "WIX"
+  }
+  else {
+    Write-Error `
+      -Message "Invalid value [$CuraWindowsInstallerType] for CuraWindowsInstallerType. Must be EXE or MSI" `
+      -Category InvalidArgument
+    exit 1
+  }
 
   & docker.exe run -it --rm `
     --volume ${repoRoot}:C:\cura-build-src `
@@ -60,6 +76,7 @@ Function BuildCura {
     --env CURA_CLOUD_API_ROOT=$CuraCloudApiRoot `
     --env CURA_CLOUD_API_VERSION=$CuraCloudApiVersion `
     --env CURA_CLOUD_ACCOUNT_API_ROOT=$CuraCloudAccountApiRoot `
+    --env CPACK_GENERATOR=$CPACK_GENERATOR `
     $DockerImage `
     powershell.exe -Command cmd /c "C:\cura-build-src\scripts\windows\build_in_docker_vs2015.cmd"
 }

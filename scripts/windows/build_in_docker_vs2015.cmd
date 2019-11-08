@@ -23,9 +23,11 @@ echo CURA_BUILD_NAME             = "%CURA_BUILD_NAME%"
 echo CURA_CLOUD_API_ROOT         = "%CURA_CLOUD_API_ROOT%"
 echo CURA_CLOUD_API_VERSION      = "%CURA_CLOUD_API_VERSION%"
 echo CURA_CLOUD_ACCOUNT_API_ROOT = "%CURA_CLOUD_ACCOUNT_API_ROOT%"
+echo
+echo CPACK_GENERATOR = "%CPACK_GENERATOR%"
 echo ========== Build Variables END ==========
 
-echo Prepare envrionment variables ...
+echo Prepare environment variables ...
 call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
 set PATH=C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;%PATH%
 set PATH=%CURA_BUILD_ENV_PATH%\bin;%PATH%
@@ -38,7 +40,7 @@ robocopy /e "%CURA_BUILD_SRC_PATH%" "%cura_build_work_dir%\src"
 cd /d %cura_build_work_dir%\src
 
 cmake -DCMAKE_BUILD_TYPE=Release ^
-      -DCMAKE_PREFIX_PATH="%environment_dir%" ^
+      -DCMAKE_PREFIX_PATH="%CURA_BUILD_ENV_PATH%" ^
       -DBUILD_OS_WIN64=ON ^
       -DSIGN_PACKAGE=OFF ^
       -DCURA_BRANCH_OR_TAG="%CURA_BRANCH_OR_TAG%" ^
@@ -54,10 +56,14 @@ cmake -DCMAKE_BUILD_TYPE=Release ^
       -DCURA_CLOUD_API_ROOT="%CURA_CLOUD_API_ROOT%" ^
       -DCURA_CLOUD_API_VERSION="%CURA_CLOUD_API_VERSION%" ^
       -DCURA_CLOUD_ACCOUNT_API_ROOT="%CURA_CLOUD_ACCOUNT_API_ROOT%" %CMAKE_EXTRA_ARGS% ^
+      -DCPACK_GENERATOR="%CPACK_GENERATOR%" ^
       -G "NMake Makefiles" ^
       .
 nmake
 nmake package
+
+rem Copy all build data
+robocopy /e %cura_build_work_dir%\src %CURA_BUILD_OUTPUT_PATH%\build
 
 echo Copying the installer to the mounted volume ...
 copy /y "Ultimaker Cura*.exe" %CURA_BUILD_OUTPUT_PATH%\
