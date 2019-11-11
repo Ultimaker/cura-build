@@ -40,12 +40,6 @@ if(SIGN_PACKAGE)
     set(BUILD_PACKAGE ON)
 endif()
 
-# This should care that our CMAKE_PREFIX_PATH is absolute at the end...
-get_filename_component(CMAKE_PREFIX_PATH
-                       ${CMAKE_PREFIX_PATH}
-                       ABSOLUTE
-                       CACHE FORCE)
-
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
 
 GetFromEnvironmentOrCache(FDMMATERIALS_BRANCH_OR_TAG "master" STRING "The name of the tag or branch to build for fdm_materials")
@@ -57,7 +51,6 @@ GetFromEnvironmentOrCache(LIBCHARON_BRANCH_OR_TAG "master" STRING "The name of t
 
 GetFromEnvironmentOrCache(CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS "ON" STRING "Whether to enable extra compiler optimization flags for CuraEngine")
 
-GetFromEnvironmentOrCache(CURA_BUILD_NAME "master" STRING "The build name")
 GetFromEnvironmentOrCache(EXTRA_REPOSITORIES "" STRING "Extra repositories to install. Expected to have a CMake based build system. Format is (<project name> <git URL> <cmake configuration options>\;)*")
 
 # Create the version-related variables

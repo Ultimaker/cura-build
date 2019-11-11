@@ -7,7 +7,7 @@ set -e
 
 # Get where this script resides
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-ROOT_DIR="${SCRIPT_DIR}/.."
+ROOT_DIR="${SCRIPT_DIR}/../.."
 
 # Make sure that cura-build-environment is present
 if [[ -z "${CURA_BUILD_ENV_PATH}" ]]; then
@@ -26,7 +26,6 @@ export CURA_VERSION_MAJOR="${CURA_VERSION_MAJOR:-0}"
 export CURA_VERSION_MINOR="${CURA_VERSION_MINOR:-0}"
 export CURA_VERSION_PATCH="${CURA_VERSION_PATCH:-0}"
 export CURA_VERSION_EXTRA="${CURA_VERSION_EXTRA:-}"
-export CURA_BUILD_NAME="${CURA_BUILD_NAME:-master}"
 
 export CURA_CLOUD_API_ROOT="${CURA_CLOUD_API_ROOT:-https://api.ultimaker.com}"
 export CURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION:-1}"
@@ -44,12 +43,12 @@ cmake3 "${ROOT_DIR}" \
     -DCURA_VERSION_MINOR="${CURA_VERSION_MINOR}" \
     -DCURA_VERSION_PATCH="${CURA_VERSION_PATCH}" \
     -DCURA_VERSION_EXTRA="${CURA_VERSION_EXTRA}" \
-    -DCURA_BUILD_NAME="${CURA_BUILD_NAME}" \
     -DCURA_CLOUD_API_ROOT="${CURA_CLOUD_API_ROOT}" \
     -DCURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION}" \
     -DCURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT}" \
     -DSIGN_PACKAGE=OFF
 make
+make package
 
 # Copy the appimage to the output directory
 chmod a+x Cura-*.AppImage

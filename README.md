@@ -2,42 +2,79 @@
 
 This repository contains build scripts used to build Cura and all dependencies from scratch.
 
-The build has a number of dependencies. Ideally, these dependencies should be installed by the [cura-build-environment](https://github.com/Ultimaker/cura-build-environment) repository. Even with cura-build-environment though, some things may still be missing from your system that we haven't thought of.
+The build has a number of dependencies. Ideally, these dependencies should be installed by the
+[cura-build-environment](https://github.com/Ultimaker/cura-build-environment) repository. Even
+with cura-build-environment though, some things may still be missing from your system that we
+haven't thought of.
 
-## (WIP) Build with docker (for Linux AppImage only)
+# Build with Docker (Linux and Windows)
 
-To build Linux AppImage with docker, you first need to have a working cura-build-environment docker image. Please check
-the `WIP_fix_docker` branch in [cura-build-environment repository](https://github.com/ultimaker/cura-build-environment).
+To build Cura releases for Linux and Windows, you can use the `cura-build-environment` docker
+images. Check the [repository](https://github.com/Ultimaker/cura-build-environment) for more
+details on how to build the docker images on Linux and Windows.
 
-Assume that you have a working cura-build-environment docker image tagged as `cura-build-env:centos7`. To build an
-AppImage, run:
+## Build Cura Linux AppImage with Docker
 
+Assume that you have a working `cura-build-environment` docker image. To build a Cura AppImage,
+you can use the commands below:
+
+```shell
+./scripts/linux/build.sh
 ```
-./scripts/build.sh
-```
 
-If the build is successful, the resulting AppImage will placed in the `appimages/` directory.
+This script by default uses a docker image tagged as `cura-build-env:centos7` to build Cura
+AppImage, so make sure that your image is tagged accordingly. If the build is successful,
+the resulting AppImage and its checksum will be placed in the `appimages/` directory. Check
+the script `scripts/linux/build.sh` for more details if you want to customize it.
 
 To configure your AppImage build, you can use the following environment variables:
 
- - `CURA_VERSION_MAJOR`: Major version number of Cura (default `4`)
- - `CURA_VERSION_MINOR`: Minor version number of Cura (default `1`)
- - `CURA_VERSION_PATCH`: Patch version number of Cura (default `99`)
- - `CURA_VERSION_EXTRA`: Extra version string of Cura, which will be appended after `x.y.z` with `-<extra>`
-                         (default `docker`)
- - `CURA_BUILD_NAME`: FIXME: default to `docker`, probably no use.
- - `CURA_SDK_VERSION`:   SDK version of Cura in the form of semantic versioning (default `6.0.0`)
+ - `CURA_VERSION_MAJOR`: Major version number of Cura (default `0`)
+ - `CURA_VERSION_MINOR`: Minor version number of Cura (default `0`)
+ - `CURA_VERSION_PATCH`: Patch version number of Cura (default `0`)
+ - `CURA_VERSION_EXTRA`: Extra version string of Cura, which will be appended after `x.y.z`
+   in the format of `x.y.z-<extra>` (default an empty string "")
  - `CURA_CLOUD_API_ROOT`: Root URL of Cura Cloud API (default `https://api.ultimaker.com`)
  - `CURA_CLOUD_API_VERSION`: Cura Cloud API version to use (default `1`)
  - `CURA_CLOUD_ACCOUNT_API_ROOT`: Root URL of Cura Cloud Account API (default `https://account.ultimaker.com`)
+
+## Build Cura Windows Installer with Docker
+
+Similar to the Linux build instructions, you first need a workding `cura-build-environment`
+docker image for Windows. To build the Cura installer, you can use the commands below:
+
+```powershell
+# Do this in PowerShell
+.\scripts\windows\build.ps1
+```
+
+The script by default uses a docker image tagged as `cura-build-environment:1809-vs2015-amd64`,
+so make sure that your image is tagged accordingly. If the build is successful, the resulting
+installer will be placed in the `windows-installers/` directory. Check the script
+`scripts\windows\build.ps1` for more details if you want to customize it.
+
+You will be asked for some mandatory variables for building Cura, including:
+
+ - `CuraVersionMajor`: Major version number of Cura (default `0`)
+ - `CuraVersionMinor`: Minor version number of Cura (default `0`)
+ - `CuraVersionPatch`: Patch version number of Cura (default `0`)
+ - `CuraVersionExtra`: Extra version string of Cura, which will be appended after `x.y.z`
+   in the format of `x.y.z-<extra>` (default an empty string "")
+ - `CuraCloudApiRoot`: Root URL of Cura Cloud API (default `https://api.ultimaker.com`)
+ - `CuraCloudApiVersion`: Cura Cloud API version to use (default `1`)
+ - `CuraCloudAccountApiRoot`: Root URL of Cura Cloud Account API (default `https://account.ultimaker.com`)
+
+
+# Build on Native Machine
 
 ## OS X
 
 1. Install CMake (available via [homebrew](http://brew.sh/) or [cmake.org](http://www.cmake.org/))
 2. Install latest version of Xcode.
-3. On Mac OS X > 10.10, execute command: *brew link openssl --force*
-4. Because Fortran is necessary: *brew install gcc*
+3. On Mac OS X > 10.10, execute command: `brew link openssl --force`
+4. Because Fortran is necessary: `brew install gcc gfortran`
 5. Run these commands:
+
 ```shell
 git clone git@github.com:Ultimaker/cura-build.git
 cd cura-build
@@ -85,7 +122,7 @@ On Windows, the following dependencies are needed for building:
 
 Make sure these dependencies are available from your path.
 
-```shell
+```batch
 REM 64-bit
 git clone git@github.com:Ultimaker/cura-build.git
 cd cura-build
@@ -113,13 +150,15 @@ cura-build can build AppImage packages of Cura. The following dependencies are r
 To build, make sure these dependencies are installed, then clone this repository and run the following commands from your clone:
 
 ```shell
+# Clone the repo
 git clone http://github.com/Ultimaker/cura-build.git
 cd cura-build
-```
 
-```shell
+# Create a build directory
 mkdir build
 cd build
+
+# Build and package
 cmake ..
 make
 make package
@@ -160,13 +199,15 @@ Alternative method for installing python at: https://edwards.sdsu.edu/research/i
 Make sure, that the PYTHONPATH can find dist-packages. 
 
 ```shell
+# Clone the repo
 git clone http://github.com/Ultimaker/cura-build.git
 cd cura-build
-```
 
-```shell
+# Create a build directory
 mkdir build
 cd build
+
+# Build and package
 cmake ..
 make
 make package
