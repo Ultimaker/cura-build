@@ -53,6 +53,7 @@ build_options = {
         "zeroconf",
         "requests",
         "idna",
+        "stl",
         "serial",
         "shapely",
         "networkx",
