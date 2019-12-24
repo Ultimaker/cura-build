@@ -51,7 +51,9 @@ def patch_dialogplugin_dll_qt5_10(filepath: str) -> None:
         with open(filepath, "wb") as f:
             f.write(new_content)
     except Exception as e:
-        raise RuntimeError("Failed to modify '%s': %s" % (filepath, e))
+        msg = "Failed to modify '%s': %s" % (filepath, e)
+        print(msg)
+        return
 
     print("File '%s' patched." % filepath)
 
