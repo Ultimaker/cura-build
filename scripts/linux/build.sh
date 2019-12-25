@@ -49,4 +49,4 @@ docker run \
   --env CURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION}" \
   --env CURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT}" \
   "${cura_build_env_image}" \
-  /home/ultimaker/src/scripts/build_in_docker.sh
+  /home/ultimaker/src/scripts/linux/build_in_docker.sh
