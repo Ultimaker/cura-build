@@ -24,7 +24,7 @@ CURA_CLOUD_API_VERSION="${CURA_CLOUD_API_VERSION:-1}"
 CURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT:-https://account.ultimaker.com}"
 
 # Docker image to use for building the AppImage
-cura_build_env_image="cura-build-env:centos7"
+cura_build_env_image="ultimaker/cura-build-environment"
 
 pushd "${ROOT_DIR}" > /dev/null
 
