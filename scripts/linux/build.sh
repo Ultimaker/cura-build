@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # This scripts builds a Cura AppImage using a docker container. The docker base
 # image it uses is "cura-build-env:centos7", which can be created with the
@@ -40,7 +40,8 @@ CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="${CURA_ENABLE_CURAENGINE_EXTRA_
 # Docker image to use for building the AppImage
 cura_build_env_image="ultimaker/cura-build-environment"
 
-pushd "${ROOT_DIR}"
+__old_pwd="$(pwd)"
+cd "${ROOT_DIR}"
 
 # Prepare the "appimages" directory
 mkdir -p appimages
@@ -74,3 +75,5 @@ docker run \
   --env CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="${CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS}" \
   "${cura_build_env_image}" \
   /home/ultimaker/src/scripts/linux/build_in_docker.sh
+
+cd "${__old_pwd}"
