@@ -68,7 +68,7 @@ elseif ($CuraWindowsInstallerType -eq "MSI") {
   $CPACK_GENERATOR = "WIX"
   if ($CuraMsiProductGuid -eq "" -Or $CuraMsiUpgradeGuid -eq "") {
     Write-Error `
-      -Message "Missing CuraMsiProductGuid or CuraMsiUpgradeGuid."
+      -Message "Missing CuraMsiProductGuid or CuraMsiUpgradeGuid." `
       -Category InvalidArgument
   }
 }
