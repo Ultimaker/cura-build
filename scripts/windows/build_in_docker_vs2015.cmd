@@ -78,7 +78,8 @@ nmake
 nmake package
 
 rem Copy all build data
-robocopy /e %cura_build_work_dir%\src %CURA_BUILD_OUTPUT_PATH%\build
+rem robocopy /e %cura_build_work_dir%\src %CURA_BUILD_OUTPUT_PATH%\build
 
 echo Copying the installer to the mounted volume ...
 copy /y "Ultimaker Cura*.exe" %CURA_BUILD_OUTPUT_PATH%\
+copy /y "Ultimaker Cura*.msi" %CURA_BUILD_OUTPUT_PATH%\
