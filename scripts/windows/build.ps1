@@ -37,10 +37,8 @@ param (
   [Parameter(Mandatory=$true)]
     [string]$CuraWindowsInstallerType = "EXE",
 
-  [Parameter(Mandatory=$true)]
-    [string]$CuraMsiProductGuid = "",
-  [Parameter(Mandatory=$true)]
-    [string]$CuraMsiUpgradeGuid = "",
+  [string]$CuraMsiProductGuid = "",
+  [string]$CuraMsiUpgradeGuid = "",
 
   [boolean]$IsInteractive = $true
 )
