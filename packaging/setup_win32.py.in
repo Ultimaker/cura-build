@@ -145,6 +145,9 @@ build_options = {
         "PyQt5.QtDBus",
         "comtypes",
         "Charon",
+        "logging",
+        "logging.config",
+        "logging.handlers",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", ""),

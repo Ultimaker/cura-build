@@ -51,6 +51,9 @@ build_options = {
         "Savitar",
         "PyQt5.QtDBus",
         "Charon",
+        "logging",
+        "logging.config",
+        "logging.handlers",
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
