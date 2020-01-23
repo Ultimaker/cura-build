@@ -14,6 +14,8 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ROOT_DIR="${SCRIPT_DIR}/../.."
 
 # Cura release configurations
+CURA_BUILD_ENV_DOCKER_IMAGE="${CURA_BUILD_ENV_DOCKER_IMAGE:-ultimaker/cura-build-environment:centos-latest}"
+
 CURA_BRANCH_OR_TAG="${CURA_BRANCH_OR_TAG:-master}"
 URANIUM_BRANCH_OR_TAG="${URANIUM_BRANCH_OR_TAG:-master}"
 CURAENGINE_BRANCH_OR_TAG="${CURAENGINE_BRANCH_OR_TAG:-master}"
@@ -43,7 +45,6 @@ else
 fi
 
 # Docker image to use for building the AppImage
-cura_build_env_image="ultimaker/cura-build-environment:centos-latest"
 
 __old_pwd="$(pwd)"
 cd "${ROOT_DIR}"
@@ -52,7 +53,7 @@ cd "${ROOT_DIR}"
 mkdir -p appimages
 
 DOCKER_EXTRA_ARGS=""
-if [ "${IS_INTERACTIVE}" == "yes" ]; then
+if [ "${IS_INTERACTIVE}" = "yes" ]; then
   # Add -it so you can do CTRL-C in terminal if you are running in a TTY.
   DOCKER_EXTRA_ARGS="-it ${DOCKER_EXTRA_ARGS}"
 fi
@@ -84,7 +85,7 @@ docker run \
   --env CURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT}" \
   --env CURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE}" \
   --env CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="${CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS}" \
-  "${cura_build_env_image}" \
+  "${CURA_BUILD_ENV_DOCKER_IMAGE}" \
   /home/ultimaker/src/scripts/linux/build_in_docker.sh
 
 cd "${__old_pwd}"
