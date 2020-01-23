@@ -44,10 +44,11 @@ set PATH=%CURA_BUILD_ENV_PATH%\bin;%PATH%
 
 set cura_build_work_dir=C:\temp\cura-build
 echo Prepare work directory "%cura_build_work_dir%" ...
-mkdir %cura_build_work_dir%
+REM mkdir %cura_build_work_dir%
 echo "Copying %CURA_BUILD_SRC_PATH% to %cura_build_work_dir%"
-robocopy /e "%CURA_BUILD_SRC_PATH%" "%cura_build_work_dir%\src"
-cd /d %cura_build_work_dir%\src
+REM robocopy /e "%CURA_BUILD_SRC_PATH%" "%cura_build_work_dir%\src"
+mkdir %CURA_BUILD_OUTPUT_PATH%\build
+cd /d %CURA_BUILD_OUTPUT_PATH%\build
 
 cmake -DCMAKE_BUILD_TYPE=Release ^
       -DCMAKE_PREFIX_PATH="%CURA_BUILD_ENV_PATH%" ^
@@ -73,7 +74,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ^
       -DCURA_MSI_PRODUCT_GUID="%CURA_MSI_PRODUCT_GUID%" ^
       -DCURA_MSI_UPGRADE_GUID="%CURA_MSI_UPGRADE_GUID%" ^
       -G "NMake Makefiles" ^
-      .
+      %CURA_BUILD_SRC_PATH%
 nmake
 nmake package
 

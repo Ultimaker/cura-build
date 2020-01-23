@@ -44,6 +44,7 @@ param (
 )
 
 $outputDirName = "windows-installers"
+$buildOutputDirName = "build"
 
 New-Item $outputDirName -ItemType "directory" -Force
 $repoRoot = Join-Path $PSScriptRoot -ChildPath "..\.." -Resolve
@@ -105,5 +106,7 @@ if ($IsInteractive) {
   --env CURA_DEBUG_MODE=$CURA_DEBUG_MODE `
   --env CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS=$CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS `
   --env CPACK_GENERATOR=$CPACK_GENERATOR `
+  --env CURA_MSI_PRODUCT_GUID=$CuraMsiProductGuid `
+  --env CURA_MSI_UPGRADE_GUID=$CuraMsiUpgradeGuid `
   $DockerImage `
   powershell.exe -Command cmd /c "C:\cura-build-src\scripts\windows\build_in_docker_vs2015.cmd"
