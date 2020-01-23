@@ -43,7 +43,7 @@ else
 fi
 
 # Docker image to use for building the AppImage
-cura_build_env_image="ultimaker/cura-build-environment"
+cura_build_env_image="ultimaker/cura-build-environment:centos-latest"
 
 __old_pwd="$(pwd)"
 cd "${ROOT_DIR}"
