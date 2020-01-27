@@ -40,7 +40,8 @@ param (
   [string]$CuraMsiProductGuid = "",
   [string]$CuraMsiUpgradeGuid = "",
 
-  [boolean]$IsInteractive = $true
+  [boolean]$IsInteractive = $true,
+  [boolean]$BindSshVolume = $false
 )
 
 $outputDirName = "windows-installers"
@@ -78,12 +79,14 @@ else {
   exit 1
 }
 
+$sshPath = "$env:HOME\.ssh"
 $dockerExtraArgs = ""
 if ($IsInteractive) {
   $dockerExtraArgs = "-it"
 }
 
 & docker.exe run $dockerExtraArgs --rm `
+  --volume ${sshPath}:C:\Users\ContainerAdministrator\.ssh `
   --volume ${repoRoot}:C:\cura-build-src `
   --volume ${outputRoot}:C:\cura-build-output `
   --env CURA_BUILD_SRC_PATH=C:\cura-build-src `

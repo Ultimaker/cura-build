@@ -58,6 +58,10 @@ if [ "${IS_INTERACTIVE}" = "yes" ]; then
   DOCKER_EXTRA_ARGS="-it ${DOCKER_EXTRA_ARGS}"
 fi
 
+if [ "${BIND_SSH_VOLUME}" = "yes" ]; then
+  DOCKER_EXTRA_ARGS="${DOCKER_EXTRA_ARGS} -v $HOME/.ssh:/root/.ssh:ro"
+fi
+
 # Run docker to create the AppImage
 #
 # Environment variables:
