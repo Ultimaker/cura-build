@@ -82,6 +82,11 @@ else {
   exit 1
 }
 
+# Always try to pull the image
+$ErrorActionPreference = "Continue"
+docker pull "$DockerImage"
+$ErrorActionPreference = "Stop"
+
 $dockerExtraArgs = New-Object Collections.Generic.List[String]
 if ($IsInteractive) {
   $dockerExtraArgs.Add("-it")

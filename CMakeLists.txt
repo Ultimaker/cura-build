@@ -18,6 +18,8 @@ include(BuildPlatformDetection)
 include(GetFromEnvironmentOrCache)
 include(SetProjectDependencies)
 
+option(USE_CURAENGINE_ARTIFACT "Use CuraEngine artifact instead of compiling it." OFF)
+
 option(BUILD_PACKAGE "Create a package with the build of Cura" ON)
 option(SIGN_PACKAGE "Perform signing of the created package. Implies BUILD_PACKAGE" ON)
 
@@ -114,7 +116,11 @@ if(BUILD_PACKAGE)
     add_custom_target(packaging ALL DEPENDS projects COMMENT "Packaging Projects...")
 
     if(BUILD_OS_WINDOWS)
-        include(packaging/windows.cmake)
+        if(${Python3_VERSION} VERSION_LESS 3.7)
+            include(packaging/windows.cmake)
+        else()
+            include(packaging/python3.7/windows.cmake)
+        endif()
     elseif(BUILD_OS_OSX)
         include(packaging/osx.cmake)
     elseif(BUILD_OS_LINUX)

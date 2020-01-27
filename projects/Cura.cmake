@@ -23,6 +23,6 @@ ExternalProject_Add(Cura
                -DCURA_NO_INSTALL_PLUGINS=${_cura_no_install_plugins}
 )
 
-SetProjectDependencies(TARGET Cura DEPENDS Uranium CuraEngine)
+SetProjectDependencies(TARGET Cura DEPENDS Uranium)
 
 add_dependencies(update Cura-update)

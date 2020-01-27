@@ -8,6 +8,7 @@ param (
   [string]$CuraBranchOrTag = "master",
   [string]$UraniumBranchOrTag = "master",
   [string]$CuraEngineBranchOrTag = "master",
+  [boolean]$UseCuraEngineArtifact = $true,
   [string]$CuraBinaryDataBranchOrTag = "master",
   [string]$FdmMaterialsBranchOrTag = "master",
   [string]$LibCharonBranchOrTag = "master",
@@ -46,12 +47,17 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-$outputDirName = "windows-installers"
+$outputDirName = "output"
 $buildOutputDirName = "build"
 
 New-Item $outputDirName -ItemType "directory" -Force
-$repoRoot = Join-Path $PSScriptRoot -ChildPath "..\.." -Resolve
+$repoRoot = Join-Path $PSScriptRoot -ChildPath "..\..\.." -Resolve
 $outputRoot = Join-Path (Get-Location).Path -ChildPath $outputDirName -Resolve
+
+$USE_CURAENGINE_ARTIFACT = "OFF"
+if ($UseCuraEngineArtifact) {
+  $USE_CURAENGINE_ARTIFACT = "ON"
+}
 
 $CURA_DEBUG_MODE = "OFF"
 if ($EnableDebugMode) {
@@ -82,6 +88,11 @@ else {
   exit 1
 }
 
+# Always try to pull the image
+$ErrorActionPreference = "Continue"
+docker pull "$DockerImage"
+$ErrorActionPreference = "Stop"
+
 $dockerExtraArgs = New-Object Collections.Generic.List[String]
 if ($IsInteractive) {
   $dockerExtraArgs.Add("-it")
@@ -106,6 +117,7 @@ if ($BindSshVolume) {
   --env CURA_BRANCH_OR_TAG=$CuraBranchOrTag `
   --env URANIUM_BRANCH_OR_TAG=$UraniumBranchOrTag `
   --env CURAENGINE_BRANCH_OR_TAG=$CuraEngineBranchOrTag `
+  --env USE_CURAENGINE_ARTIFACT=$USE_CURAENGINE_ARTIFACT `
   --env CURABINARYDATA_BRANCH_OR_TAG=$CuraBinaryDataBranchOrTag `
   --env FDMMATERIALS_BRANCH_OR_TAG=$FdmMaterialsBranchOrTag `
   --env LIBCHARON_BRANCH_OR_TAG=$LibCharonBranchOrTag `

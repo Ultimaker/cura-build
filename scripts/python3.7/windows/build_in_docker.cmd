@@ -11,6 +11,7 @@ echo
 echo CURA_BRANCH_OR_TAG           = "%CURA_BRANCH_OR_TAG%"
 echo URANIUM_BRANCH_OR_TAG        = "%URANIUM_BRANCH_OR_TAG%"
 echo CURAENGINE_BRANCH_OR_TAG     = "%CURAENGINE_BRANCH_OR_TAG%"
+echo USE_CURAENGINE_ARTIFACT      = "%USE_CURAENGINE_ARTIFACT%"
 echo CURABINARYDATA_BRANCH_OR_TAG = "%CURABINARYDATA_BRANCH_OR_TAG%"
 echo FDMMATERIALS_BRANCH_OR_TAG   = "%FDMMATERIALS_BRANCH_OR_TAG%"
 echo LIBCHARON_BRANCH_OR_TAG      = "%LIBCHARON_BRANCH_OR_TAG%"
@@ -38,7 +39,7 @@ echo
 echo ========== Build Variables END ==========
 
 echo Prepare environment variables ...
-call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
 set PATH=C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;%PATH%
 set PATH=%CURA_BUILD_ENV_PATH%\bin;%PATH%
 
@@ -57,6 +58,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ^
       -DCURA_BRANCH_OR_TAG="%CURA_BRANCH_OR_TAG%" ^
       -DURANIUM_BRANCH_OR_TAG="%URANIUM_BRANCH_OR_TAG%" ^
       -DCURAENGINE_BRANCH_OR_TAG="%CURAENGINE_BRANCH_OR_TAG%" ^
+      -DUSE_CURAENGINE_ARTIFACT="%USE_CURAENGINE_ARTIFACT%" ^
       -DCURABINARYDATA_BRANCH_OR_TAG="%CURABINARYDATA_BRANCH_OR_TAG%" ^
       -DFDMMATERIALS_BRANCH_OR_TAG="%FDMMATERIALS_BRANCH_OR_TAG%" ^
       -DCURA_VERSION_MAJOR="%CURA_VERSION_MAJOR%" ^
