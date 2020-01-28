@@ -1,4 +1,5 @@
 # This script builds a Cura release using the cura-build-environment Windows docker image.
+$ErrorActionPreference = "Stop"
 
 param (
 # Docker parameters
@@ -70,6 +71,7 @@ elseif ($CuraWindowsInstallerType -eq "MSI") {
     Write-Error `
       -Message "Missing CuraMsiProductGuid or CuraMsiUpgradeGuid." `
       -Category InvalidArgument
+    exit 1
   }
 }
 else {
