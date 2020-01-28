@@ -94,7 +94,7 @@ if ($BindSshVolume) {
   $dockerExtraArgs.Add("${sshPath}:C:\Users\ContainerAdministrator\.ssh")
 }
 
-& docker.exe run dockerExtraArgs:* `
+& docker.exe run $dockerExtraArgs `
   --rm `
   --volume ${repoRoot}:C:\cura-build-src `
   --volume ${outputRoot}:C:\cura-build-output `
