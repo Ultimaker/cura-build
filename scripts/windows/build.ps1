@@ -79,7 +79,12 @@ else {
   exit 1
 }
 
-$sshPath = "$env:HOME\.ssh"
+$oldPath = pwd
+cd ~
+$homePath = pwd
+cd $oldPath
+
+$sshPath = "$homePath\.ssh"
 $dockerExtraArgs = ""
 if ($IsInteractive) {
   $dockerExtraArgs = "-it"
