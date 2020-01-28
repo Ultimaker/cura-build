@@ -79,19 +79,23 @@ else {
   exit 1
 }
 
-$oldPath = pwd
-cd ~
-$homePath = pwd
-cd $oldPath
-
-$sshPath = "$homePath\.ssh"
-$dockerExtraArgs = ""
+$dockerExtraArgs = New-Object Collections.Generic.List[String]
 if ($IsInteractive) {
-  $dockerExtraArgs = "-it"
+  $dockerExtraArgs.Add("-it")
 }
 
-& docker.exe run $dockerExtraArgs --rm `
-  --volume ${sshPath}:C:\Users\ContainerAdministrator\.ssh `
+if ($BindSshVolume) {
+  $oldPath = pwd
+  cd ~
+  $homePath = pwd
+  cd $oldPath
+  $sshPath = "$homePath\.ssh"
+  $dockerExtraArgs.Add("--volume")
+  $dockerExtraArgs.Add("${sshPath}:C:\Users\ContainerAdministrator\.ssh")
+}
+
+& docker.exe run dockerExtraArgs:* `
+  --rm `
   --volume ${repoRoot}:C:\cura-build-src `
   --volume ${outputRoot}:C:\cura-build-output `
   --env CURA_BUILD_SRC_PATH=C:\cura-build-src `
