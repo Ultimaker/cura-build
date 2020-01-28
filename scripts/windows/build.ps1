@@ -1,5 +1,4 @@
 # This script builds a Cura release using the cura-build-environment Windows docker image.
-$ErrorActionPreference = "Stop"
 
 param (
 # Docker parameters
@@ -44,6 +43,8 @@ param (
   [boolean]$IsInteractive = $true,
   [boolean]$BindSshVolume = $false
 )
+
+$ErrorActionPreference = "Stop"
 
 $outputDirName = "windows-installers"
 $buildOutputDirName = "build"
