@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # This script is used in the docker container to create a Cura AppImage.
 #
@@ -7,18 +7,19 @@ set -e
 
 # Get where this script resides
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-ROOT_DIR="${SCRIPT_DIR}/../.."
+ROOT_DIR="${SCRIPT_DIR}/../../.."
 
 # Make sure that cura-build-environment is present
+CURA_BUILD_ENV_PATH="/usr/local"
 if [[ -z "${CURA_BUILD_ENV_PATH}" ]]; then
     echo "CURA_BUILD_ENV_PATH is not defined. Cannot find the installed cura build environment."
     exit 1
 fi
 
-# Make sure that a directory for saving the resulting AppImage exists
-CURA_APPIMAGES_OUTPUT_DIR="${CURA_APPIMAGES_OUTPUT_DIR:-/home/ultimaker/appimages}"
-if [[ ! -d "${CURA_APPIMAGES_OUTPUT_DIR}" ]]; then
-    mkdir -p "${CURA_APPIMAGES_OUTPUT_DIR}"
+# Make sure that a directory for saving the output directory exists
+CURA_BUILD_OUTPUT_DIR="${CURA_BUILD_OUTPUT_DIR:-/home/ultimaker/output}"
+if [[ ! -d "${CURA_BUILD_OUTPUT_DIR}" ]]; then
+    mkdir -p "${CURA_BUILD_OUTPUT_DIR}"
 fi
 
 # Set up Cura build configuration in environment variables
@@ -45,18 +46,16 @@ export CURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE:-ON}"
 export CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="${CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS:-ON}"
 
 # Set up development environment variables
-source /opt/rh/devtoolset-7/enable
 export PATH="${CURA_BUILD_ENV_PATH}/bin:${PATH}"
 export PKG_CONFIG_PATH="${CURA_BUILD_ENV_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
-if [ -d "${ROOT_DIR}/build" ]; then
-  rm -rf "${ROOT_DIR}/build"
-fi
-mkdir -p "${ROOT_DIR}/build"
-cd "${ROOT_DIR}/build"
+mkdir "${CURA_BUILD_OUTPUT_DIR}/build"
+mkdir "${CURA_BUILD_OUTPUT_DIR}/appimages"
+
+cd "${CURA_BUILD_OUTPUT_DIR}/build"
 
 # Create AppImage
-cmake3 "${ROOT_DIR}" \
+cmake "${ROOT_DIR}" \
     -DCMAKE_PREFIX_PATH="${CURA_BUILD_ENV_PATH}" \
     -DCURA_VERSION_MAJOR="${CURA_VERSION_MAJOR}" \
     -DCURA_VERSION_MINOR="${CURA_VERSION_MINOR}" \
@@ -71,8 +70,6 @@ cmake3 "${ROOT_DIR}" \
 make
 make package
 
-chown -R 1000:1000 "${ROOT_DIR}/build"
-
 # Copy the appimage to the output directory
 chmod a+x Cura-*.AppImage
-cp Cura-*.AppImage "${CURA_APPIMAGES_OUTPUT_DIR}/"
+cp Cura-*.AppImage "${CURA_BUILD_OUTPUT_DIR}/appimages/"

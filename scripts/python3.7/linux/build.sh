@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # This scripts builds a Cura AppImage using a docker container. The docker base
 # image it uses is "cura-build-env:centos7", which can be created with the
@@ -11,10 +11,10 @@ set -e
 
 # Get where this script resides
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-ROOT_DIR="${SCRIPT_DIR}/../.."
+ROOT_DIR="${SCRIPT_DIR}/../../.."
 
 # Cura release configurations
-CURA_BUILD_ENV_DOCKER_IMAGE="${CURA_BUILD_ENV_DOCKER_IMAGE:-ultimaker/cura-build-environment:centos-latest}"
+CURA_BUILD_ENV_DOCKER_IMAGE="${CURA_BUILD_ENV_DOCKER_IMAGE:-ultimaker/cura-build-environment:python3.7-debian-latest}"
 
 CURA_BRANCH_OR_TAG="${CURA_BRANCH_OR_TAG:-master}"
 URANIUM_BRANCH_OR_TAG="${URANIUM_BRANCH_OR_TAG:-master}"
@@ -49,8 +49,8 @@ fi
 __old_pwd="$(pwd)"
 cd "${ROOT_DIR}"
 
-# Prepare the "appimages" directory
-mkdir -p appimages
+# Prepare the "output" directory
+mkdir -p output
 
 DOCKER_EXTRA_ARGS=""
 if [ "${IS_INTERACTIVE}" = "yes" ]; then
@@ -62,16 +62,22 @@ if [ "${BIND_SSH_VOLUME}" = "yes" ]; then
   DOCKER_EXTRA_ARGS="${DOCKER_EXTRA_ARGS} -v $HOME/.ssh:/root/.ssh:ro"
 fi
 
+# Always pull the image to make sure that we have the latest
+set +e
+docker pull "${CURA_BUILD_ENV_DOCKER_IMAGE}"
+set -e
+
 # Run docker to create the AppImage
 #
 # Environment variables:
-#  - CURA_APPIMAGES_OUTPUT_DIR : Where AppImages will be put inside docker container
+#  - CURA_BUILD_OUTPUT_DIR : Where the build directory and AppImages will be put inside docker container
 #
 docker run \
   ${DOCKER_EXTRA_ARGS} \
   --rm \
+  --user 1000:1000 \
   --volume "$(pwd)":/home/ultimaker/src \
-  --env CURA_APPIMAGES_OUTPUT_DIR=/home/ultimaker/src/appimages \
+  --env CURA_BUILD_OUTPUT_DIR=/home/ultimaker/src/output \
   --env CURA_BRANCH_OR_TAG="${CURA_BRANCH_OR_TAG}" \
   --env URANIUM_BRANCH_OR_TAG="${URANIUM_BRANCH_OR_TAG}" \
   --env CURAENGINE_BRANCH_OR_TAG="${CURAENGINE_BRANCH_OR_TAG}" \
@@ -90,6 +96,6 @@ docker run \
   --env CURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE}" \
   --env CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="${CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS}" \
   "${CURA_BUILD_ENV_DOCKER_IMAGE}" \
-  /home/ultimaker/src/scripts/linux/build_in_docker.sh
+  /home/ultimaker/src/scripts/python3.7/linux/build_in_docker.sh
 
 cd "${__old_pwd}"

@@ -75,6 +75,26 @@ if(NOT CURA_EXTRA_PROJECTS_DIR STREQUAL "")
     list(APPEND _projects ${_extra_projects})
 endif()
 
+
+# FIXME: Remove the code for CMake <3.12 once we have switched over completely.
+# FindPython3 is a new module since CMake 3.12. It deprecates FindPythonInterp and FindPythonLibs. The FindPython3
+# module is copied from the CMake repository here so in CMake <3.12 we can still use it.
+if(${CMAKE_VERSION} VERSION_LESS 3.12)
+    # Use FindPythonInterp and FindPythonLibs for CMake <3.12
+    find_package(PythonInterp 3 REQUIRED)
+
+    set(Python3_EXECUTABLE ${PYTHON_EXECUTABLE})
+
+    set(Python3_VERSION ${PYTHON_VERSION_STRING})
+    set(Python3_VERSION_MAJOR ${PYTHON_VERSION_MAJOR})
+    set(Python3_VERSION_MINOR ${PYTHON_VERSION_MINOR})
+    set(Python3_VERSION_PATCH ${PYTHON_VERSION_PATCH})
+else()
+    # Use FindPython3 for CMake >=3.12
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+endif()
+
+
 add_custom_target(update COMMENT "Updating Projects...")
 
 foreach(_project ${_projects})
@@ -98,7 +118,11 @@ if(BUILD_PACKAGE)
     elseif(BUILD_OS_OSX)
         include(packaging/osx.cmake)
     elseif(BUILD_OS_LINUX)
-        include(packaging/linux.cmake)
+        if(${Python3_VERSION} VERSION_LESS 3.7)
+            include(packaging/linux.cmake)
+        else()
+            include(packaging/python3.7/linux.cmake)
+        endif()
     else()
         message(STATUS "Do not know how to build an executable for the current platform! You will have to create it manually.")
     endif()

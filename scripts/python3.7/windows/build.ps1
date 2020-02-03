@@ -2,7 +2,7 @@
 
 param (
 # Docker parameters
-  [string]$DockerImage = "ultimaker/cura-build-environment:win1809-latest",
+  [string]$DockerImage = "ultimaker/cura-build-environment:python3.7-win1809-latest",
 
 # Branch parameters
   [string]$CuraBranchOrTag = "master",
@@ -124,4 +124,4 @@ if ($BindSshVolume) {
   --env CURA_MSI_PRODUCT_GUID=$CuraMsiProductGuid `
   --env CURA_MSI_UPGRADE_GUID=$CuraMsiUpgradeGuid `
   $DockerImage `
-  powershell.exe -Command cmd /c "C:\cura-build-src\scripts\windows\build_in_docker_vs2015.cmd"
+  powershell.exe -Command cmd /c "C:\cura-build-src\scripts\python3.7\windows\build_in_docker.cmd"

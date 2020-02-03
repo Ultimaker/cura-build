@@ -29,7 +29,7 @@ do
     # or set-rpath will be setting RUNPATH instead of RPATH, even if the flag
     # --force-rpath is given.
     patchelf --remove-rpath "${filename}"
-    patchelf --force-rpath --set-rpath '$ORIGIN:$ORIGIN/../lib' "${filename}"
+    patchelf --force-rpath --set-rpath '$ORIGIN:$ORIGIN/lib:$ORIGIN/bin:$ORIGIN/..:$ORIGIN/../lib:$ORIGIN/../bin' "${filename}"
     echo "RPATH set for ${filename}"
 done
 
