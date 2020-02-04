@@ -6,6 +6,7 @@ include(packaging/cpackconfig_common.cmake)
 # MSI
 # ========================================
 set(CPACK_WIX_CULTURES "en-US")
+set(CPACK_WIX_EXTENSIONS, WixUtilExtension)
 set(CPACK_WIX_PRODUCT_GUID "${CURA_MSI_PRODUCT_GUID}")
 set(CPACK_WIX_UPGRADE_GUID "${CURA_MSI_UPGRADE_GUID}")
 set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/packaging/cura.ico")
