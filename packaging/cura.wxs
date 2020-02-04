@@ -3,6 +3,7 @@
 <?include "cpack_variables.wxi"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
     RequiredVersion="3.6.3303.0">
 
     <Product Id="$(var.CPACK_WIX_PRODUCT_GUID)"
@@ -23,6 +24,17 @@
 
         <WixVariable Id="WixUILicenseRtf" Value="$(var.CPACK_WIX_LICENSE_RTF)"/>
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALL_ROOT"/>
+
+        <Property Id="REMEMBERFOLDER">
+            <RegistrySearch Id="UninstallFromFolder" Root="HKLM" Key="Software\Ultimaker\Cura" Name="${var.CPACK_WIX_PRODUCT_GUID}" Type="raw" />
+        </Property>
+
+        <DirectoryRef Id="REMEMBERFOLDER">
+            <Component Id="CleanupMainApplicationFolder" Guid="*">
+                <RegistryValue Root="HKLM" Key="Software\Ultimaker\Cura" Name="${var.CPACK_WIX_PRODUCT_GUID}" Value="[REMEMBERFOLDER]" Type="string" KeyPath="yes"/>
+                <util:RemoveFolderEx On="uninstall" Property="REMEMBERFOLDER" />
+            </Component>
+        </DirectoryRef>
 
         <?ifdef CPACK_WIX_PRODUCT_ICON?>
         <Property Id="ARPPRODUCTICON">ProductIcon.ico</Property>
