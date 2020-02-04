@@ -29,13 +29,6 @@
             <RegistrySearch Id="UninstallFromFolder" Root="HKLM" Key="Software\Ultimaker\Cura" Name="${var.CPACK_WIX_PRODUCT_GUID}" Type="raw" />
         </Property>
 
-        <DirectoryRef Id="REMEMBERFOLDER">
-            <Component Id="CleanupMainApplicationFolder" Guid="*">
-                <RegistryValue Root="HKLM" Key="Software\Ultimaker\Cura" Name="${var.CPACK_WIX_PRODUCT_GUID}" Value="[REMEMBERFOLDER]" Type="string" KeyPath="yes"/>
-                <util:RemoveFolderEx On="uninstall" Property="REMEMBERFOLDER" />
-            </Component>
-        </DirectoryRef>
-
         <?ifdef CPACK_WIX_PRODUCT_ICON?>
         <Property Id="ARPPRODUCTICON">ProductIcon.ico</Property>
         <Icon Id="ProductIcon.ico" SourceFile="$(var.CPACK_WIX_PRODUCT_ICON)"/>
@@ -54,11 +47,15 @@
         <?include "properties.wxi"?>
         <?include "product_fragment.wxi"?>
 
-        <!-- For installing VC runtime redistribution -->
+        <!-- For installing VC runtime redistribution and also complete uninstall. -->
         <DirectoryRef Id="TARGETDIR">
             <Merge Id="VC_Redist64"
                    SourceFile="$(env.CommonProgramFiles(x86))\Merge Modules\Microsoft_VC140_CRT_x64.msm"
                    DiskId="1" Language="1033" />
+            <Component Id="CleanupMainApplicationFolder" Guid="*">
+                <RegistryValue Root="HKLM" Key="Software\Ultimaker\Cura" Name="${var.CPACK_WIX_PRODUCT_GUID}" Value="[TARGETDIR]" Type="string" KeyPath="yes" />
+                <util:RemoveFolderEx On="uninstall" Property="REMEMBERFOLDER" />
+            </Component>
         </DirectoryRef>
         <FeatureRef Id="ProductFeature">
             <Feature Id="VC_Redist64" Title="Visual C++ Runtime" AllowAdvertise="no" Display="hidden" Level="3">
