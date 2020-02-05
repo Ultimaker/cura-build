@@ -49,6 +49,12 @@ source /opt/rh/devtoolset-7/enable
 export PATH="${CURA_BUILD_ENV_PATH}/bin:${PATH}"
 export PKG_CONFIG_PATH="${CURA_BUILD_ENV_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
+if [ -d "${ROOT_DIR}/build" ]; then
+  rm -rf "${ROOT_DIR}/build"
+fi
+mkdir -p "${ROOT_DIR}/build"
+cd "${ROOT_DIR}/build"
+
 # Create AppImage
 cmake3 "${ROOT_DIR}" \
     -DCMAKE_PREFIX_PATH="${CURA_BUILD_ENV_PATH}" \
@@ -64,6 +70,8 @@ cmake3 "${ROOT_DIR}" \
     -DSIGN_PACKAGE=OFF
 make
 make package
+
+chown -R 1000:1000 "${ROOT_DIR}/build"
 
 # Copy the appimage to the output directory
 chmod a+x Cura-*.AppImage
