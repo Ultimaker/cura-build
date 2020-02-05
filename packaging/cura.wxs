@@ -58,7 +58,7 @@
                 <MergeRef Id="VC_Redist64" />
             </Feature>
             <Feature Id="ProductFeatureUninstall" Title="Complete Uninstall Folder" AllowAdvertise="no" Display="hidden" Level="3">
-                <Component Id="CompleteUninstall" Guid="*">
+                <Component Id="CompleteUninstall" Directory="TARGETDIR" Guid="*">
                     <RegistryValue Root="HKLM" Key="Software\Ultimaker\Cura" Name="${var.CPACK_WIX_PRODUCT_GUID}" Value="[TARGETDIR]" Type="string" KeyPath="yes" />
                     <util:RemoveFolderEx On="uninstall" Property="REMEMBERFOLDER" />
                 </Component>
