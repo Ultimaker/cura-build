@@ -43,6 +43,9 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliar
 set PATH=C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;%PATH%
 set PATH=%CURA_BUILD_ENV_PATH%\bin;%PATH%
 
+REM FIXME: remove when the new image is there
+python -m pip install comtypes==1.1.7
+
 set cura_build_work_dir=C:\temp\cura-build
 echo Prepare work directory "%cura_build_work_dir%" ...
 REM mkdir %cura_build_work_dir%

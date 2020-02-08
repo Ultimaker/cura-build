@@ -22,15 +22,33 @@ def load_numpy(finder, module):
     finder.IncludePackage("numpy.linalg._umath_linalg")
 
     # Include all MKL files that are needed to get Numpy with MKL working.
-    npy_core_dir = os.path.join(module.path[0], "core")
+    npy_core_dir = os.path.join(module.path[0], "DLLs")
     required_mkl_files = [
-        "mkl_intel_thread.dll",
-        "mkl_core.dll",
+        "libifcoremd.dll",
+        "libifportmd.dll",
+        "libimalloc.dll",
+        "libiomp5md.dll",
+        "libiompstubs5md.dll",
+        "libmmd.dll",
+        "libopenblas.dll",
         "mkl_avx.dll",
         "mkl_avx2.dll",
-        "libiomp5md.dll",
-        "libimalloc.dll",
-        "libmmd.dll",
+        "mkl_avx512.dll",
+        "mkl_core.dll",
+        "mkl_def.dll",
+        "mkl_intel_thread.dll",
+        "mkl_sequential.dll",
+        "mkl_tbb_thread.dll",
+        "mkl_vml_avx.dll",
+        "mkl_vml_avx2.dll",
+        "mkl_vml_avx512.dll",
+        "mkl_vml_cmpt.dll",
+        "mkl_vml_def.dll",
+        "mkl_vml_mc.dll",
+        "mkl_vml_mc2.dll",
+        "mkl_vml_mc3.dll",
+        "tbb.dll",
+        "tbbmalloc.dll",
     ]
 
     if platform.architecture()[0] == "32bit":
@@ -173,12 +191,12 @@ build_options = {
 executables = [
     Executable(script="@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py",
                base="Win32GUI",
-               targetName = "Cura.exe",
+               targetName = os.path.join("@CMAKE_BINARY_DIR@", "package", "Cura.exe"),
                icon="@CMAKE_SOURCE_DIR@/packaging/cura.ico"
                ),
     Executable(script="@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py",
                base="Console",
-               targetName = "CuraCLI.exe",
+               targetName = os.path.join("@CMAKE_BINARY_DIR@", "package", "CuraCLI.exe"),
                icon="@CMAKE_SOURCE_DIR@/packaging/cura.ico"
                ),
     

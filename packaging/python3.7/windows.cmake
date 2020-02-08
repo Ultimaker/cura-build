@@ -6,7 +6,7 @@ add_dependencies(packaging build_bundle)
 add_dependencies(build_bundle projects)
 
 add_custom_command(
-    TARGET build_bundle PRE_LINK
+    TARGET build_bundle PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/package
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/package
     COMMENT "cleaning old package/ directory"
