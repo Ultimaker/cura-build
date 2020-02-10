@@ -49,7 +49,7 @@ fi
 __old_pwd="$(pwd)"
 cd "${ROOT_DIR}"
 
-# Prepare the "appimages" directory
+# Prepare the "output" directory
 mkdir -p output
 
 DOCKER_EXTRA_ARGS=""
