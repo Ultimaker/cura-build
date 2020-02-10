@@ -70,8 +70,6 @@ cmake3 "${ROOT_DIR}" \
 make
 make package
 
-chown -R 1000:1000 "${CURA_BUILD_OUTPUT_DIR}/*"
-
 # Copy the appimage to the output directory
 chmod a+x Cura-*.AppImage
 cp Cura-*.AppImage "${CURA_BUILD_OUTPUT_DIR}/appimages"
