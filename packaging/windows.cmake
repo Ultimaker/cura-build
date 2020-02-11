@@ -28,6 +28,12 @@ add_custom_command(
     COMMENT "copying cura.ico as Cura.ico into package/"
 )
 
+add_custom_command(
+    TARGET build_bundle POST_BUILD
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/packaging/windows_touchcache.py -f ${CMAKE_BINARY_DIR}/package/
+    COMMENT "force cache files to be registered to the installer"
+)
+
 #
 # CURA-6074
 # QTBUG-57832
