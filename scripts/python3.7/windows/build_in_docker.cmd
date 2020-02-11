@@ -53,6 +53,7 @@ echo "Copying %CURA_BUILD_SRC_PATH% to %cura_build_work_dir%"
 REM robocopy /e "%CURA_BUILD_SRC_PATH%" "%cura_build_work_dir%\src"
 mkdir %CURA_BUILD_OUTPUT_PATH%\build
 cd /d %CURA_BUILD_OUTPUT_PATH%\build
+mkdir %CURA_BUILD_OUTPUT_PATH%\installers
 
 cmake -DCMAKE_BUILD_TYPE=Release ^
       -DCMAKE_PREFIX_PATH="%CURA_BUILD_ENV_PATH%" ^
@@ -87,5 +88,5 @@ rem Copy all build data
 rem robocopy /e %cura_build_work_dir%\src %CURA_BUILD_OUTPUT_PATH%\build
 
 echo Copying the installer to the mounted volume ...
-copy /y "Ultimaker Cura*.exe" %CURA_BUILD_OUTPUT_PATH%\
-copy /y "Ultimaker Cura*.msi" %CURA_BUILD_OUTPUT_PATH%\
+copy /y "Ultimaker Cura*.exe" %CURA_BUILD_OUTPUT_PATH%\installers
+copy /y "Ultimaker Cura*.msi" %CURA_BUILD_OUTPUT_PATH%\installers
