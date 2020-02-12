@@ -59,7 +59,7 @@ if [ "${IS_INTERACTIVE}" = "yes" ]; then
 fi
 
 if [ "${BIND_SSH_VOLUME}" = "yes" ]; then
-  DOCKER_EXTRA_ARGS="${DOCKER_EXTRA_ARGS} -v $HOME/.ssh:/root/.ssh:ro"
+  DOCKER_EXTRA_ARGS="${DOCKER_EXTRA_ARGS} -v $HOME/.ssh:/home/ultimaker/.ssh:ro"
 fi
 
 # Always pull the image to make sure that we have the latest
