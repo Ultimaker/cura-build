@@ -36,6 +36,8 @@ else:
     python_install_dir = "@CMAKE_INSTALL_PREFIX@/lib/python3.5/site-packages/"
 search_path.insert(1, python_externalproject_dir)
 search_path.insert(2, python_install_dir)
+if "" in search_path:  # Don't allow local working directory to be in sys.path.
+    search_path.remove("")
 
 # Dependencies are automatically detected, but it might need
 # fine tuning.
