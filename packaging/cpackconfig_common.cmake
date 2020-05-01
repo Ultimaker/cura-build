@@ -7,7 +7,7 @@ cpack_add_component(_cura
 # ========================================
 # CPack Common Settings
 # ========================================
-set(CPACK_PACKAGE_NAME "Ultimaker Cura")
+set(CPACK_PACKAGE_NAME "Ultimaker_Cura")
 set(CPACK_PACKAGE_VENDOR "Ultimaker B.V.")
 set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/Ultimaker/Cura")
 
