@@ -59,9 +59,6 @@ GetFromEnvironmentOrCache(CURA_VERSION_MINOR "0" STRING "Cura Minor Version")
 GetFromEnvironmentOrCache(CURA_VERSION_PATCH "0" STRING "Cura Patch Version")
 GetFromEnvironmentOrCache(CURA_VERSION_EXTRA "${TAG_OR_BRANCH}" STRING "Cura Extra Version Information")
 
-# Setting whether the build is an Enterprise build or not
-GetFromEnvironmentOrCache(IS_CURA_ENTERPRISE "ON" STRING "If this is a Cura Enterprise release")
-
 GetFromEnvironmentOrCache(CURA_EXTRA_PROJECTS_DIR "" STRING "Directory where extra projects to build are located.")
 
 set(CURA_VERSION "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}")
