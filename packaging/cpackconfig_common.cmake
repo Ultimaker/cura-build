@@ -1,23 +1,15 @@
-if(IS_CURA_ENTERPRISE MATCHES "ON")
-	cpack_add_component(_cura
-						DISPLAY_NAME "Ultimaker Cura Enterprise"
-						Description "Ultimaker Cura Enterprise Executable and Data Files"
-						REQUIRED
-	)
-else()
-	cpack_add_component(_cura
-						DISPLAY_NAME "Ultimaker Cura"
-						Description "Ultimaker Cura Executable and Data Files"
-						REQUIRED
-	)
-endif()
+cpack_add_component(_cura
+					DISPLAY_NAME "Ultimaker Cura ${CURA_BUILDTYPE}"
+					Description "Ultimaker Cura ${CURA_BUILDTYPE} Executable and Data Files"
+					REQUIRED
+)
 
 # ========================================
 # CPack Common Settings
 # ========================================
 set(CPACK_PACKAGE_NAME "Ultimaker_Cura")
-if(IS_CURA_ENTERPRISE MATCHES "ON")
-	set (CPACK_PACKAGE_NAME "Ultimaker_Cura_Enterprise")
+if(CURA_BUILDTYPE MATCHES "Enterprise")
+	set(CPACK_PACKAGE_NAME "Ultimaker_Cura_${CURA_BUILDTYPE}")
 endif()
 set(CPACK_PACKAGE_VENDOR "Ultimaker B.V.")
 set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/Ultimaker/Cura")
@@ -42,8 +34,8 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/packaging/cura_license.txt"
 set(CPACK_CREATE_DESKTOP_LINKS Cura "Ultimaker Cura ${CURA_FULL_VERSION}")
 set(CPACK_PACKAGE_EXECUTABLES Cura "Ultimaker Cura ${CURA_FULL_VERSION}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Ultimaker Cura ${CURA_FULL_VERSION}")
-if(IS_CURA_ENTERPRISE MATCHES "ON")
-	set(CPACK_CREATE_DESKTOP_LINKS Cura "Ultimaker Cura Enterprise ${CURA_FULL_VERSION}")
-	set(CPACK_PACKAGE_EXECUTABLES Cura "Ultimaker Cura Enterprise ${CURA_FULL_VERSION}")
-	set(CPACK_PACKAGE_INSTALL_DIRECTORY "Ultimaker Cura Enterprise ${CURA_FULL_VERSION}")
+if(CURA_BUILDTYPE MATCHES "Enterprise")
+	set(CPACK_CREATE_DESKTOP_LINKS Cura "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
+	set(CPACK_PACKAGE_EXECUTABLES Cura "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
+	set(CPACK_PACKAGE_INSTALL_DIRECTORY "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
 endif()
