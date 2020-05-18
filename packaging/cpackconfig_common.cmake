@@ -1,7 +1,7 @@
 cpack_add_component(_cura
-					DISPLAY_NAME "Ultimaker Cura ${CURA_BUILDTYPE}"
-					Description "Ultimaker Cura ${CURA_BUILDTYPE} Executable and Data Files"
-					REQUIRED
+		DISPLAY_NAME "Ultimaker Cura ${CURA_BUILDTYPE}"
+		Description "Ultimaker Cura ${CURA_BUILDTYPE} Executable and Data Files"
+		REQUIRED
 )
 
 # ========================================
