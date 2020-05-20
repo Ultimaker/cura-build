@@ -1,7 +1,7 @@
 cpack_add_component(_cura
-		DISPLAY_NAME "Ultimaker Cura ${CURA_BUILDTYPE}"
-		Description "Ultimaker Cura ${CURA_BUILDTYPE} Executable and Data Files"
-		REQUIRED
+            DISPLAY_NAME "Ultimaker Cura ${CURA_BUILDTYPE}"
+            Description "Ultimaker Cura ${CURA_BUILDTYPE} Executable and Data Files"
+            REQUIRED
 )
 
 # ========================================
@@ -10,7 +10,7 @@ cpack_add_component(_cura
 
 set(CPACK_PACKAGE_NAME "Ultimaker Cura")
 if(CURA_BUILDTYPE MATCHES "Enterprise")
-	set(CPACK_PACKAGE_NAME "Ultimaker Cura ${CURA_BUILDTYPE}")
+    set(CPACK_PACKAGE_NAME "Ultimaker Cura ${CURA_BUILDTYPE}")
 endif()
 string(REPLACE " " "_" CPACK_FILE_NAME_NO_SPACES "${CPACK_PACKAGE_NAME}")
 
@@ -39,9 +39,9 @@ set(CPACK_CREATE_DESKTOP_LINKS Cura "Ultimaker Cura ${CURA_FULL_VERSION}")
 set(CPACK_PACKAGE_EXECUTABLES Cura "Ultimaker Cura ${CURA_FULL_VERSION}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Ultimaker Cura ${CURA_FULL_VERSION}")
 if(CURA_BUILDTYPE MATCHES "Enterprise")
-	set(CPACK_CREATE_DESKTOP_LINKS Cura "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
-	set(CPACK_PACKAGE_EXECUTABLES Cura "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
-	set(CPACK_PACKAGE_INSTALL_DIRECTORY "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
+    set(CPACK_CREATE_DESKTOP_LINKS Cura "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
+    set(CPACK_PACKAGE_EXECUTABLES Cura "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
+    set(CPACK_PACKAGE_INSTALL_DIRECTORY "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
 endif()
 
 STRING(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" CPACK_SYSTEM_NAME)
