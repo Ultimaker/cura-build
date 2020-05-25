@@ -1,7 +1,7 @@
 find_package(GPG REQUIRED)
 find_package(SHA1Sum REQUIRED)
 
-set(PACKAGE_FILE "Cura-${CURA_VERSION}.AppImage")
+set(PACKAGE_FILE "Ultimaker_Cura-${CURA_VERSION}.AppImage")
 
 add_custom_command(
     TARGET signing PRE_BUILD
