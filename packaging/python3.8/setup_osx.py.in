@@ -1,0 +1,104 @@
+import sys
+import os.path
+
+from cx_Freeze import setup, Executable, hooks
+
+def load_scipy(finder, module):
+    finder.IncludePackage("scipy._lib")
+    finder.IncludePackage("scipy.misc")
+    finder.IncludePackage("scipy.sparse.csgraph._validation")
+    finder.IncludePackage("scipy.sparse._csparsetools")
+
+hooks.load_scipy = load_scipy
+
+def load_pyqt5_qtquick(finder, module):
+    finder.IncludeModule("PyQt5.QtCore")
+    finder.IncludeModule("PyQt5.QtGui")
+    finder.IncludeModule("PyQt5.QtQml")
+    finder.IncludeModule("PyQt5.QtNetwork")
+    finder.IncludeModule("PyQt5.QtWebSockets")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_4_1_Core")
+
+hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
+
+search_path = sys.path.copy()
+search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/")
+search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/")
+search_path.insert(3, "@CMAKE_PREFIX_PATH@/lib")
+
+# Dependencies are automatically detected, but it might need
+# fine tuning.
+build_options = {
+#    "build_exe": "package",
+    "path": search_path,
+    "packages": [
+        "appdirs",
+        "packaging",
+        "cryptography",
+        "xml.etree",
+        "uuid",
+        "serial",
+        "zeroconf",
+        "requests",
+        "idna",
+        "UM",
+        "cura",
+        "stl",
+        "shapely",
+        "netifaces",
+        "networkx",
+        "trimesh",
+        "Savitar",
+        "PyQt5",
+        "PyQt5.QtDBus",
+        "Charon",
+        "logging",
+        "logging.config",
+        "logging.handlers",
+    ],
+    "include_files": [
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura", "plugins"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium", "plugins"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/UM/Qt/qml/UM", "qml/UM"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
+        #("@CMAKE_PREFIX_PATH@/lib/qml/Qt", "qml/Qt"),
+        #("@CMAKE_PREFIX_PATH@/lib/qml/QtQml", "qml/QtQml"),
+        #("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick", "qml/QtQuick"),
+        #("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick.2", "qml/QtQuick.2"),
+        #("@CMAKE_PREFIX_PATH@/lib/qml/QtCharts", "qml/QtCharts"),
+        #("@CMAKE_PREFIX_PATH@/lib/qml/QtDataVisualization", "qml/QtDataVisualization"),
+        #("@CMAKE_PREFIX_PATH@/lib/qml/QtGraphicalEffects", "qml/QtGraphicalEffects"),
+        #("@CMAKE_PREFIX_PATH@/lib/libgeos.dylib", "lib/python3.8/shapely/.dylibs/libgeos.dylib"),
+        #("@CMAKE_PREFIX_PATH@/lib/libgeos_c.1.dylib", "lib/python3.8/shapely/.dylibs/libgeos_c.1.dylib"),
+        #("@CMAKE_PREFIX_PATH@/lib/libopenctm.dylib", ""),  # For opening .CTM files
+    ],
+    "excludes": [ ],
+    "bin_path_includes": [
+        "@CMAKE_PREFIX_PATH@/lib",
+    ],
+}
+
+bdist_mac_options = {
+    "iconfile": "@CMAKE_SOURCE_DIR@/packaging/cura.icns",
+    "custom_info_plist": "@CMAKE_BINARY_DIR@/Info.plist",
+    "bundle_name": "Ultimaker Cura"
+}
+
+executables = [
+    Executable("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/cura_app.py", targetName = "cura")
+]
+
+setup(
+    name = "Ultimaker Cura",
+    version = "@CURA_VERSION_MAJOR@.@CURA_VERSION_MINOR@.@CURA_VERSION_PATCH@",
+    description = "3D Printing Software",
+    author = "Ultimaker B.V.",
+    url = "http://software.ultimaker.com/",
+    license = "GNU LESSER GENERAL PUBLIC LICENSE (LGPL)",
+
+    options = {"build_exe": build_options, "bdist_mac": bdist_mac_options },
+    executables = executables
+)

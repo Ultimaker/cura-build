@@ -1,4 +1,4 @@
-find_package(cx_freeze 5.0 REQUIRED)
+find_package(cx_Freeze 5.0 REQUIRED)
 
 configure_file(${CMAKE_CURRENT_LIST_DIR}/setup_win32.py.in setup.py @ONLY)
 add_custom_target(build_bundle)
