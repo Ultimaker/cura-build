@@ -917,13 +917,69 @@ Section "Uninstall"
 !endif
 
   ;Unregister file associations
-  ${UnRegisterExtension} ".amf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.amf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
-  ${UnRegisterExtension} ".3mf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
-  ${UnRegisterExtension} ".obj" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.obj.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
-  ${UnRegisterExtension} ".stl" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.stl.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
-  ${UnRegisterExtension} ".x3d" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".3mf"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".amf"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.amf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".ctm"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.ctm.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".dae"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.dae.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".glb"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.glb.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".gltf"  "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.gltf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".obj"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.obj.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".ply"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.ply.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".stl"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.stl.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".x3d"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+  ${UnRegisterExtension} ".zae"   "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.zae.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
   ${UnRegisterExtension} ".gcode" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.gcode.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
   ${UnRegisterExtension} ".g"     "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.g.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"
+
+
+
+Section /o "Open 3MF files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".3mf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "3D Manufacturing Format"
+SectionEnd
+
+Section /o "Open AMF files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".amf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Additive Manufacturing Format"
+SectionEnd
+
+Section /o "Open CTM files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".ctm" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Open Compressed Triangle Mesh"
+SectionEnd
+
+Section /o "Open DAE files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".dae" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "COLLADA Digital Asset Exchange"
+SectionEnd
+
+Section /o "Open GLB files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".glb" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "glTF Binary"
+SectionEnd
+
+Section /o "Open glTF files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".gltf" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "glTF Embedded JSON"
+SectionEnd
+
+Section /o "Open OBJ files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".obj" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.obj.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Wavefront OBJ"
+SectionEnd
+
+Section /o "Open PLY files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".ply" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.ply.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Stanford Triangle Format"
+SectionEnd
+
+Section "Open STL files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".stl" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.stl.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Stereolithography Mesh"
+SectionEnd
+
+Section /o "Open X3D files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".x3d" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.x3d.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "XML-based 3D model"
+SectionEnd
+
+Section /o "Open ZAE files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".zae" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.3mf.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "Compressed COLLADA Digital Asset Exchange"
+SectionEnd
+
+Section /o "Open GCODE files with Cura"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".gcode" "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.gcode.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "G-code toolpath"
+    ${RegisterExtension} "$INSTDIR\Cura.exe" ".g"     "@CPACK_PACKAGE_NAME_NO_WHITESPACES@.g.@CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@"     "G-code toolpath"
 
   ;Remove executable from MuiCache
   DeleteRegKey HKCR "Local Settings\Software\Microsoft\Windows\Shell\MuiCache\$INSTDIR\Cura.exe.ApplicationCompany"
