@@ -30,6 +30,10 @@ param (
     [string]$CloudAccountApiRoot = "https://account.ultimaker.com",
   [Parameter(Mandatory=$true)]
     [int32]$CloudApiVersion = 1,
+  [Parameter(Mandatory=$true)]
+    [string]$MarketplaceRoot = "https://marketplace.ultimaker.com",
+  [Parameter(Mandatory=$true)]
+    [string]$DigitalFactoryURL = "https://digitalfactory.ultimaker.com",
 
   [boolean]$EnableDebugMode = $true,
   [boolean]$EnableCuraEngineExtraOptimizationFlags = $true,
@@ -118,6 +122,8 @@ if ($BindSshVolume) {
   --env CURA_CLOUD_API_ROOT=$CuraCloudApiRoot `
   --env CURA_CLOUD_API_VERSION=$CuraCloudApiVersion `
   --env CURA_CLOUD_ACCOUNT_API_ROOT=$CuraCloudAccountApiRoot `
+  --env CURA_MARKETPLACE_ROOT=$MarketplaceRoot `
+  --env CURA_DIGITAL_FACTORY_URL=$DigitalFactoryURL
   --env CURA_DEBUG_MODE=$CURA_DEBUG_MODE `
   --env CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS=$CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS `
   --env CPACK_GENERATOR=$CPACK_GENERATOR `
