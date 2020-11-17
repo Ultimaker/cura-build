@@ -23,6 +23,6 @@ set(CPACK_PACKAGE_VERSION ${CURA_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cura 3D Printing Software")
 set(CPACK_PACKAGE_CONTACT "Arjen Hiemstra <a.hiemstra@ultimaker.com>")
 
-set(CPACK_GENERATOR "DragNDrop")
+set(CPACK_GENERATOR "productbuild")
 
 include(CPack)
