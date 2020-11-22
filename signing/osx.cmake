@@ -14,6 +14,12 @@ add_custom_command(
 
 install(DIRECTORY "${CMAKE_BINARY_DIR}/build/Ultimaker Cura.app" DESTINATION "." USE_SOURCE_PERMISSIONS)
 
+set(CPACK_GENERATOR "productbuild")
+
+if(CPACK_GENERATOR STREQUAL "productbuild")
+    set(CPACK_PACKAGE_NAME "Ultimaker_Cura.pkg")
+endif()
+
 set(CPACK_PACKAGE_NAME "Ultimaker_Cura")
 set(CPACK_PACKAGE_VENDOR "Ultimaker")
 set(CPACK_PACKAGE_VERSION_MAJOR ${CURA_MAJOR_VERSION})
@@ -22,7 +28,5 @@ set(CPACK_PACKAGE_VERSION_PATCH ${CURA_PATCH_VERSION})
 set(CPACK_PACKAGE_VERSION ${CURA_VERSION})
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Cura 3D Printing Software")
 set(CPACK_PACKAGE_CONTACT "Arjen Hiemstra <a.hiemstra@ultimaker.com>")
-
-set(CPACK_GENERATOR "productbuild")
 
 include(CPack)
