@@ -75,7 +75,7 @@ set -e
 docker run \
   ${DOCKER_EXTRA_ARGS} \
   --rm \
-  --user 1000:1000 \
+  --user $(id -u):$(id -g) \
   --volume "$(pwd)":/home/ultimaker/src \
   --env CURA_BUILD_OUTPUT_DIR=/home/ultimaker/src/output \
   --env CURA_BRANCH_OR_TAG="${CURA_BRANCH_OR_TAG}" \
