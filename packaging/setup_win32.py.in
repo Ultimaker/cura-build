@@ -49,7 +49,7 @@ def load_numpy(finder, module):
     for file in required_mkl_files:
         finder.IncludeFiles(os.path.join(npy_core_dir, file), file)
 
-hooks.load_numpy = load_numpy
+#hooks.load_numpy = load_numpy
 
 def load_scipy(finder, module):
     finder.IncludePackage("scipy._lib")
@@ -59,7 +59,7 @@ def load_scipy(finder, module):
     finder.IncludePackage("scipy.special._ufuncs_cxx")
     finder.IncludePackage("scipy.special.specfun")
 
-hooks.load_scipy = load_scipy
+#hooks.load_scipy = load_scipy
 
 # Trimesh data files
 trimesh_resources_path = os.path.join(os.path.dirname(trimesh.__file__), "resources")
@@ -136,6 +136,8 @@ build_options = {
         "idna",
         "UM",
         "cura",
+        "numpy",
+        "scipy",
         "stl",
         "shapely",
         "netifaces",
