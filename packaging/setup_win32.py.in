@@ -136,6 +136,7 @@ build_options = {
         "idna",
         "UM",
         "cura",
+        "sip",
         "stl",
         "shapely",
         "netifaces",

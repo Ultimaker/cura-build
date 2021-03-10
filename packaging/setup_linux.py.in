@@ -55,6 +55,7 @@ build_options = {
         "idna",
         "stl",
         "serial",
+        "sip",
         "shapely",
         "netifaces",
         "networkx",

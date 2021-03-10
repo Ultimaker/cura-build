@@ -46,6 +46,7 @@ build_options = {
         "cura",
         "stl",
         "shapely",
+        "sip",
         "netifaces",
         "networkx",
         "trimesh",
