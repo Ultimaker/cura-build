@@ -32,8 +32,8 @@ if os.path.exists("/etc/debian_version"):
     python_externalproject_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3/dist-packages/"
     python_install_dir = "@CMAKE_INSTALL_PREFIX@/lib/python3/dist-packages/"
 else:
-    python_externalproject_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.9/site-packages/"
-    python_install_dir = "@CMAKE_INSTALL_PREFIX@/lib/python3.9/site-packages/"
+    python_externalproject_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/"
+    python_install_dir = "@CMAKE_INSTALL_PREFIX@/lib/python3.8/site-packages/"
 search_path.insert(1, python_externalproject_dir)
 search_path.insert(2, python_install_dir)
 
@@ -78,6 +78,9 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml"),
         ("@CMAKE_PREFIX_PATH@/lib/libgeos.so", ""),    # For shapely
         ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.so", ""),  # For shapely
+        ("@CMAKE_PREFIX_PATH@/lib/liblzma.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libnlopt.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libopenblas.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libopenctm.so", ""), # For opening .CTM files
         ("@CMAKE_PREFIX_PATH@/openssl.cnf", ""),
     ],
