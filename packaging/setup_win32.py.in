@@ -114,8 +114,8 @@ def load_shapely(finder, module):
 hooks.load_shapely = load_shapely
 
 search_path = sys.path.copy()
-search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.9/site-packages/")
-search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.9/site-packages/")
+search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/")
+search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/")
 
 # Dependencies are automatically detected, but it might need
 # fine tuning.
@@ -155,7 +155,7 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", ""),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura/plugins", ""),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", ""),
-        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.9/site-packages/UM/Qt/qml/UM", "qml/UM"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/UM/Qt/qml/UM", "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/bin/openctm.dll", ""), # For opening .CTM files
@@ -182,7 +182,6 @@ executables = [
                targetName = "CuraCLI.exe",
                icon="@CMAKE_SOURCE_DIR@/packaging/cura.ico"
                ),
-    
 ]
 
 setup(
