@@ -159,6 +159,7 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/bin/openctm.dll", ""), # For opening .CTM files
+        ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/numpy.libs", "lib/numpy/core"), # Due to a bug in cx_Freeze, these Numpy extensions don't get packaged properly. See https://github.com/marcelotduarte/cx_Freeze/issues/653
         # Preinstalled PyQt5 installation
         (PyQt5.__path__[0] + "/Qt/qml/Qt", "qml/Qt"),
         (PyQt5.__path__[0] + "/Qt/qml/QtQml", "qml/QtQml"),
