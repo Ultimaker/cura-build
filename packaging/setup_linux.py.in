@@ -37,6 +37,7 @@ build_options = {
         "zeroconf",
         "requests",
         "idna",
+        "scipy.spatial",
         "stl",
         "serial",
         "sip",
