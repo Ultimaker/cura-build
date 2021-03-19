@@ -23,8 +23,8 @@ def load_pyqt5_qtquick(finder, module):
 hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
 search_path = sys.path.copy()
-search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.9/site-packages/")
-search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.9/site-packages/")
+search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/")
+search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/")
 search_path.insert(3, "@CMAKE_PREFIX_PATH@/lib")
 
 # Dependencies are automatically detected, but it might need
@@ -45,8 +45,9 @@ build_options = {
         "UM",
         "cura",
         "stl",
-        "shapely",
         "sip",
+        "scipy.spatial",
+        "shapely",
         "netifaces",
         "networkx",
         "trimesh",
@@ -61,7 +62,7 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura", "plugins"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium", "plugins"),
-        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.9/site-packages/UM/Qt/qml/UM", "qml/UM"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/UM/Qt/qml/UM", "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/qml/Qt", "qml/Qt"),
@@ -71,14 +72,26 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtCharts", "qml/QtCharts"),
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtDataVisualization", "qml/QtDataVisualization"),
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtGraphicalEffects", "qml/QtGraphicalEffects"),
-        ("@CMAKE_PREFIX_PATH@/lib/libgeos.dylib", "lib/python3.9/shapely/.dylibs/libgeos.dylib"),
-        ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.1.dylib", "lib/python3.9/shapely/.dylibs/libgeos_c.1.dylib"),
+        ("@CMAKE_PREFIX_PATH@/lib/libgeos.dylib", "lib/python3.8/shapely/.dylibs/libgeos.dylib"),
+        ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.1.dylib", "lib/python3.8/shapely/.dylibs/libgeos_c.1.dylib"),
         ("@CMAKE_PREFIX_PATH@/lib/libopenctm.dylib", ""),  # For opening .CTM files
+        ("@CMAKE_PREFIX_PATH@/lib/libopenblas.dylib", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libnlopt.dylib", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/numpy/.dylibs/libgfortran.3.dylib", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/numpy/.dylibs/libquadmath.0.dylib", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/numpy/.dylibs/libgcc_s.1.dylib", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/numpy/.dylibs/libopenblas.0.dylib", ""),
     ],
     "excludes": [ ],
     "zip_include_packages": [ "PyQt5" ],
     "bin_path_includes": [
         "@CMAKE_PREFIX_PATH@/lib",
+    ],
+    "bin_excludes": [
+        "libgfortran.3.dylib",
+        "libquadmath.0.dylib",
+        "libgcc_s.1.dylib",
+        "libopenblas.0.dylib"
     ],
 }
 
