@@ -20,7 +20,7 @@ fi
 # (Optional) OSX SDK version to use
 if [ -n "${CURA_OSX_SDK_VERSION}" ]; then
     echo "Using ${CURA_OSX_SDK_VERSION} as the OSX SDK version."
-    export CMAKE_OSX_SYSROOT="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${CURA_OSX_SDK_VERSION}.sdk"
+    export CMAKE_OSX_SYSROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX${CURA_OSX_SDK_VERSION}.sdk"
 
     echo "Set CMAKE_OSX_SYSROOT to ${CMAKE_OSX_SYSROOT}"
 fi
@@ -28,5 +28,5 @@ fi
 export CMAKE_CXX_FLAGS="-stdlib=libc++"
 export CXXFLAGS="-stdlib=libc++"
 
-export CC="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang"
-export CXX="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
+export CC="/Library/Developer/CommandLineTools/usr/bin/clang"
+export CXX="/Library/Developer/CommandLineTools/usr/bin/clang++"
