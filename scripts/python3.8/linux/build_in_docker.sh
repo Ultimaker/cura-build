@@ -16,7 +16,7 @@ if [[ -z "${CURA_BUILD_ENV_PATH}" ]]; then
 fi
 
 # Make sure that a directory for saving the resulting AppImage exists
-CURA_BUILD_OUTPUT_DIR="${CURA_BUILD_OUTPUT_DIR:-/home/ultimaker/output}"
+CURA_BUILD_OUTPUT_DIR="${CURA_BUILD_OUTPUT_DIR:-/home/ultimaker/src/output}"
 if [[ ! -d "${CURA_BUILD_OUTPUT_DIR}" ]]; then
     mkdir -p "${CURA_BUILD_OUTPUT_DIR}"
 fi
@@ -32,7 +32,7 @@ export LIBCHARON_BRANCH_OR_TAG="${LIBCHARON_BRANCH_OR_TAG:-master}"
 export CURA_VERSION_MAJOR="${CURA_VERSION_MAJOR:-9}"
 export CURA_VERSION_MINOR="${CURA_VERSION_MINOR:-9}"
 export CURA_VERSION_PATCH="${CURA_VERSION_PATCH:-9}"
-export CURA_VERSION_EXTRA="${CURA_VERSION_EXTRA:-Python3.8-Qt5.15.2}"
+export CURA_VERSION_EXTRA="${CURA_VERSION_EXTRA:-}"
 
 export CURA_BUILD_TYPE="${CURA_BUILD_TYPE}"
 export CURA_NO_INSTALL_PLUGINS="${CURA_NO_INSTALL_PLUGINS}"
@@ -50,6 +50,7 @@ export CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="${CURA_ENABLE_CURAENGINE
 source /opt/rh/devtoolset-8/enable
 export PATH="${CURA_BUILD_ENV_PATH}/bin:${PATH}"
 export PKG_CONFIG_PATH="${CURA_BUILD_ENV_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
 
 mkdir "${CURA_BUILD_OUTPUT_DIR}/build"
 mkdir "${CURA_BUILD_OUTPUT_DIR}/appimages"
