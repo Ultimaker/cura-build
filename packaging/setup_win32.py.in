@@ -31,6 +31,7 @@ def load_numpy(finder, module):
         "libiomp5md.dll",
         "libimalloc.dll",
         "libmmd.dll",
+        "libifcoremd.dll",
     ]
 
     if platform.architecture()[0] == "32bit":
