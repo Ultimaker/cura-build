@@ -98,6 +98,6 @@ docker run \
   --env CURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE}" \
   --env CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="ON" \
   "${CURA_BUILD_ENV_DOCKER_IMAGE}" \
-  /home/ultimaker/src/scripts/python3.8/linux/build_in_docker.sh
+  /home/ultimaker/src/docker/linux/build_in_docker.sh
 
 cd "${__old_pwd}"
