@@ -7,7 +7,7 @@ set -e
 
 # Get where this script resides
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-ROOT_DIR="${SCRIPT_DIR}/../../.."
+ROOT_DIR="${SCRIPT_DIR}/../.."
 
 # Make sure that cura-build-environment is present
 if [[ -z "${CURA_BUILD_ENV_PATH}" ]]; then
@@ -16,7 +16,7 @@ if [[ -z "${CURA_BUILD_ENV_PATH}" ]]; then
 fi
 
 # Make sure that a directory for saving the resulting AppImage exists
-CURA_BUILD_OUTPUT_DIR="${CURA_BUILD_OUTPUT_DIR:-/home/ultimaker/output}"
+CURA_BUILD_OUTPUT_DIR="${CURA_BUILD_OUTPUT_DIR:-/home/ultimaker/src/output}"
 if [[ ! -d "${CURA_BUILD_OUTPUT_DIR}" ]]; then
     mkdir -p "${CURA_BUILD_OUTPUT_DIR}"
 fi
@@ -44,12 +44,12 @@ export CURA_MARKETPLACE_ROOT="${CURA_MARKETPLACE_ROOT:-https://marketplace.ultim
 export CURA_DIGITAL_FACTORY_URL="${CURA_DIGITAL_FACTORY_URL:-https://digitalfactory.ultimaker.com}"
 
 export CURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE:-ON}"
-export CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="${CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS:-ON}"
 
 # Set up development environment variables
-source /opt/rh/devtoolset-7/enable
+source /opt/rh/devtoolset-8/enable
 export PATH="${CURA_BUILD_ENV_PATH}/bin:${PATH}"
 export PKG_CONFIG_PATH="${CURA_BUILD_ENV_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
 
 mkdir "${CURA_BUILD_OUTPUT_DIR}/build"
 mkdir "${CURA_BUILD_OUTPUT_DIR}/appimages"
@@ -70,6 +70,8 @@ cmake3 "${ROOT_DIR}" \
     -DCURA_CLOUD_ACCOUNT_API_ROOT="${CURA_CLOUD_ACCOUNT_API_ROOT}" \
     -DCURA_MARKETPLACE_ROOT="${CURA_MARKETPLACE_ROOT}" \
     -DCURA_DIGITAL_FACTORY_URL="${CURA_DIGITAL_FACTORY_URL}" \
+    -DCURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE}" \
+    -DCURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="ON" \
     -DSIGN_PACKAGE=OFF
 make
 make package
