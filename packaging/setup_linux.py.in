@@ -11,29 +11,13 @@ def load_scipy(finder, module):
 
 hooks.load_scipy = load_scipy
 
-def load_pyqt5_qtgui(finder, module):
-    finder.IncludeModule("PyQt5.QtCore")
-
-hooks.load_PyQt5_QtGui = load_pyqt5_qtgui
-
-def load_pyqt5_qtquick(finder, module):
-    finder.IncludeModule("PyQt5.QtCore")
-    finder.IncludeModule("PyQt5.QtGui")
-    finder.IncludeModule("PyQt5.QtQml")
-    finder.IncludeModule("PyQt5.QtNetwork")
-    finder.IncludeModule("PyQt5.QtWebSockets")
-    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
-    finder.IncludeModule("PyQt5._QOpenGLFunctions_4_1_Core")
-
-hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
-
 search_path = sys.path.copy()
 if os.path.exists("/etc/debian_version"):
     python_externalproject_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3/dist-packages/"
     python_install_dir = "@CMAKE_INSTALL_PREFIX@/lib/python3/dist-packages/"
 else:
-    python_externalproject_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.5/site-packages/"
-    python_install_dir = "@CMAKE_INSTALL_PREFIX@/lib/python3.5/site-packages/"
+    python_externalproject_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/"
+    python_install_dir = "@CMAKE_INSTALL_PREFIX@/lib/python3.8/site-packages/"
 search_path.insert(1, python_externalproject_dir)
 search_path.insert(2, python_install_dir)
 
@@ -53,8 +37,10 @@ build_options = {
         "zeroconf",
         "requests",
         "idna",
+        "scipy.spatial",
         "stl",
         "serial",
+        "sip",
         "shapely",
         "netifaces",
         "networkx",
@@ -75,12 +61,50 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/plugins", "qt/plugins"),
         ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml"),
+        ("@CMAKE_PREFIX_PATH@/lib/libbz2.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libcrypto.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libffi.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libgeos.so", ""),    # For shapely
         ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.so", ""),  # For shapely
+        ("@CMAKE_PREFIX_PATH@/lib/liblzma.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libnlopt.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libopenblas.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libopenctm.so", ""), # For opening .CTM files
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Charts.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Concurrent.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Core.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5DataVisualization.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5DBus.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Gui.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Network.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5OpenGL.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Qml.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5QmlModels.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5QmlWorkerScript.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Quick3DAssetImport.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Quick3DRender.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Quick3DRuntimeRender.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Quick3D.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Quick3DUtils.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5QuickControls2.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5QuickParticles.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5QuickShapes.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5QuickTemplates2.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5QuickTest.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5QuickWidgets.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5RemoteObjects.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5SerialBus.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Sql.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Svg.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Test.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5WebSockets.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Widgets.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libQt5Xml.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libssl.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/numpy.libs", "lib/numpy/core"), # Due to a bug in cx_Freeze, these Numpy extensions don't get packaged properly. See https://github.com/marcelotduarte/cx_Freeze/issues/653
         ("@CMAKE_PREFIX_PATH@/openssl.cnf", ""),
     ],
-    "optimize": 2,
+    "optimize": 1,
     "bin_path_includes": [
         "@CMAKE_PREFIX_PATH@/lib",
         "/lib",

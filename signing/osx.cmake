@@ -8,7 +8,7 @@ add_custom_command(
 
 add_custom_command(
     TARGET signing PRE_BUILD
-    COMMAND codesign -s ${OSX_CODESIGN_IDENTITY} --deep "Ultimaker Cura.app"
+    COMMAND ${CMAKE_CURRENT_LIST_DIR}/sign_cura_macOS.sh
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/build
 )
 

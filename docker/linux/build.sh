@@ -14,7 +14,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ROOT_DIR="${SCRIPT_DIR}/../../.."
 
 # Cura release configurations
-CURA_BUILD_ENV_DOCKER_IMAGE="${CURA_BUILD_ENV_DOCKER_IMAGE:-ultimaker/cura-build-environment:centos-latest}"
+CURA_BUILD_ENV_DOCKER_IMAGE="${CURA_BUILD_ENV_DOCKER_IMAGE:-ultimaker/cura-build-environment:centos7-master}"
 
 CURA_BRANCH_OR_TAG="${CURA_BRANCH_OR_TAG:-master}"
 URANIUM_BRANCH_OR_TAG="${URANIUM_BRANCH_OR_TAG:-master}"
@@ -38,7 +38,6 @@ CURA_MARKETPLACE_ROOT="${CURA_MARKETPLACE_ROOT:-https://marketplace.ultimaker.co
 CURA_DIGITAL_FACTORY_URL="${CURA_DIGITAL_FACTORY_URL:-https://digitalfactory.ultimaker.com}"
 
 CURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE:-ON}"
-CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="${CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS:-ON}"
 
 if [ -t 0 ]; then
   IS_INTERACTIVE=yes
@@ -76,7 +75,6 @@ set -e
 #
 docker run \
   ${DOCKER_EXTRA_ARGS} \
-  --rm \
   --user $(id -u):$(id -g) \
   --volume "$(pwd)":/home/ultimaker/src \
   --env CURA_BUILD_OUTPUT_DIR=/home/ultimaker/src/output \
@@ -98,8 +96,8 @@ docker run \
   --env CURA_MARKETPLACE_ROOT="${CURA_MARKETPLACE_ROOT}" \
   --env CURA_DIGITAL_FACTORY_URL="${CURA_DIGITAL_FACTORY_URL}" \
   --env CURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE}" \
-  --env CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="${CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS}" \
+  --env CURA_ENABLE_CURAENGINE_EXTRA_OPTIMIZATION_FLAGS="ON" \
   "${CURA_BUILD_ENV_DOCKER_IMAGE}" \
-  /home/ultimaker/src/scripts/python3.5/linux/build_in_docker.sh
+  /home/ultimaker/src/docker/linux/build_in_docker.sh
 
 cd "${__old_pwd}"
