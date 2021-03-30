@@ -148,6 +148,7 @@ build_options = {
         "Savitar",
         "PyQt5.QtDBus",
         "comtypes",
+        "pywin32",
         "Charon",
         "logging",
         "logging.config",
