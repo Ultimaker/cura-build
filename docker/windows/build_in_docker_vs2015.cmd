@@ -41,7 +41,7 @@ echo ========== Build Variables END ==========
 
 echo Prepare environment variables ...
 call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-set PATH=C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;%PATH%
+set PATH=C:\mingw\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin;%PATH%
 set PATH=%CURA_BUILD_ENV_PATH%\bin;%PATH%
 
 set cura_build_work_dir=C:\temp\cura-build
