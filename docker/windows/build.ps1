@@ -54,7 +54,7 @@ $outputDirName = "windows-installers"
 $buildOutputDirName = "build"
 
 New-Item $outputDirName -ItemType "directory" -Force
-$repoRoot = Join-Path $PSScriptRoot -ChildPath "..\..\.." -Resolve
+$repoRoot = Join-Path $PSScriptRoot -ChildPath "..\.." -Resolve
 $outputRoot = Join-Path (Get-Location).Path -ChildPath $outputDirName -Resolve
 
 $CURA_DEBUG_MODE = "OFF"
