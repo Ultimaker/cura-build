@@ -1018,8 +1018,15 @@ SectionEnd
   ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${_VERSION}" "UninstallString"
   ${CharStrip} '"' $0 $0
 
-  StrCmp $0 "" _end_${_ID}
+  StrCmp $0 "" _alt_${_ID} _quest_${_ID}
 
+_alt_${_ID}:
+  ReadRegStr $0 HKLM "Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\${_VERSION}" "UninstallString"
+  ${CharStrip} '"' $0 $0
+
+  StrCmp $0 "" _end_${_ID} _quest_${_ID}
+
+_quest_${_ID}:
   MessageBox MB_YESNOCANCEL|MB_ICONQUESTION \
     "${_NAME} is already installed.$\n$\nDo you want to uninstall the old version before installing the new version?" \
     /SD IDNO IDYES _uninst_${_ID} IDNO _end_${_ID}
@@ -1077,6 +1084,7 @@ Function .onInit
   !insertmacro uninstallVersion "Ultimaker Cura 4.6" "Ultimaker Cura 4.6" "U46"
   !insertmacro uninstallVersion "Ultimaker Cura 4.7" "Ultimaker Cura 4.7" "U47"
   !insertmacro uninstallVersion "Ultimaker Cura 4.8.0" "Ultimaker Cura 4.8.0" "U480"
+  !insertmacro uninstallVersion "Ultimaker Cura 4.9.0" "Ultimaker Cura 4.9.0" "U490"
   !insertmacro uninstallVersion "Ultimaker Cura @CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@" "@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "latest"
 
 inst:
