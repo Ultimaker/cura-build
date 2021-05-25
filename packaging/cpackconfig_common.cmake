@@ -58,10 +58,6 @@ else()
     set(CPACK_PACKAGE_INSTALL_DIRECTORY "Ultimaker Cura ${CURA_BUILDTYPE} ${CURA_FULL_VERSION}")
 endif()
 
-# Forcing the CPack System Name to be either win32 or win64 for consistency purposes
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64")
-    set(CPACK_SYSTEM_NAME "win64")
-else()
-    set(CPACK_SYSTEM_NAME "win32")
-endif()
+# Use processor name
+STRING(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" CPACK_SYSTEM_NAME)
 set(CPACK_PACKAGE_FILE_NAME "${CPACK_FILE_NAME_NO_SPACES}-${CURA_VERSION}-${CPACK_SYSTEM_NAME}")
