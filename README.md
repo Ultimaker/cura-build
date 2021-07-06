@@ -91,11 +91,11 @@ On Windows, the following dependencies are needed for building:
 * **git for windows** (https://git-for-windows.github.io/) The `git` command should be available on your `%PATH%`. Make sure that the `cmd` directory in the git for windows installation directory is on the `%PATH%` and *not* its `bin` directory, otherwise mingw32 will complain about `sh.exe` being on the path.
 * **CMake** (http://www.cmake.org/) Once CMake is installed make sure it is available on your `%PATH%`. Check this by running `cmake --version` in the Windows console.
 * **MinGW-W64** >= 5.3.0 (http://mingw-w64.org/doku.php) Once installed, its `bin` directory should be available on your `%PATH%`. Test this by running `mingw32-make --version` in the Windows console.
-* **Python** 3.5 (http://python.org/, note that the version "3.5" is hardcoded across this project)
+* **Python** 3.8 (http://python.org/, note that the version "3.8" is hardcoded across this project)
 * **NumPy** (http://www.lfd.uci.edu/~gohlke/pythonlibs/#numpy)
-  You'll need to download a .whl from this site for Python 3.5 and install it via `pip install <your_whl_file>.whl`.
+  You'll need to download a .whl from this site for Python 3.8 and install it via `pip install <your_whl_file>.whl`.
 * **SciPy** (http://www.lfd.uci.edu/~gohlke/pythonlibs/#scipy)
-  You'll need to download a .whl from this site for Python 3.5 and install it via `pip install <your_whl_file>.whl`.
+  You'll need to download a .whl from this site for Python 3.8 and install it via `pip install <your_whl_file>.whl`.
 * **PySerial** from https://pypi.python.org/pypi/pyserial/3.2.1
   It can be easily installed via `pip3 install pyserial`
 * **PyQt5** from https://pypi.python.org/pypi/PyQt5/5.7
@@ -107,7 +107,7 @@ On Windows, the following dependencies are needed for building:
 * **PyCollada** from https://pypi.org/project/pycollada/0.6
   It can be easily installed via `pip3 install pycollada`
 * **Shapely** from https://pypi.python.org/pypi/Shapely/1.6.4.post2
-  It can be easily installed via `pip3 install shapely[vectorized]`. If it doesn't work, you'll need to download a .whl from https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely for Python 3.5 and install it via `pip install <your_whl_file>.whl`.
+  It can be easily installed via `pip3 install shapely[vectorized]`. If it doesn't work, you'll need to download a .whl from https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely for Python 3.8 and install it via `pip install <your_whl_file>.whl`.
 * **Zeroconf** from https://pypi.python.org/pypi/zeroconf/0.17.6
   It can be easily installed via `pip3 install zeroconf`
 * **NumPy-STL** from https://pypi.python.org/pypi/numpy-stl/2.0.0
@@ -171,25 +171,26 @@ cura-build can build CentOS/RHEL packages of Cura.
 Dependencies:
 
 * gcc-gfortran 
-* python34.x86_64 
-* python34-devel.x86_64 
-* python34-numpy.x86_64 
+* python38.x86_64 
+* python38-devel.x86_64 
+* python38-numpy.x86_64 
 * pyserial.noarch 
 * PyOpenGL.noarch 
-* python34-setuptools.noarch 
+* python38-setuptools.noarch 
 * wxPython.x86_64 
 * libstdc++-static.x86_64 
 * libstdc++-devel.x86_64 
 * openssl.x86_64 
 * openblas-devel.x86_64 
-* python34-numpy-f2py.x86_64
+* python38-numpy-f2py.x86_64
 
 To build, make sure these dependencies are installed, then clone this repository and run the following commands from your clone:
 
 ```shell
-sudo yum install gcc-gfortran python34.x86_64 python34-devel.x86_64 python34-numpy.x86_64 pyserial.noarch PyOpenGL.noarch python34-setuptools.noarch wxPython.x86_64 libstdc++-static.x86_64 libstdc++-devel.x86_64 openssl.x86_64 openblas-devel.x86_64 python34-numpy-f2py.x86_64
+sudo yum install gcc-gfortran python38.x86_64 python38-devel.x86_64 python38-numpy.x86_64 pyserial.noarch PyOpenGL.noarch python38-setuptools.noarch wxPython.x86_64 libstdc++-static.x86_64 libstdc++-devel.x86_64 openssl.x86_64 openblas-devel.x86_64 python38-numpy-f2py.x86_64
 ```
-1. download and install scipy from https://github.com/scipy/scipy/releases be sure to use python 3.5, eg. using sudo python3 setup.py 2. install (version in repository is for python 2.7)
+1. download and install scipy from https://github.com/scipy/scipy/releases be sure to use python 3.8, eg. using sudo python3 setup.py
+2. install (version in repository is for python 2.7)
 3. download and install CMake from https://cmake.org/download/ and configure CMake to use ssl
 4. download and install Qt5 from https://www.qt.io/download/
 5. download and install PyQt5 from https://www.riverbankcomputing.com/software/pyqt/download5
