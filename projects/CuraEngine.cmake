@@ -17,8 +17,6 @@ elseif (BUILD_OS_OSX)
     endif()
 endif()
 
-list(APPEND extra_cmake_args -DCMAKE_CXX_FLAGS="-std=c++17")
-
 ExternalProject_Add(CuraEngine
     GIT_REPOSITORY https://github.com/ultimaker/CuraEngine
     GIT_TAG origin/${CURAENGINE_BRANCH_OR_TAG}
