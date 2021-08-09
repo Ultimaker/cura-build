@@ -81,7 +81,7 @@ cd cura-build
 mkdir build
 cd build
 cmake ..
-make
+make package
 ```
 
 ## Windows
@@ -132,7 +132,7 @@ mkdir build
 cd build
 ..\env_win64.bat
 cmake -G "MinGW Makefiles" ..
-mingw32-make
+mingw32-make package
 ```
 
 Before make package - copy arduino to cura-build/
@@ -161,7 +161,7 @@ cd build
 
 # Build and package
 cmake ..
-make
+make package
 ```
 
 ## CentOS/Linux
@@ -210,5 +210,5 @@ cd build
 
 # Build and package
 cmake ..
-make
+make package
 ```
