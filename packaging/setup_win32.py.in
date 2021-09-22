@@ -22,7 +22,7 @@ def load_numpy(finder, module):
     finder.IncludePackage("numpy.linalg._umath_linalg")
 
     # Include all MKL files that are needed to get Numpy with MKL working.
-    npy_core_dir = os.path.join(module.path[0], "core")
+    npy_dll_dir = os.path.join(module.path[0], "DLLs")
     required_mkl_files = [
         "mkl_intel_thread.dll",
         "mkl_core.dll",
@@ -48,7 +48,7 @@ def load_numpy(finder, module):
         ])
 
     for file in required_mkl_files:
-        finder.IncludeFiles(os.path.join(npy_core_dir, file), file)
+        finder.IncludeFiles(os.path.join(npy_dll_dir, file), file)
 
 hooks.load_numpy = load_numpy
 
