@@ -103,6 +103,8 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/libssl.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/numpy.libs", "lib/numpy/core"), # Due to a bug in cx_Freeze, these Numpy extensions don't get packaged properly. See https://github.com/marcelotduarte/cx_Freeze/issues/653
         ("@CMAKE_PREFIX_PATH@/openssl.cnf", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/scipy.libs/libopenblasp-r0-085ca80a.3.9.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/scipy.libs/libgfortran-ed201abd.so.3.0.0", ""),
     ],
     "optimize": 1,
     "bin_path_includes": [
