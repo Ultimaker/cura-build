@@ -65,7 +65,6 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/UM/Qt/qml/UM", "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
-        ("@CMAKE_PREFIX_PATH@/lib/qml/Qt", "qml/Qt"),
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtQml", "qml/QtQml"),
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick", "qml/QtQuick"),
         ("@CMAKE_PREFIX_PATH@/lib/qml/QtQuick.2", "qml/QtQuick.2"),
