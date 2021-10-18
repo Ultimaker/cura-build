@@ -12,13 +12,13 @@ def load_scipy(finder, module):
 hooks.load_scipy = load_scipy
 
 def load_pyqt5_qtquick(finder, module):
-    finder.IncludeModule("PyQt5.QtCore")
-    finder.IncludeModule("PyQt5.QtGui")
-    finder.IncludeModule("PyQt5.QtQml")
-    finder.IncludeModule("PyQt5.QtNetwork")
-    finder.IncludeModule("PyQt5.QtWebSockets")
-    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
-    finder.IncludeModule("PyQt5._QOpenGLFunctions_4_1_Core")
+    finder.IncludeModule("PyQt6.QtCore")
+    finder.IncludeModule("PyQt6.QtGui")
+    finder.IncludeModule("PyQt6.QtQml")
+    finder.IncludeModule("PyQt6.QtNetwork")
+    finder.IncludeModule("PyQt6.QtWebSockets")
+    finder.IncludeModule("PyQt6._QOpenGLFunctions_2_0")
+    finder.IncludeModule("PyQt6._QOpenGLFunctions_4_1_Core")
 
 hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
@@ -52,7 +52,7 @@ build_options = {
         "networkx",
         "trimesh",
         "Savitar",
-        "PyQt5.QtDBus",
+        "PyQt6.QtDBus",
         "Charon",
         "logging",
         "logging.config",
@@ -83,7 +83,7 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/numpy/.dylibs/libopenblas.0.dylib", ""),
     ],
     "excludes": [ ],
-    "zip_include_packages": [ "PyQt5" ],
+    "zip_include_packages": [ "PyQt6" ],
     "bin_path_includes": [
         "@CMAKE_PREFIX_PATH@/lib",
     ],
