@@ -86,7 +86,8 @@ build_options = {
         "libgfortran.3.dylib",
         "libquadmath.0.dylib",
         "libgcc_s.1.dylib",
-        "libopenblas.0.dylib"
+        "libopenblas.0.dylib",
+        "libqmlxmllistmodelplugin.dylib"
     ],
 }
 
