@@ -87,7 +87,7 @@ build_options = {
         "libquadmath.0.dylib",
         "libgcc_s.1.dylib",
         "libopenblas.0.dylib",
-        "libqmlxmllistmodelplugin.dylib"
+        "@CMAKE_PREFIX_PATH@/lib/qml/QtQml/XmlListModel/libqmlxmllistmodelplugin.dylib"
     ],
 }
 
