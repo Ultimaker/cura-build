@@ -40,8 +40,7 @@ echo
 echo ========== Build Variables END ==========
 
 echo Prepare environment variables ...
-call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-set PATH=C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;%PATH%
+call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" amd64
 set PATH=%CURA_BUILD_ENV_PATH%\bin;%PATH%
 
 set cura_build_work_dir=C:\temp\cura-build
@@ -73,7 +72,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ^
       -DCURA_DIGITAL_FACTORY_URL="%CURA_DIGITAL_FACTORY_URL%" ^
       -DCURA_CLOUD_ACCOUNT_API_ROOT="%CURA_CLOUD_ACCOUNT_API_ROOT%" %CMAKE_EXTRA_ARGS% ^
       -DCURA_DEBUGMODE=%CURA_DEBUG_MODE% ^
-      -DCURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS="%CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS%" ^
+      -DCURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS="ON" ^
       -DCPACK_GENERATOR="%CPACK_GENERATOR%" ^
       -DCURA_MSI_PRODUCT_GUID="%CURA_MSI_PRODUCT_GUID%" ^
       -DCURA_MSI_UPGRADE_GUID="%CURA_MSI_UPGRADE_GUID%" ^
