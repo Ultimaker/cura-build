@@ -78,7 +78,6 @@ cmake -DCMAKE_BUILD_TYPE=Release ^
       -DCURA_MSI_UPGRADE_GUID="%CURA_MSI_UPGRADE_GUID%" ^
       -G "NMake Makefiles" ^
       %CURA_BUILD_SRC_PATH%
-nmake
 nmake package
 
 rem Copy all build data
