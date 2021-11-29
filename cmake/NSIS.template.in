@@ -1081,6 +1081,7 @@ Function .onInit
   !insertmacro uninstallVersion "Ultimaker Cura 4.9.1" "Ultimaker Cura 4.9.1" "U491"
   !insertmacro uninstallVersion "Ultimaker Cura 4.10.0" "Ultimaker Cura 4.10.0" "U410"
   !insertmacro uninstallVersion "Ultimaker Cura 4.11.0" "Ultimaker Cura 4.11.0" "U411"
+  !insertmacro uninstallVersion "Ultimaker Cura 4.12.0" "Ultimaker Cura 4.12.0" "U412"
   !insertmacro uninstallVersion "Ultimaker Cura @CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@.@CPACK_PACKAGE_VERSION_PATCH@" "@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@" "latest"
 inst:
 
