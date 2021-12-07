@@ -4,7 +4,7 @@ import os.path
 import platform
 
 # Importing preinstalled modules to get their paths
-import PyQt6
+import PyQt5
 import numpy
 import trimesh
 import shapely
@@ -78,22 +78,22 @@ for file_name in trimesh_resources_required_files:
     item = (os.path.join(trimesh_resources_path, file_name), os.path.join("trimesh", "resources", file_name))
     zip_includes.append(item)
 
-def load_pyqt6_qtquick(finder, module):
-    finder.IncludeModule("PyQt6.QtCore")
-    finder.IncludeModule("PyQt6.QtGui")
-    finder.IncludeModule("PyQt6.QtQml")
-    finder.IncludeModule("PyQt6.QtNetwork")
-    finder.IncludeModule("PyQt6.QtWebSockets")
-    finder.IncludeModule("PyQt6._QOpenGLFunctions_2_0")
-    finder.IncludeModule("PyQt6._QOpenGLFunctions_2_1")
-    finder.IncludeModule("PyQt6._QOpenGLFunctions_4_1_Core")
+def load_pyqt5_qtquick(finder, module):
+    finder.IncludeModule("PyQt5.QtCore")
+    finder.IncludeModule("PyQt5.QtGui")
+    finder.IncludeModule("PyQt5.QtQml")
+    finder.IncludeModule("PyQt5.QtNetwork")
+    finder.IncludeModule("PyQt5.QtWebSockets")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_0")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_2_1")
+    finder.IncludeModule("PyQt5._QOpenGLFunctions_4_1_Core")
 
-hooks.load_PyQt6_QtQuick = load_pyqt6_qtquick
+hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 
-def load_pyqt6_qtnetwork(finder, module):
-    finder.IncludeModule("PyQt6.QtCore")
+def load_pyqt5_qtnetwork(finder, module):
+    finder.IncludeModule("PyQt5.QtCore")
 
-    qt_path = os.path.join(os.path.dirname(PyQt6.QtCore.__file__), "Qt", "bin")
+    qt_path = os.path.join(os.path.dirname(PyQt5.QtCore.__file__), "Qt", "bin")
     required_ssl_files = [
         "libeay32.dll",
         "ssleay32.dll",
@@ -101,7 +101,7 @@ def load_pyqt6_qtnetwork(finder, module):
     for file_name in required_ssl_files:
         finder.IncludeFiles(os.path.join(qt_path, file_name), file_name)
 
-hooks.load_PyQt6_QtNetwork = load_pyqt6_qtnetwork
+hooks.load_PyQt5_QtNetwork = load_pyqt5_qtnetwork
 
 def load_shapely(finder, module):
     finder.IncludeModule("shapely")
@@ -115,8 +115,8 @@ def load_shapely(finder, module):
 hooks.load_shapely = load_shapely
 
 search_path = sys.path.copy()
-search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.10/site-packages/")
-search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/")
+search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/")
+search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.8/site-packages/")
 
 # Dependencies are automatically detected, but it might need
 # fine tuning.
@@ -146,7 +146,7 @@ build_options = {
         "trimesh",
         "trimesh.resources",
         "Savitar",
-        "PyQt6.QtDBus",
+        "PyQt5.QtDBus",
         "comtypes",
         "Charon",
         "logging",
@@ -157,73 +157,73 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine.exe", ""),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura/plugins", ""),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium/plugins", ""),
-        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.10/site-packages/UM/Qt/qml/UM", "qml/UM"),
+        ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.8/site-packages/UM/Qt/qml/UM", "qml/UM"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/bin/openctm.dll", ""), # For opening .CTM files
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/concrt140.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/d3dcompiler_47.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/libcrypto-1_1-x64.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/libeay32.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/libEGL.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/libGLESv2.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/libssl-1_1-x64.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/msvcp140.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/msvcp140_1.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/msvcp140_2.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/opengl32sw.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Bluetooth.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Core.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5DBus.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Designer.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Gui.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Help.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Location.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Multimedia.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5MultimediaWidgets.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Network.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5NetworkAuth.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Nfc.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5OpenGL.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Positioning.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5PositioningQuick.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5PrintSupport.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Qml.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5QmlModels.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5QmlWorkerScript.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Quick.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Quick3D.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Quick3DAssetImport.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Quick3DRender.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Quick3DRuntimeRender.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Quick3DUtils.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5QuickControls2.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5QuickParticles.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5QuickShapes.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5QuickTemplates2.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5QuickTest.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5QuickWidgets.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5RemoteObjects.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Sensors.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5SerialPort.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Sql.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Svg.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Test.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5WebChannel.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5WebSockets.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Widgets.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5WinExtras.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5Xml.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/Qt5XmlPatterns.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/ssleay32.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/vcruntime140.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt/bin/vcruntime140_1.dll",""),
-        # Preinstalled PyQt6 installation
-        (PyQt6.__path__[0] + "/Qt/qml/Qt", "qml/Qt"),
-        (PyQt6.__path__[0] + "/Qt/qml/QtQml", "qml/QtQml"),
-        (PyQt6.__path__[0] + "/Qt/qml/QtQuick", "qml/QtQuick"),
-        (PyQt6.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
-        (PyQt6.__path__[0] + "/Qt/qml/QtGraphicalEffects", "qml/QtGraphicalEffects"),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/concrt140.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/d3dcompiler_47.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/libcrypto-1_1-x64.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/libeay32.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/libEGL.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/libGLESv2.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/libssl-1_1-x64.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/msvcp140.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/msvcp140_1.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/msvcp140_2.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/opengl32sw.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Bluetooth.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Core.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5DBus.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Designer.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Gui.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Help.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Location.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Multimedia.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5MultimediaWidgets.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Network.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5NetworkAuth.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Nfc.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5OpenGL.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Positioning.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5PositioningQuick.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5PrintSupport.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Qml.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5QmlModels.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5QmlWorkerScript.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Quick.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Quick3D.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Quick3DAssetImport.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Quick3DRender.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Quick3DRuntimeRender.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Quick3DUtils.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5QuickControls2.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5QuickParticles.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5QuickShapes.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5QuickTemplates2.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5QuickTest.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5QuickWidgets.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5RemoteObjects.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Sensors.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5SerialPort.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Sql.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Svg.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Test.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5WebChannel.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5WebSockets.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Widgets.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5WinExtras.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5Xml.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/Qt5XmlPatterns.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/ssleay32.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/vcruntime140.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt/bin/vcruntime140_1.dll",""),
+        # Preinstalled PyQt5 installation
+        (PyQt5.__path__[0] + "/Qt/qml/Qt", "qml/Qt"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtQml", "qml/QtQml"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtQuick", "qml/QtQuick"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtQuick.2", "qml/QtQuick.2"),
+        (PyQt5.__path__[0] + "/Qt/qml/QtGraphicalEffects", "qml/QtGraphicalEffects"),
     ],
     "zip_includes": zip_includes,
     "excludes": [ ],
