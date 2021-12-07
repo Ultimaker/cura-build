@@ -4,7 +4,7 @@ if(NOT BUILD_OS_WINDOWS)
     # On Windows we are using PyQt5 to provide our libraries prebuilt.
     #find_package(Qt5 5.15.0 REQUIRED Core Qml Quick Widgets)
 endif()
-find_package(PyQt 5.15 REQUIRED)
+find_package(PyQt 6.2 REQUIRED)
 find_package(SciPy 1.2.0 REQUIRED)
 
 # WORKAROUND: CMAKE_ARGS itself is a string list with items separated by ';'. Passing a string list that's also
