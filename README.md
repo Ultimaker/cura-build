@@ -19,13 +19,13 @@ Assume that you have a working `cura-build-environment` docker image. To build a
 you can use the commands below:
 
 ```shell
-./scripts/python3.5/linux/build.sh
+./docker/linux/build.sh
 ```
 
 This script by default uses a docker image tagged as `cura-build-env:centos-latest` to build Cura
 AppImage, so make sure that your image is tagged accordingly. If the build is successful,
 the resulting AppImage and its checksum will be placed in the `output/appimages` directory. Check
-the script `scripts/python3.5/linux/build.sh` for more details if you want to customize it.
+the script `docker/linux/build.sh` for more details if you want to customize it.
 
 To configure your AppImage build, you can use the following environment variables:
 
@@ -45,13 +45,13 @@ docker image for Windows. To build the Cura installer, you can use the commands 
 
 ```powershell
 # Do this in PowerShell
-.\scripts\python3.5\windows\build.ps1
+.\docker\windows\build.ps1
 ```
 
 The script by default uses a docker image tagged as `cura-build-environment:win1809-latest`,
 so make sure that your image is tagged accordingly. If the build is successful, the resulting
 installer will be placed in the `windows-installers/` directory. Check the script
-`scripts\python3.5\windows\build.ps1` for more details if you want to customize it.
+`docker\windows\build.ps1` for more details if you want to customize it.
 
 You will be asked for some mandatory variables for building Cura, including:
 
