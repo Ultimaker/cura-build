@@ -3,14 +3,6 @@ import os.path
 
 from cx_Freeze import setup, Executable, hooks
 
-def load_scipy(finder, module):
-    finder.IncludePackage("scipy._lib")
-    finder.IncludePackage("scipy.misc")
-    finder.IncludePackage("scipy.sparse.csgraph._validation")
-    finder.IncludePackage("scipy.sparse._csparsetools")
-
-hooks.load_scipy = load_scipy
-
 search_path = sys.path.copy()
 if os.path.exists("/etc/debian_version"):
     python_externalproject_dir = "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3/dist-packages/"
@@ -37,6 +29,7 @@ build_options = {
         "zeroconf",
         "requests",
         "idna",
+        "scipy",
         "scipy.spatial",
         "stl",
         "serial",
