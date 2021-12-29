@@ -3,14 +3,6 @@ import os.path
 
 from cx_Freeze import setup, Executable, hooks
 
-def load_scipy(finder, module):
-    finder.IncludePackage("scipy._lib")
-    finder.IncludePackage("scipy.misc")
-    finder.IncludePackage("scipy.sparse.csgraph._validation")
-    finder.IncludePackage("scipy.sparse._csparsetools")
-
-hooks.load_scipy = load_scipy
-
 def load_pyqt5_qtquick(finder, module):
     finder.IncludeModule("PyQt5.QtCore")
     finder.IncludeModule("PyQt5.QtGui")

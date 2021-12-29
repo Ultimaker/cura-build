@@ -52,16 +52,6 @@ def load_numpy(finder, module):
 
 hooks.load_numpy = load_numpy
 
-def load_scipy(finder, module):
-    finder.IncludePackage("scipy._lib")
-    finder.IncludePackage("scipy.misc")
-    finder.IncludePackage("scipy.sparse.csgraph._validation")
-    finder.IncludePackage("scipy.sparse._csparsetools")
-    finder.IncludePackage("scipy.special._ufuncs_cxx")
-    finder.IncludePackage("scipy.special.specfun")
-
-hooks.load_scipy = load_scipy
-
 # Trimesh data files
 trimesh_resources_path = os.path.join(os.path.dirname(trimesh.__file__), "resources")
 trimesh_resources_required_files = [
