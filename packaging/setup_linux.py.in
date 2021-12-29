@@ -1,7 +1,7 @@
 import sys
 import os.path
 
-from cx_Freeze import setup, Executable, hooks
+from cx_Freeze import setup, Executable
 
 search_path = sys.path.copy()
 if os.path.exists("/etc/debian_version"):
@@ -37,6 +37,7 @@ build_options = {
         "shapely",
         "netifaces",
         "networkx",
+        "numpy",
         "trimesh",
         "Savitar",
         "PyQt5.QtDBus",
