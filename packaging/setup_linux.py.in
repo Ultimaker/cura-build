@@ -29,12 +29,12 @@ build_options = {
         "zeroconf",
         "requests",
         "idna",
+        "pyclipper",
         "scipy",
         "scipy.spatial",
         "stl",
         "serial",
         "sip",
-        "shapely",
         "netifaces",
         "networkx",
         "numpy",
@@ -58,8 +58,6 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/libbz2.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libcrypto.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libffi.so", ""),
-        ("@CMAKE_PREFIX_PATH@/lib/libgeos.so", ""),    # For shapely
-        ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.so", ""),  # For shapely
         ("@CMAKE_PREFIX_PATH@/lib/liblzma.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libnlopt.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libopenblas.so", ""),

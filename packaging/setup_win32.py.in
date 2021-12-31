@@ -7,7 +7,6 @@ import platform
 import PyQt5
 import numpy
 import trimesh
-import shapely
 
 from cx_Freeze import setup, Executable, hooks
 
@@ -93,17 +92,6 @@ def load_pyqt5_qtnetwork(finder, module):
 
 hooks.load_PyQt5_QtNetwork = load_pyqt5_qtnetwork
 
-def load_shapely(finder, module):
-    finder.IncludeModule("shapely")
-    shapely_path = os.path.join(os.path.dirname(shapely.__file__), "DLLs")
-    required_dll_files = [
-        "geos_c.dll",
-    ]
-    for file_name in required_dll_files:
-        finder.IncludeFiles(os.path.join(shapely_path, file_name), file_name)
-
-hooks.load_shapely = load_shapely
-
 search_path = sys.path.copy()
 search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.10/site-packages/")
 search_path.insert(2, "@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/")
@@ -119,6 +107,7 @@ build_options = {
         "appdirs",
         "packaging",
         "cryptography",
+        "pyclipper",
         "xml.etree",
         "uuid",
         "serial",
@@ -130,7 +119,6 @@ build_options = {
         "scipy.spatial",
         "sip",
         "stl",
-        "shapely",
         "netifaces",
         "networkx",
         "trimesh",
