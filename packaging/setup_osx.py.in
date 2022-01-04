@@ -77,12 +77,7 @@ build_options = {
     "bin_path_includes": [
         "@CMAKE_PREFIX_PATH@/lib",
     ],
-    "bin_excludes": [
-        "libgfortran.3.dylib",
-        "libquadmath.0.dylib",
-        "libgcc_s.1.dylib",
-        "libopenblas.0.dylib"
-    ],
+    "bin_excludes": [ ],
 }
 
 bdist_mac_options = {
