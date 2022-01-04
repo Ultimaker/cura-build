@@ -52,16 +52,19 @@ def load_numpy(finder, module):
 hooks.load_numpy = load_numpy
 
 # Trimesh data files
+# Includes everything that the setup.py specifies as extra files:
+# https://github.com/mikedh/trimesh/blob/7b67e9a8fb70a8a795f3cec6ff615d8d7bb5be2d/setup.py#L134-L136
+# cx-Freeze doesn't recognise these as dependencies, so we have to specify them manually just like that set-up.
 trimesh_resources_path = os.path.join(os.path.dirname(trimesh.__file__), "resources")
 trimesh_resources_required_files = [
-    "blender.py.template",
-    "collada.dae.template",
-    "dxf.json.template",
-    "ply.template",
-    "svg.xml.template",
+    "gltf_2_schema.zip",
     "units_to_inches.json",
-    "viewer.html.template",
-    "yafaray.xml.template",
+    os.path.join("templates", "base.svg"),
+    os.path.join("templates", "blender_boolean.py"),
+    os.path.join("templates", "dxf.json"),
+    os.path.join("templates", "path.svg"),
+    os.path.join("templates", "ply.json"),
+    os.path.join("templates", "viewer.zip")
 ]
 for file_name in trimesh_resources_required_files:
     item = (os.path.join(trimesh_resources_path, file_name), os.path.join("trimesh", "resources", file_name))
