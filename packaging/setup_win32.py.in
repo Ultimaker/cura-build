@@ -23,28 +23,19 @@ def load_numpy(finder, module):
     # Include all MKL files that are needed to get Numpy with MKL working.
     npy_dll_dir = os.path.join(module.path[0], "DLLs")
     required_mkl_files = [
-        "mkl_intel_thread.dll",
-        "mkl_core.dll",
-        "mkl_avx.dll",
-        "mkl_avx2.dll",
-        "libiomp5md.dll",
-        "libimalloc.dll",
-        "libmmd.dll",
         "libifcoremd.dll",
+        "libimalloc.dll",
+        "libiomp5md.dll",
+        "libmmd.dll",
+        "mkl_avx.1.dll",
+        "mkl_avx2.1.dll",
+        "mkl_avx512.1.dll",
+        "mkl_core.1.dll",
+        "mkl_def.1.dll",
+        "mkl_intel_thread.1.dll",
+        "mkl_mc.1.dll",
+        "mkl_mc3.1.dll"
     ]
-
-    if platform.architecture()[0] == "32bit":
-        required_mkl_files.extend([
-            "mkl_p4.dll",
-            "mkl_p4m.dll",
-            "mkl_p4m3.dll",
-        ])
-    else:
-        required_mkl_files.extend([
-            "mkl_def.dll",
-            "mkl_mc.dll",
-            "mkl_mc3.dll",
-        ])
 
     for file in required_mkl_files:
         finder.IncludeFiles(os.path.join(npy_dll_dir, file), file)
