@@ -134,7 +134,6 @@ build_options = {
         "trimesh.resources",
         "Savitar",
         "PyQt5.QtDBus",
-        "comtypes",
         "Charon",
         "logging",
         "logging.config",
