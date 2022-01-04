@@ -77,7 +77,7 @@ hooks.load_PyQt5_QtQuick = load_pyqt5_qtquick
 def load_pyqt5_qtnetwork(finder, module):
     finder.IncludeModule("PyQt5.QtCore")
 
-    qt_path = os.path.join(os.path.dirname(PyQt5.QtCore.__file__), "Qt", "bin")
+    qt_path = os.path.join(os.path.dirname(PyQt5.QtCore.__file__), "Qt5", "bin")
     required_ssl_files = [
         "libeay32.dll",
         "ssleay32.dll",
