@@ -156,11 +156,10 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Designer.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Gui.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Help.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Location.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Multimedia.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5MultimediaWidgets.dll",""),
+        #("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Location.dll",""), #Plug-in doesn't get included.
+        #("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Multimedia.dll",""), #Plug-in doesn't get included.
+        #("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5MultimediaWidgets.dll",""), #Plug-in doesn't get included.
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Network.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5NetworkAuth.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Nfc.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5OpenGL.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Positioning.dll",""),
@@ -182,17 +181,19 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5QuickTest.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5QuickWidgets.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5RemoteObjects.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Sensors.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5SerialPort.dll",""),
+        #("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Sensors.dll",""), #Plug-in doesn't get included.
+        #("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5SerialPort.dll",""), #Plug-in doesn't get included.
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Sql.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Svg.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Test.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5WebChannel.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5TextToSpeech.dll",""),
+        #("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5WebChannel.dll",""), #Plug-in doesn't get included.
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5WebSockets.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5WebView.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Widgets.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5WinExtras.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5Xml.dll",""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5XmlPatterns.dll",""),
+        #("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/Qt5XmlPatterns.dll",""), #Plug-in doesn't get included.
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/ssleay32.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/vcruntime140.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt5/Qt5/bin/vcruntime140_1.dll",""),
