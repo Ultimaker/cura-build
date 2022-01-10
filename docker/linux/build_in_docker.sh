@@ -46,7 +46,6 @@ export CURA_DIGITAL_FACTORY_URL="${CURA_DIGITAL_FACTORY_URL:-https://digitalfact
 export CURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE:-ON}"
 
 # Set up development environment variables
-source /opt/rh/devtoolset-8/enable
 export PATH="${CURA_BUILD_ENV_PATH}/bin:${PATH}"
 export PKG_CONFIG_PATH="${CURA_BUILD_ENV_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
