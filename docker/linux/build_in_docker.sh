@@ -56,7 +56,7 @@ mkdir "${CURA_BUILD_OUTPUT_DIR}/appimages"
 cd "${CURA_BUILD_OUTPUT_DIR}/build"
 
 # Create AppImage
-cmake3 "${ROOT_DIR}" \
+cmake "${ROOT_DIR}" \
     -DCMAKE_PREFIX_PATH="${CURA_BUILD_ENV_PATH}" \
     -DCURA_VERSION_MAJOR="${CURA_VERSION_MAJOR}" \
     -DCURA_VERSION_MINOR="${CURA_VERSION_MINOR}" \
