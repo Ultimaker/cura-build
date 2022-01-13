@@ -55,11 +55,12 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/plugins", "qt/plugins"),
         ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml"),
+        ("@CMAKE_PREFIX_PATH@/lib/libpython3.10.so.1.0", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libbz2.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libcrypto.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libffi.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/liblzma.so", ""),
-        ("@CMAKE_PREFIX_PATH@/lib/libnlopt.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libnlopt.so.0", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libopenblas.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libopenctm.so", ""), # For opening .CTM files
         ("@CMAKE_PREFIX_PATH@/lib/libQt5Charts.so", ""),
@@ -95,7 +96,6 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/libssl.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/numpy.libs", "lib/numpy/core"), # Due to a bug in cx_Freeze, these Numpy extensions don't get packaged properly. See https://github.com/marcelotduarte/cx_Freeze/issues/653
         ("@CMAKE_PREFIX_PATH@/openssl.cnf", ""),
-        ("/usr/lib64/libdbus-1.so.3", "")
     ],
     "optimize": 1,
     "bin_path_includes": [
