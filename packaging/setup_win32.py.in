@@ -125,7 +125,7 @@ build_options = {
         "idna",
         "UM",
         "cura",
-        "scipy.spatial",
+        "scipy",
         "sip",
         "stl",
         "netifaces",
