@@ -91,7 +91,7 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
     set(Python3_VERSION_PATCH ${PYTHON_VERSION_PATCH})
 else()
     # Use FindPython3 for CMake >=3.12
-    find_package(Python3 3.10 EXACT REQUIRED COMPONENTS Interpreter)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
 endif()
 
 
