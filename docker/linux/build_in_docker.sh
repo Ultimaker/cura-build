@@ -46,10 +46,8 @@ export CURA_DIGITAL_FACTORY_URL="${CURA_DIGITAL_FACTORY_URL:-https://digitalfact
 export CURA_ENABLE_DEBUG_MODE="${CURA_ENABLE_DEBUG_MODE:-ON}"
 
 # Set up development environment variables
-source /opt/rh/devtoolset-8/enable
 export PATH="${CURA_BUILD_ENV_PATH}/bin:${PATH}"
 export PKG_CONFIG_PATH="${CURA_BUILD_ENV_PATH}/lib/pkgconfig:${PKG_CONFIG_PATH}"
-
 
 mkdir "${CURA_BUILD_OUTPUT_DIR}/build"
 mkdir "${CURA_BUILD_OUTPUT_DIR}/appimages"
@@ -57,7 +55,7 @@ mkdir "${CURA_BUILD_OUTPUT_DIR}/appimages"
 cd "${CURA_BUILD_OUTPUT_DIR}/build"
 
 # Create AppImage
-cmake3 "${ROOT_DIR}" \
+cmake "${ROOT_DIR}" \
     -DCMAKE_PREFIX_PATH="${CURA_BUILD_ENV_PATH}" \
     -DCURA_VERSION_MAJOR="${CURA_VERSION_MAJOR}" \
     -DCURA_VERSION_MINOR="${CURA_VERSION_MINOR}" \
