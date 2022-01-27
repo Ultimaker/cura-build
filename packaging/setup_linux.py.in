@@ -67,7 +67,7 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/libgeos.so", ""),    # For shapely
         ("@CMAKE_PREFIX_PATH@/lib/libgeos_c.so", ""),  # For shapely
         ("@CMAKE_PREFIX_PATH@/lib/liblzma.so", ""),
-        ("@CMAKE_PREFIX_PATH@/lib/libnlopt.so", ""),
+        ("@CMAKE_PREFIX_PATH@/lib/libnlopt.so.0", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libopenblas.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libopenctm.so", ""), # For opening .CTM files
         ("@CMAKE_PREFIX_PATH@/lib/libQt5Charts.so", ""),
