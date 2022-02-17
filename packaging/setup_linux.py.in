@@ -34,7 +34,6 @@ build_options = {
         "scipy.spatial",
         "stl",
         "serial",
-        "sip",
         "netifaces",
         "networkx",
         "numpy",
