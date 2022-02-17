@@ -55,7 +55,6 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/plugins", "qt/plugins"),
-        ("@CMAKE_PREFIX_PATH@/lib/qml", "qt/qml"),
         ("@CMAKE_PREFIX_PATH@/lib/libpython3.10.so.1.0", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libbz2.so", ""),
         ("@CMAKE_PREFIX_PATH@/lib/libcrypto.so", ""),
