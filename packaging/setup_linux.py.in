@@ -57,7 +57,7 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/cura/resources", "resources"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/plugins", "qt/plugins"),
-        ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/qml/Qt", "qt/qml/Qt"),
+        ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/qml/Qt", "qt/qml/QtPositioning"),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/qml/QtQml", "qt/qml/QtQml"),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/qml/QtQuick", "qt/qml/QtQuick"),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/lib/libQt6Core.so.6", ""),
