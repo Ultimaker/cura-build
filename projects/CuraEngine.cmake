@@ -4,10 +4,11 @@ set(extra_cmake_args "")
 set(cmake_generator "${CMAKE_GENERATOR}")
 if(BUILD_OS_WINDOWS)
     set(extra_cmake_args -DArcus_DIR=${CMAKE_PREFIX_PATH}/lib-mingw/cmake/Arcus
-                         -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib-mingw)
+                         -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib-mingw
 						 -DProtobuf_LIBRARY=${CMAKE_PREFIX_PATH}/lib-mingw/libprotobuf.a
 						 -DProtobuf_LITE_LIBRARY=${CMAKE_PREFIX_PATH}/lib-mingw/libprotobuf-lite.a
 						 -DProtobuf_PROTOC_LIBRARY=${CMAKE_PREFIX_PATH}/lib-mingw/libprotoc.a
+	)
     set(cmake_generator "MinGW Makefiles")
 elseif (BUILD_OS_OSX)
     if (CMAKE_OSX_DEPLOYMENT_TARGET)
