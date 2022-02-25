@@ -115,7 +115,6 @@ build_options = {
         "networkx",
         "trimesh",
         "trimesh.resources",
-        "Savitar",
         "PyQt6.QtDBus",
         "PyQt6.sip",
         "Charon",
