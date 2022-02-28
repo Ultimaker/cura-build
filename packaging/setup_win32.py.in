@@ -234,6 +234,7 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt6/bin/Qt6Xml.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt6/bin/vcruntime140.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt6/bin/vcruntime140_1.dll",""),
+        ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt6/plugins/platforms","plugins/platforms"),  # Include the Windows/Offscreen plug-ins.
         # Preinstalled PyQt6 installation
         (PyQt6.__path__[0] + "/Qt6/qml/QtQml", "qml/QtQml"),
         (PyQt6.__path__[0] + "/Qt6/qml/QtQuick", "qml/QtQuick"),
