@@ -4,18 +4,7 @@
 import sys
 import os.path
 
-from cx_Freeze import setup, Executable, hooks
-
-def load_pyqt6_qtquick(finder, module):
-    finder.IncludeModule("PyQt6.QtCore")
-    finder.IncludeModule("PyQt6.QtGui")
-    finder.IncludeModule("PyQt6.QtQml")
-    finder.IncludeModule("PyQt6.QtNetwork")
-    finder.IncludeModule("PyQt6.QtWebSockets")
-    finder.IncludeModule("PyQt6._QOpenGLFunctions_2_0")
-    finder.IncludeModule("PyQt6._QOpenGLFunctions_4_1_Core")
-
-hooks.load_PyQt6_QtQuick = load_pyqt6_qtquick
+from cx_Freeze import setup, Executable
 
 search_path = sys.path.copy()
 search_path.insert(1, "@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.10/site-packages/")
@@ -64,7 +53,6 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/qml/QtQml", "qml/QtQml"),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/qml/QtQuick", "qml/QtQuick"),
-        ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/qml/QtQuick3D", "qml/QtQuick3D"),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/PyQt6/Qt6/qml/QtPositioning", "qml/QtPositioning"),
         ("@CMAKE_PREFIX_PATH@/lib/libopenctm.dylib", ""),  # For opening .CTM files
         ("@CMAKE_PREFIX_PATH@/lib/libopenblas.dylib", ""),
