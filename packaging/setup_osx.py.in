@@ -41,7 +41,6 @@ build_options = {
         "UM",
         "cura",
         "stl",
-        "sip",
         "scipy.spatial",
         "netifaces",
         "networkx",
