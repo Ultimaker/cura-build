@@ -137,12 +137,7 @@ build_options = {
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/share/uranium/resources", "resources"),
         ("@CMAKE_PREFIX_PATH@/bin/openctm.dll", ""), # For opening .CTM files
         ("@CMAKE_PREFIX_PATH@/bin/libprotobuf.dll", ""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/pyArcus.pyd", ""),
-        ("@CMAKE_PREFIX_PATH@/bin/Arcus.dll", ""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/pySavitar.pyd", ""),
-        ("@CMAKE_PREFIX_PATH@/bin/Savitar.dll", ""),
         ("@CMAKE_PREFIX_PATH@/bin/nlopt.dll", ""),
-        ("@CMAKE_PREFIX_PATH@/lib/site-packages/pynest2d.pyd", ""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/PyQt6/Qt6/bin/concrt140.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/scipy/.libs/libansari.54HGNEJBQIYZX5TZPCQGLNVIPFU6NWEX.gfortran-win_amd64.dll",""),
         ("@CMAKE_PREFIX_PATH@/lib/site-packages/scipy/.libs/libbanded5x.RAW5BOYQWSFMRTEBYBJTZLS57PQP5COE.gfortran-win_amd64.dll",""),
