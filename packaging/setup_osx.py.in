@@ -62,7 +62,7 @@ build_options = {
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/numpy/.dylibs/libgcc_s.1.dylib", ""),
         ("@CMAKE_PREFIX_PATH@/lib/python3.10/site-packages/numpy/.dylibs/libopenblas.0.dylib", ""),
     ],
-    "excludes": [ ],
+    "excludes": ["XmlListModel"],
     "zip_include_packages": [ "PyQt6" ],
     "bin_path_includes": [
         "@CMAKE_PREFIX_PATH@/lib",
