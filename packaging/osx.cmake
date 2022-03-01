@@ -6,6 +6,6 @@ configure_file(${CMAKE_CURRENT_LIST_DIR}/Info.plist.in Info.plist @ONLY)
 add_custom_command(
     TARGET packaging POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/build
-    COMMAND ${CMAKE_COMMAND} -E env "DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:\"${CMAKE_PREFIX_PATH}/lib\"" ${Python3_EXECUTABLE} setup.py bdist_mac
+    COMMAND ${CMAKE_COMMAND} -E env "RPATH=$RPATH:\"${CMAKE_PREFIX_PATH}/lib\"" ${Python3_EXECUTABLE} setup.py bdist_mac
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
