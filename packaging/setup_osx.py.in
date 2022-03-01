@@ -35,6 +35,7 @@ build_options = {
         "networkx",
         "trimesh",
         "PyQt6",
+        "PyQt6-Qt6",
         "PyQt6.QtDBus",
         "pyArcus",
         "pynest2d",
