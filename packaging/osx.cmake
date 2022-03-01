@@ -8,11 +8,6 @@ add_custom_command(
     COMMAND /Library/Developer/CommandLineTools/usr/bin/install_name_tool -add_rpath "${CMAKE_PREFIX_PATH}/lib" "${EXTERNALPROJECT_INSTALL_PREFIX}/bin/CuraEngine"
     COMMENT "Modify RPATH for CuraEngine to libArcus"
 )
-add_custom_command(
-    TARGET packaging PRE_BUILD
-    COMMAND /Library/Developer/CommandLineTools/usr/bin/install_name_tool -add_rpath "${CMAKE_PREFIX_PATH}/lib" "${CMAKE_PREFIX_PATH}/lib/python3.10/site-packages/pynest2d.so"
-    COMMENT "Modify RPATH for pynest2d to nlopt & polyclipping"
-)
 
 add_custom_command(
     TARGET packaging POST_BUILD
