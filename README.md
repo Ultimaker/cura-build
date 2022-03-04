@@ -1,7 +1,7 @@
 # cura-build
 
 
-This repository contains build scripts used to build Cura and all dependencies from scratch.
+Thisstag repository contains build scripts used to build Cura and all dependencies from scratch.
 
 The build has a number of dependencies. Ideally, these dependencies should be installed by the
 [cura-build-environment](https://github.com/Ultimaker/cura-build-environment) repository. Even
