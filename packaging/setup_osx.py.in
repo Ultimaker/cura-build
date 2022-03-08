@@ -46,6 +46,7 @@ build_options = {
     ],
     "include_files": [
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/bin/CuraEngine", ""),
+        ("@CMAKE_PREFIX_PATH@/bin/python3.10", ""),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/cura", "plugins"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/uranium", "plugins"),
         ("@EXTERNALPROJECT_INSTALL_PREFIX@/lib/python3.10/site-packages/UM/Qt/qml/UM", "qml/UM"),
