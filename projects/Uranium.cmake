@@ -13,11 +13,11 @@ GetFromEnvironmentOrCache(
             "The name of the tag or branch to build for Uranium")
 
 # Ensure we're linking to our previously built Python version.
-if(BUILD_OS_LINUX)
+if(WIN32)
+    set(pylib_cmake_command ${CMAKE_COMMAND})
+else()
     include(${CMAKE_SOURCE_DIR}/cmake/Python.cmake)
     set(pylib_cmake_command PATH=${CMAKE_PREFIX_PATH}/bin/:$ENV{PATH} LD_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib/ PYTHONPATH=${Python_SITEARCH}:${CMAKE_PREFIX_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/ ${CMAKE_COMMAND})
-else()
-    set(pylib_cmake_command ${CMAKE_COMMAND})
 endif()
 
 GetFromEnvironmentOrCache(

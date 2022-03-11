@@ -1,11 +1,12 @@
-#Copyright (c) 2021 Ultimaker B.V.
+#Copyright (c) 2022 Ultimaker B.V.
 #cura-build is released under the terms of the AGPLv3 or higher.
 
 # Ensure we're linking to our previously built Python version.
-if(BUILD_OS_LINUX)
-    set(pylib_cmake_command PATH=${CMAKE_PREFIX_PATH}/bin/:$ENV{PATH} LD_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib/ PYTHONPATH=${CMAKE_PREFIX_PATH}/lib/python3/dist-packages/:${CMAKE_PREFIX_PATH}/lib/python3.10:${CMAKE_PREFIX_PATH}/lib/python3.10/site-packages/ ${CMAKE_COMMAND})
-else()
+if(WIN32)
     set(pylib_cmake_command ${CMAKE_COMMAND})
+else()
+    include(${CMAKE_SOURCE_DIR}/cmake/Python.cmake)
+    set(pylib_cmake_command PATH=${CMAKE_PREFIX_PATH}/bin/:$ENV{PATH} LD_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib/ PYTHONPATH=${Python_SITEARCH}:${CMAKE_PREFIX_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/ ${CMAKE_COMMAND})
 endif()
 
 ExternalProject_Add(libCharon
