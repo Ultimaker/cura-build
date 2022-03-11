@@ -1,3 +1,4 @@
+# Copyright 2022 Ultimaker
 project(cura-build)
 
 cmake_minimum_required(VERSION 3.18)
@@ -5,10 +6,6 @@ cmake_minimum_required(VERSION 3.18)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 option(BUILD_OFFLINE "Build offline (use target 'update' to update sources)." OFF)
-
-if(BUILD_OFFLINE)
-    set_property(DIRECTORY PROPERTY EP_UPDATE_DISCONNECTED 1)
-endif()
 
 include(ExternalProject)
 include(GNUInstallDirs)
@@ -18,11 +15,44 @@ include(BuildPlatformDetection)
 include(GetFromEnvironmentOrCache)
 include(SetProjectDependencies)
 
-option(BUILD_PACKAGE "Create a package with the build of Cura" ON)
-option(SIGN_PACKAGE "Perform signing of the created package. Implies BUILD_PACKAGE" ON)
+GetFromEnvironmentOrCache(
+        NAME
+            BUILD_OFFLINE
+        DEFAULT
+            OFF
+        DESCRIPTION
+            "Cura build offline mode, handy for debugging"
+        BOOL)
+if(BUILD_OFFLINE)
+    set_property(DIRECTORY PROPERTY EP_UPDATE_DISCONNECTED 1)
+endif()
 
-set(CURA_BUILDTYPE          "" CACHE STRING "Build type of Cura, eg. 'testing'")
-set(CURA_NO_INSTALL_PLUGINS "" CACHE STRING "A list of plugins to exclude from installation, should be separated by ';'.")
+GetFromEnvironmentOrCache(
+        NAME
+            BUILD_PACKAGE
+        DEFAULT
+            ON
+        DESCRIPTION
+            "Create a package with the build of Cura"
+        BOOL)
+GetFromEnvironmentOrCache(
+        NAME
+            SIGN_PACKAGE
+        DEFAULT
+            ON
+        DESCRIPTION
+            "Create a package with the build of Cura"
+        BOOL)
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_BUILDTYPE
+        DESCRIPTION
+            "Build type of Cura, eg. 'testing'")
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_NO_INSTALL_PLUGINS
+        DESCRIPTION
+            "A list of plugins to exclude from installation, should be separated by ';'.")
 
 if(SIGN_PACKAGE)
     set(BUILD_PACKAGE ON)
@@ -31,45 +61,124 @@ endif()
 if(WIN32)
     if(BUILD_PACKAGE)
         # Cura MSI product GUID and upgrade GUID
-        if(NOT DEFINED CURA_MSI_PRODUCT_GUID)
-            message(SEND_ERROR "CURA_MSI_PRODUCT_GUID must be provided.")
-        endif()
-        if(NOT DEFINED CURA_MSI_UPGRADE_GUID)
-            message(SEND_ERROR "CURA_MSI_UPGRADE_GUID must be provided.")
-        endif()
+        GetFromEnvironmentOrCache(
+                NAME
+                    CURA_MSI_PRODUCT_GUID
+                DESCRIPTION
+                    "MSI product GUID"
+                REQUIRED)
+        GetFromEnvironmentOrCache(
+                NAME
+                    CURA_MSI_UPGRADE_GUID
+                DESCRIPTION
+                    "MSI upgrade GUID"
+                REQUIRED)
     endif()
 endif()
 
-if(NOT DEFINED EXTERNALPROJECT_INSTALL_PREFIX)
-    set(EXTERNALPROJECT_INSTALL_PREFIX
+GetFromEnvironmentOrCache(
+        NAME
+            EXTERNALPROJECT_INSTALL_PREFIX
+        DEFAULT
             ${CMAKE_CURRENT_BINARY_DIR}/install
-            CACHE STRING "Install prefix for External Projects" FORCE)
-    message(STATUS "Using default install prefix for External projects: ${EXTERNALPROJECT_INSTALL_PREFIX}.")
-endif()
-
-GetFromEnvironmentOrCache(FDMMATERIALS_BRANCH_OR_TAG "master" STRING "The name of the tag or branch to build for fdm_materials")
-GetFromEnvironmentOrCache(CURABINARYDATA_BRANCH_OR_TAG "master" STRING "The name of the tag or branch to build for cura-binary-data")
-GetFromEnvironmentOrCache(CURAENGINE_BRANCH_OR_TAG "master" STRING "The name of the tag or branch to build for CuraEngine")
-GetFromEnvironmentOrCache(URANIUM_BRANCH_OR_TAG "master" STRING "The name of the tag or branch to build for Uranium")
-GetFromEnvironmentOrCache(CURA_BRANCH_OR_TAG "master" STRING "The name of the tag or branch to build for Cura")
-GetFromEnvironmentOrCache(LIBCHARON_BRANCH_OR_TAG "master" STRING "The name of the tag or branch to build for libCharon")
-
-GetFromEnvironmentOrCache(CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS "ON" STRING "Whether to enable extra compiler optimization flags for CuraEngine")
-
-GetFromEnvironmentOrCache(EXTRA_REPOSITORIES "" STRING "Extra repositories to install. Expected to have a CMake based build system. Format is (<project name> <git URL> <cmake configuration options>\;)*")
+        DESCRIPTION
+            "Location where the External projects need to be installed in")
+GetFromEnvironmentOrCache(
+        NAME
+            FDMMATERIALS_BRANCH_OR_TAG
+        DEFAULT
+            master
+        DESCRIPTION
+            "The name of the tag or branch to build for fdm_materials")
+GetFromEnvironmentOrCache(
+        NAME
+            CURABINARYDATA_BRANCH_OR_TAG
+        DEFAULT
+            master
+        DESCRIPTION
+            "The name of the tag or branch to build for cura-binary-data")
+GetFromEnvironmentOrCache(
+        NAME
+            CURAENGINE_BRANCH_OR_TAG
+        DEFAULT
+            master
+        DESCRIPTION
+            "The name of the tag or branch to build for CuraEngine")
+GetFromEnvironmentOrCache(
+        NAME
+            URANIUM_BRANCH_OR_TAG
+        DEFAULT
+            master
+        DESCRIPTION
+            "The name of the tag or branch to build for Uranium")
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_BRANCH_OR_TAG
+        DEFAULT
+            master
+        DESCRIPTION "The name of the tag or branch to build for Cura")
+GetFromEnvironmentOrCache(
+        NAME
+            LIBCHARON_BRANCH_OR_TAG
+        DEFAULT
+            master
+        DESCRIPTION
+            "The name of the tag or branch to build for libCharon")
+GetFromEnvironmentOrCache(
+        NAME
+            CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS
+        DEFAULT
+            ON
+        DESCRIPTION
+            "Whether to enable extra compiler optimization flags for CuraEngine"
+        BOOL)
+GetFromEnvironmentOrCache(
+        NAME
+            EXTRA_REPOSITORIES
+        DESCRIPTION
+            "Extra repositories to install. Expected to have a CMake based build system. Format is (<project name> <git URL> <cmake configuration options>\;)*")
 
 # Create the version-related variables
-GetFromEnvironmentOrCache(CURA_VERSION_MAJOR "0" STRING "Cura Major Version")
-GetFromEnvironmentOrCache(CURA_VERSION_MINOR "0" STRING "Cura Minor Version")
-GetFromEnvironmentOrCache(CURA_VERSION_PATCH "0" STRING "Cura Patch Version")
-GetFromEnvironmentOrCache(CURA_VERSION_EXTRA "${TAG_OR_BRANCH}" STRING "Cura Extra Version Information")
-
-GetFromEnvironmentOrCache(CURA_EXTRA_PROJECTS_DIR "" STRING "Directory where extra projects to build are located.")
-
-set(CURA_VERSION "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}")
-if(NOT "${CURA_VERSION_EXTRA}" STREQUAL "")
-    set(CURA_VERSION "${CURA_VERSION}-${CURA_VERSION_EXTRA}")
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_VERSION_MAJOR
+        DESCRIPTION
+            "Cura Major Version")
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_VERSION_MINOR
+        DEFAULT
+            0
+        DESCRIPTION
+            "Cura Minor Version")
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_VERSION_PATCH
+        DEFAULT
+            0
+        DESCRIPTION
+            "Cura Patch Version")
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_VERSION_EXTRA
+        DESCRIPTION
+            "Cura Extra Version Information")
+set(_default_cura_version "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}${CURA_VERSION_EXTRA}")
+if(${_default_cura_version} VERSION_GREATER 0.0.0)
+    set(CURA_VERSION ${_default_cura_version})
 endif()
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_VERSION
+        DESCRIPTION
+            "Cura Extra Version Information"
+        REQUIRED)
+
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_EXTRA_PROJECTS_DIR
+        DESCRIPTION
+            "Directory where extra projects to build are located.")
 
 # Build projects step
 add_custom_target(projects ALL COMMENT "Building Projects...")
@@ -80,13 +189,14 @@ if(NOT CURA_EXTRA_PROJECTS_DIR STREQUAL "")
     list(APPEND _projects ${_extra_projects})
 endif()
 
-
-if(NOT DEFINED Python_VERSION)
-    set(Python_VERSION
+GetFromEnvironmentOrCache(
+        NAME
+            Python_VERSION
+        DEFAULT
             3.10
-            CACHE STRING "Python Version" FORCE)
-    message(STATUS "Setting Python version to ${Python_VERSION}. Set Python_VERSION if you want to compile against an other version.")
-endif()
+        DESCRIPTION
+            "Python Version to use"
+        REQUIRED)
 if(APPLE)
     set(Python_FIND_FRAMEWORK NEVER)
 endif()
