@@ -1,6 +1,14 @@
 #Copyright (c) 2022 Ultimaker B.V.
 #cura-build is released under the terms of the AGPLv3 or higher.
 
+GetFromEnvironmentOrCache(
+        NAME
+            LIBCHARON_BRANCH_OR_TAG
+        DEFAULT
+            master
+        DESCRIPTION
+            "The name of the tag or branch to build for libCharon")
+
 # Ensure we're linking to our previously built Python version.
 if(WIN32)
     set(pylib_cmake_command ${CMAKE_COMMAND})
@@ -15,7 +23,9 @@ ExternalProject_Add(libCharon
     GIT_SHALLOW 1
     STEP_TARGETS update
     CMAKE_COMMAND ${pylib_cmake_command}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX} -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DCURA_PYTHON_VERSION=3.10
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+               -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+               -DCURA_PYTHON_VERSION=${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}
 )
 
 SetProjectDependencies(TARGET libCharon)
