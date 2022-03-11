@@ -1,26 +1,30 @@
-#Copyright (c) 2021 Ultimaker B.V.
-#cura-build is released under the terms of the AGPLv3 or higher.
+# Copyright (c) 2022 Ultimaker B.V.
+# cura-build is released under the terms of the AGPLv3 or higher.
 
-find_package(PythonInterp 3 REQUIRED)
-if(NOT BUILD_OS_WINDOWS)
-    # Only ask for Qt5 where it is actually built via cura-build-environment.
-    # On Windows we are using PyQt5 to provide our libraries prebuilt.
-    #find_package(Qt5 5.15.0 REQUIRED Core Qml Quick Widgets)
-endif()
 find_package(PyQt 6.2 REQUIRED)
 find_package(SciPy 1.7.0 REQUIRED)
 
+GetFromEnvironmentOrCache(
+        NAME
+            URANIUM_BRANCH_OR_TAG
+        DEFAULT
+            master
+        DESCRIPTION
+            "The name of the tag or branch to build for Uranium")
+
 # Ensure we're linking to our previously built Python version.
 if(BUILD_OS_LINUX)
-    set(pylib_cmake_command PATH=${CMAKE_PREFIX_PATH}/bin/:$ENV{PATH} LD_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib/ PYTHONPATH=${CMAKE_PREFIX_PATH}/lib/python3/dist-packages/:${CMAKE_PREFIX_PATH}/lib/python3.10:${CMAKE_PREFIX_PATH}/lib/python3.10/site-packages/ ${CMAKE_COMMAND})
+    include(${CMAKE_SOURCE_DIR}/cmake/Python.cmake)
+    set(pylib_cmake_command PATH=${CMAKE_PREFIX_PATH}/bin/:$ENV{PATH} LD_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib/ PYTHONPATH=${Python_SITEARCH}:${CMAKE_PREFIX_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/ ${CMAKE_COMMAND})
 else()
     set(pylib_cmake_command ${CMAKE_COMMAND})
 endif()
 
-# WORKAROUND: CMAKE_ARGS itself is a string list with items separated by ';'. Passing a string list that's also
-# separated by ';' as an argument via CMAKE_ARGS will make it confused. Converting it to "," and then to ";" is a
-# workaround.
-string(REPLACE ";" "," _cura_no_install_plugins "${CURA_NO_INSTALL_PLUGINS}")
+GetFromEnvironmentOrCache(
+        NAME
+            CURA_NO_INSTALL_PLUGINS
+        DESCRIPTION
+            "A list of plugins to exclude from installation, should be separated by ','.")
 
 ExternalProject_Add(Uranium
     GIT_REPOSITORY https://github.com/ultimaker/Uranium
@@ -30,7 +34,7 @@ ExternalProject_Add(Uranium
     CMAKE_COMMAND ${pylib_cmake_command}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
-               -DUM_NO_INSTALL_PLUGINS=${_cura_no_install_plugins}
+               -DUM_NO_INSTALL_PLUGINS=${CURA_NO_INSTALL_PLUGINS}
 )
 
 SetProjectDependencies(TARGET Uranium)

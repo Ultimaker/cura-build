@@ -87,13 +87,6 @@ GetFromEnvironmentOrCache(
             "The name of the tag or branch to build for CuraEngine")
 GetFromEnvironmentOrCache(
         NAME
-            URANIUM_BRANCH_OR_TAG
-        DEFAULT
-            master
-        DESCRIPTION
-            "The name of the tag or branch to build for Uranium")
-GetFromEnvironmentOrCache(
-        NAME
             LIBCHARON_BRANCH_OR_TAG
         DEFAULT
             master
