@@ -1,14 +1,20 @@
 # Copyright 2022 Ultimaker
-project(cura-build)
 
-cmake_minimum_required(VERSION 3.18)
-
+# Setting the MACOSX_DEPLOYMENT_TARGET needs to be done before the first project() call. Setting this value should also
+# take care of the CMAKE_OSX_SYSROOT. The variable is ignored on non-Apple systems.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+include(GetFromEnvironmentOrCache)
+GetFromEnvironmentOrCache(
+        NAME
+            CMAKE_OSX_DEPLOYMENT_TARGET
+        DESCRIPTION
+            "Specify the minimum version of the target platform (e.g. macOS or iOS)")
+
+project(cura-build)
+cmake_minimum_required(VERSION 3.18)
 
 include(ExternalProject)
 include(GNUInstallDirs)
-
-include(GetFromEnvironmentOrCache)
 include(SetProjectDependencies)
 
 GetFromEnvironmentOrCache(
