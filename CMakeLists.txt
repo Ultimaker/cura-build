@@ -40,7 +40,12 @@ if(WIN32)
     endif()
 endif()
 
-set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
+if(NOT DEFINED EXTERNALPROJECT_INSTALL_PREFIX)
+    set(EXTERNALPROJECT_INSTALL_PREFIX
+            ${CMAKE_CURRENT_BINARY_DIR}/install
+            CACHE STRING "Install prefix for External Projects" FORCE)
+    message(STATUS "Using default install prefix for External projects: ${EXTERNALPROJECT_INSTALL_PREFIX}.")
+endif()
 
 GetFromEnvironmentOrCache(FDMMATERIALS_BRANCH_OR_TAG "master" STRING "The name of the tag or branch to build for fdm_materials")
 GetFromEnvironmentOrCache(CURABINARYDATA_BRANCH_OR_TAG "master" STRING "The name of the tag or branch to build for cura-binary-data")
