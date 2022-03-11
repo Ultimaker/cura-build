@@ -68,14 +68,6 @@ if(WIN32)
     endif()
 endif()
 
-GetFromEnvironmentOrCache(
-        NAME
-            FDMMATERIALS_BRANCH_OR_TAG
-        DEFAULT
-            master
-        DESCRIPTION
-            "The name of the tag or branch to build for fdm_materials")
-
 # Build projects step
 add_custom_target(projects ALL COMMENT "Building Projects...")
 
