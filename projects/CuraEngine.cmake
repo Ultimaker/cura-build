@@ -1,25 +1,31 @@
-find_package(Arcus 1.1 REQUIRED)
+# Copyright (c) 2022 Ultimaker B.V.
+# cura-build is released under the terms of the AGPLv3 or higher.
 
-set(extra_cmake_args "")
-set(cmake_generator "${CMAKE_GENERATOR}")
-if(BUILD_OS_WINDOWS)
-    file(TO_CMAKE_PATH ${CMAKE_PREFIX_PATH} normalized_prefix_path)
-    set(extra_cmake_args -DArcus_DIR=${CMAKE_PREFIX_PATH}/lib-mingw/cmake/Arcus
-                         -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib-mingw
-						 -DProtobuf_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotobuf.a
-						 -DProtobuf_LITE_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotobuf-lite.a
-						 -DProtobuf_PROTOC_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotoc.a
-	)
-    set(cmake_generator "MinGW Makefiles")
-elseif (BUILD_OS_OSX)
-    if (CMAKE_OSX_DEPLOYMENT_TARGET)
-        list(APPEND extra_cmake_args
-            -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
-    endif()
-    if (CMAKE_OSX_SYSROOT)
-        list(APPEND extra_cmake_args
-            -DCMAKE_OSX_SYSROOT=${CMAKE_OSX_SYSROOT})
-    endif()
+GetFromEnvironmentOrCache(
+		NAME
+			CURAENGINE_BRANCH_OR_TAG
+		DEFAULT
+			master
+		DESCRIPTION
+			"The name of the tag or branch to build for CuraEngine")
+GetFromEnvironmentOrCache(
+		NAME
+			CURA_ENGINE_VERSION
+		DEFAULT
+			${CURA_VERSION}
+		DESCRIPTION
+			"The version of CuraEngine")
+GetFromEnvironmentOrCache(
+		NAME
+			CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS
+		DEFAULT
+			ON
+		DESCRIPTION
+			"Whether to enable extra compiler optimization flags for CuraEngine"
+		BOOL)
+
+if(WIN32)
+	file(TO_CMAKE_PATH ${CMAKE_PREFIX_PATH} normalized_prefix_path)
 endif()
 
 ExternalProject_Add(CuraEngine
@@ -27,16 +33,18 @@ ExternalProject_Add(CuraEngine
     GIT_TAG origin/${CURAENGINE_BRANCH_OR_TAG}
     GIT_SHALLOW 1
     STEP_TARGETS update
-    CMAKE_GENERATOR "${cmake_generator}"
+    CMAKE_GENERATOR "$<IF:$<PLATFORM_ID:Windows>:MinGW Makefiles,${CMAKE_GENERATOR}>"
     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
-               -DCURA_ENGINE_VERSION=${CURA_VERSION}
+               -DCURA_ENGINE_VERSION=${CURA_ENGINE_VERSION}
                -DENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS=${CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS}
-               -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
-               -DCMAKE_CXX_STANDARD=17
-               ${extra_cmake_args}
-)
+               -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
+				$<$<PLATFORM_ID:Windows>:-DArcus_DIR=${CMAKE_PREFIX_PATH}/lib-mingw/cmake/Arcus
+										 -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib-mingw
+										 -DProtobuf_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotobuf.a
+										 -DProtobuf_LITE_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotobuf-lite.a
+										 -DProtobuf_PROTOC_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotoc.a>)
 
 SetProjectDependencies(TARGET CuraEngine)
 

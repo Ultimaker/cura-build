@@ -84,26 +84,11 @@ GetFromEnvironmentOrCache(
             "The name of the tag or branch to build for cura-binary-data")
 GetFromEnvironmentOrCache(
         NAME
-            CURAENGINE_BRANCH_OR_TAG
-        DEFAULT
-            master
-        DESCRIPTION
-            "The name of the tag or branch to build for CuraEngine")
-GetFromEnvironmentOrCache(
-        NAME
             LIBCHARON_BRANCH_OR_TAG
         DEFAULT
             master
         DESCRIPTION
             "The name of the tag or branch to build for libCharon")
-GetFromEnvironmentOrCache(
-        NAME
-            CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS
-        DEFAULT
-            ON
-        DESCRIPTION
-            "Whether to enable extra compiler optimization flags for CuraEngine"
-        BOOL)
 GetFromEnvironmentOrCache(
         NAME
             EXTRA_REPOSITORIES
