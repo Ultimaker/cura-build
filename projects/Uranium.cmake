@@ -12,14 +12,6 @@ GetFromEnvironmentOrCache(
         DESCRIPTION
             "The name of the tag or branch to build for Uranium")
 
-# Ensure we're linking to our previously built Python version.
-if(WIN32)
-    set(pylib_cmake_command ${CMAKE_COMMAND})
-else()
-    include(${CMAKE_SOURCE_DIR}/cmake/Python.cmake)
-    set(pylib_cmake_command "${CMAKE_COMMAND} -E env "PATH=\"${CMAKE_PREFIX_PATH}/bin/:$ENV{PATH}\" LD_LIBRARY_PATH=\"${CMAKE_PREFIX_PATH}/lib/\" DYLD_LIBRARY_PATH=\"${CMAKE_PREFIX_PATH}/lib/\" PYTHONPATH=\"${Python_SITEARCH}:${CMAKE_PREFIX_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/\"" ${CMAKE_COMMAND})
-endif()
-
 GetFromEnvironmentOrCache(
         NAME
             CURA_NO_INSTALL_PLUGINS
@@ -31,11 +23,14 @@ ExternalProject_Add(Uranium
     GIT_TAG origin/${URANIUM_BRANCH_OR_TAG}
     GIT_SHALLOW 1
     STEP_TARGETS update
-    CMAKE_COMMAND ${pylib_cmake_command}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-               -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
-               -DUM_NO_INSTALL_PLUGINS=${CURA_NO_INSTALL_PLUGINS}
-)
+    CONFIGURE_COMMAND
+        ${CMAKE_COMMAND} -E env PATH="${CMAKE_PREFIX_PATH}/bin/:$ENV{PATH}"
+        ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH="${CMAKE_PREFIX_PATH}/lib/"
+        ${CMAKE_COMMAND} -E env DYLD_LIBRARY_PATH="${CMAKE_PREFIX_PATH}/lib/"
+        ${CMAKE_COMMAND} -E env PYTHONPATH="${Python_SITEARCH}:${CMAKE_PREFIX_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}:${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/"
+        ${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                         -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+                         -DUM_NO_INSTALL_PLUGINS=${CURA_NO_INSTALL_PLUGINS})
 
 SetProjectDependencies(TARGET Uranium)
 
