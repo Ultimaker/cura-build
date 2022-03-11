@@ -47,7 +47,7 @@ GetFromEnvironmentOrCache(
 
 GetFromEnvironmentOrCache(
         NAME
-            CURA_ENABLE_DEBUGMODE
+            CURA_DEBUGMODE
         DEFAULT
             OFF
         DESCRIPTION
