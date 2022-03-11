@@ -43,16 +43,6 @@ GetFromEnvironmentOrCache(
         DESCRIPTION
             "Create a package with the build of Cura"
         BOOL)
-GetFromEnvironmentOrCache(
-        NAME
-            CURA_BUILDTYPE
-        DESCRIPTION
-            "Build type of Cura, eg. 'testing'")
-GetFromEnvironmentOrCache(
-        NAME
-            CURA_NO_INSTALL_PLUGINS
-        DESCRIPTION
-            "A list of plugins to exclude from installation, should be separated by ';'.")
 
 if(SIGN_PACKAGE)
     set(BUILD_PACKAGE ON)
@@ -113,12 +103,6 @@ GetFromEnvironmentOrCache(
             "The name of the tag or branch to build for Uranium")
 GetFromEnvironmentOrCache(
         NAME
-            CURA_BRANCH_OR_TAG
-        DEFAULT
-            master
-        DESCRIPTION "The name of the tag or branch to build for Cura")
-GetFromEnvironmentOrCache(
-        NAME
             LIBCHARON_BRANCH_OR_TAG
         DEFAULT
             master
@@ -139,48 +123,9 @@ GetFromEnvironmentOrCache(
             "Extra repositories to install. Expected to have a CMake based build system. Format is (<project name> <git URL> <cmake configuration options>\;)*")
 GetFromEnvironmentOrCache(
         NAME
-        CURA_EXTRA_PROJECTS_DIR
+            CURA_EXTRA_PROJECTS_DIR
         DESCRIPTION
-        "Directory where extra projects to build are located.")
-
-# Create the version-related variables
-GetFromEnvironmentOrCache(
-        NAME
-            CURA_VERSION_MAJOR
-        DESCRIPTION
-            "Cura Major Version")
-GetFromEnvironmentOrCache(
-        NAME
-            CURA_VERSION_MINOR
-        DEFAULT
-            0
-        DESCRIPTION
-            "Cura Minor Version")
-GetFromEnvironmentOrCache(
-        NAME
-            CURA_VERSION_PATCH
-        DEFAULT
-            0
-        DESCRIPTION
-            "Cura Patch Version")
-GetFromEnvironmentOrCache(
-        NAME
-            CURA_VERSION_EXTRA
-        DESCRIPTION
-            "Cura Extra Version Information")
-if(NOT ${CURA_VERSION_EXTRA} STREQUAL "")
-    set(CURA_VERSION_EXTRA "-${CURA_VERSION_EXTRA}")
-endif()
-set(_default_cura_version "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}${CURA_VERSION_EXTRA}")
-if(${_default_cura_version} VERSION_GREATER 0.0.0)
-    set(CURA_VERSION ${_default_cura_version})
-endif()
-GetFromEnvironmentOrCache(
-        NAME
-            CURA_VERSION
-        DESCRIPTION
-            "Cura Extra Version Information"
-        REQUIRED)
+            "Directory where extra projects to build are located.")
 
 # Build projects step
 add_custom_target(projects ALL COMMENT "Building Projects...")
