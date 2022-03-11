@@ -5,8 +5,6 @@ cmake_minimum_required(VERSION 3.18)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-option(BUILD_OFFLINE "Build offline (use target 'update' to update sources)." OFF)
-
 include(ExternalProject)
 include(GNUInstallDirs)
 
