@@ -1,3 +1,14 @@
+# Copyright (c) 2022 Ultimaker B.V.
+# cura-build is released under the terms of the AGPLv3 or higher.
+
+# FIXME: This seems broken, didn't test it tho
+
+GetFromEnvironmentOrCache(
+        NAME
+            EXTRA_REPOSITORIES
+        DESCRIPTION
+            "Extra repositories to install. Expected to have a CMake based build system. Format is (<project name> <git URL> <cmake configuration options>\;)*")
+
 foreach(extra_repository ${EXTRA_REPOSITORIES})
     string(REPLACE " " ";" extra_repository ${extra_repository})
     list(LENGTH extra_repository extra_repository_length)

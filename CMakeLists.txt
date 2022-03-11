@@ -75,25 +75,18 @@ GetFromEnvironmentOrCache(
             master
         DESCRIPTION
             "The name of the tag or branch to build for fdm_materials")
-GetFromEnvironmentOrCache(
-        NAME
-            EXTRA_REPOSITORIES
-        DESCRIPTION
-            "Extra repositories to install. Expected to have a CMake based build system. Format is (<project name> <git URL> <cmake configuration options>\;)*")
-GetFromEnvironmentOrCache(
-        NAME
-            CURA_EXTRA_PROJECTS_DIR
-        DESCRIPTION
-            "Directory where extra projects to build are located.")
 
 # Build projects step
 add_custom_target(projects ALL COMMENT "Building Projects...")
 
-file(GLOB _projects projects/*.cmake)
-if(NOT CURA_EXTRA_PROJECTS_DIR STREQUAL "")
-    file(GLOB _extra_projects ${CURA_EXTRA_PROJECTS_DIR}/*.cmake)
-    list(APPEND _projects ${_extra_projects})
-endif()
+set(_projects
+        ${CMAKE_SOURCE_DIR}/projects/Cura.cmake
+        ${CMAKE_SOURCE_DIR}/projects/CuraEngine.cmake
+        ${CMAKE_SOURCE_DIR}/projects/Uranium.cmake
+        ${CMAKE_SOURCE_DIR}/projects/libCharon.cmake
+        ${CMAKE_SOURCE_DIR}/projects/fdm_materials.cmake
+        )
+include(${CMAKE_SOURCE_DIR}/projects/ExtraRepository.cmake)
 
 add_custom_target(update COMMENT "Updating Projects...")
 
