@@ -77,13 +77,6 @@ GetFromEnvironmentOrCache(
             "The name of the tag or branch to build for fdm_materials")
 GetFromEnvironmentOrCache(
         NAME
-            CURABINARYDATA_BRANCH_OR_TAG
-        DEFAULT
-            master
-        DESCRIPTION
-            "The name of the tag or branch to build for cura-binary-data")
-GetFromEnvironmentOrCache(
-        NAME
             EXTRA_REPOSITORIES
         DESCRIPTION
             "Extra repositories to install. Expected to have a CMake based build system. Format is (<project name> <git URL> <cmake configuration options>\;)*")
