@@ -66,13 +66,6 @@ endif()
 
 GetFromEnvironmentOrCache(
         NAME
-            EXTERNALPROJECT_INSTALL_PREFIX
-        DEFAULT
-            ${CMAKE_CURRENT_BINARY_DIR}/install
-        DESCRIPTION
-            "Location where the External projects need to be installed in")
-GetFromEnvironmentOrCache(
-        NAME
             FDMMATERIALS_BRANCH_OR_TAG
         DEFAULT
             master

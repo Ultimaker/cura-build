@@ -28,7 +28,7 @@ ExternalProject_Add(Uranium
     GIT_SHALLOW 1
     STEP_TARGETS update
     CMAKE_COMMAND ${pylib_cmake_command}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNALPROJECT_INSTALL_PREFIX}
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
                -DUM_NO_INSTALL_PLUGINS=${_cura_no_install_plugins}
 )
