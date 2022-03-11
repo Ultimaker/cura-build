@@ -23,21 +23,21 @@ option(SIGN_PACKAGE "Perform signing of the created package. Implies BUILD_PACKA
 
 set(CURA_BUILDTYPE          "" CACHE STRING "Build type of Cura, eg. 'testing'")
 set(CURA_NO_INSTALL_PLUGINS "" CACHE STRING "A list of plugins to exclude from installation, should be separated by ';'.")
-set(CURA_MSI_PRODUCT_GUID   "" CACHE STRING "The Product GUID for Cura MSI")
-set(CURA_MSI_UPGRADE_GUID   "" CACHE STRING "The Upgrade GUID for Cura MSI")
-
-# Cura MSI product GUID and upgrade GUID
-if(BUILD_PACKAGE)
-    if(NOT DEFINED CURA_MSI_PRODUCT_GUID)
-        message(STATUS "CURA_MSI_PRODUCT_GUID must be provided.")
-    endif()
-    if(NOT DEFINED CURA_MSI_UPGRADE_GUID)
-        message(STATUS "CURA_MSI_UPGRADE_GUID must be provided.")
-    endif()
-endif()
 
 if(SIGN_PACKAGE)
     set(BUILD_PACKAGE ON)
+endif()
+
+if(WIN32)
+    if(BUILD_PACKAGE)
+        # Cura MSI product GUID and upgrade GUID
+        if(NOT DEFINED CURA_MSI_PRODUCT_GUID)
+            message(SEND_ERROR "CURA_MSI_PRODUCT_GUID must be provided.")
+        endif()
+        if(NOT DEFINED CURA_MSI_UPGRADE_GUID)
+            message(SEND_ERROR "CURA_MSI_UPGRADE_GUID must be provided.")
+        endif()
+    endif()
 endif()
 
 set(EXTERNALPROJECT_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inst)
