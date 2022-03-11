@@ -127,20 +127,6 @@ if(NOT CURA_EXTRA_PROJECTS_DIR STREQUAL "")
     list(APPEND _projects ${_extra_projects})
 endif()
 
-GetFromEnvironmentOrCache(
-        NAME
-            Python_VERSION
-        DEFAULT
-            3.10
-        DESCRIPTION
-            "Python Version to use"
-        REQUIRED)
-if(APPLE)
-    set(Python_FIND_FRAMEWORK NEVER)
-endif()
-find_package(Python ${Python_VERSION} EXACT REQUIRED COMPONENTS Interpreter)
-message(STATUS "Using Python ${Python_VERSION}")
-
 add_custom_target(update COMMENT "Updating Projects...")
 
 foreach(_project ${_projects})
