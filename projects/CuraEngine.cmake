@@ -24,8 +24,14 @@ GetFromEnvironmentOrCache(
 			"Whether to enable extra compiler optimization flags for CuraEngine"
 		BOOL)
 
+set(_mingw_args )
 if(WIN32)
 	file(TO_CMAKE_PATH ${CMAKE_PREFIX_PATH} normalized_prefix_path)
+	set(_mingw_args "-DArcus_DIR=${CMAKE_PREFIX_PATH}/lib-mingw/cmake/Arcus
+					 -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib-mingw
+					 -DProtobuf_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotobuf.a
+					 -DProtobuf_LITE_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotobuf-lite.a
+					 -DProtobuf_PROTOC_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotoc.a")
 endif()
 
 ExternalProject_Add(CuraEngine
@@ -39,12 +45,8 @@ ExternalProject_Add(CuraEngine
                -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
                -DCURA_ENGINE_VERSION=${CURA_ENGINE_VERSION}
                -DENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS=${CURAENGINE_ENABLE_MORE_COMPILER_OPTIMIZATION_FLAGS}
-               -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
-#				$<$<PLATFORM_ID:Windows>:-DArcus_DIR=${CMAKE_PREFIX_PATH}/lib-mingw/cmake/Arcus
-#										 -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib-mingw
-#										 -DProtobuf_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotobuf.a
-#										 -DProtobuf_LITE_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotobuf-lite.a
-#										 -DProtobuf_PROTOC_LIBRARY=${normalized_prefix_path}/lib-mingw/libprotoc.a>)
+               -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}
+				${_mingw_args})
 
 SetProjectDependencies(TARGET CuraEngine)
 
