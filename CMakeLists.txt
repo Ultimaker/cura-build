@@ -1,6 +1,6 @@
 project(cura-build)
 
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.18)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
@@ -76,24 +76,17 @@ if(NOT CURA_EXTRA_PROJECTS_DIR STREQUAL "")
 endif()
 
 
-# FIXME: Remove the code for CMake <3.12 once we have switched over completely.
-# FindPython3 is a new module since CMake 3.12. It deprecates FindPythonInterp and FindPythonLibs. The FindPython3
-# module is copied from the CMake repository here so in CMake <3.12 we can still use it.
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-    # Use FindPythonInterp and FindPythonLibs for CMake <3.12
-    find_package(PythonInterp 3 REQUIRED)
-
-    set(Python3_EXECUTABLE ${PYTHON_EXECUTABLE})
-
-    set(Python3_VERSION ${PYTHON_VERSION_STRING})
-    set(Python3_VERSION_MAJOR ${PYTHON_VERSION_MAJOR})
-    set(Python3_VERSION_MINOR ${PYTHON_VERSION_MINOR})
-    set(Python3_VERSION_PATCH ${PYTHON_VERSION_PATCH})
-else()
-    # Use FindPython3 for CMake >=3.12
-    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+if(NOT DEFINED Python_VERSION)
+    set(Python_VERSION
+            3.10
+            CACHE STRING "Python Version" FORCE)
+    message(STATUS "Setting Python version to ${Python_VERSION}. Set Python_VERSION if you want to compile against an other version.")
 endif()
-
+if(APPLE)
+    set(Python_FIND_FRAMEWORK NEVER)
+endif()
+find_package(Python ${Python_VERSION} EXACT REQUIRED COMPONENTS Interpreter)
+message(STATUS "Using Python ${Python_VERSION}")
 
 add_custom_target(update COMMENT "Updating Projects...")
 
