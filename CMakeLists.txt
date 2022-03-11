@@ -137,6 +137,11 @@ GetFromEnvironmentOrCache(
             EXTRA_REPOSITORIES
         DESCRIPTION
             "Extra repositories to install. Expected to have a CMake based build system. Format is (<project name> <git URL> <cmake configuration options>\;)*")
+GetFromEnvironmentOrCache(
+        NAME
+        CURA_EXTRA_PROJECTS_DIR
+        DESCRIPTION
+        "Directory where extra projects to build are located.")
 
 # Create the version-related variables
 GetFromEnvironmentOrCache(
@@ -163,6 +168,9 @@ GetFromEnvironmentOrCache(
             CURA_VERSION_EXTRA
         DESCRIPTION
             "Cura Extra Version Information")
+if(NOT ${CURA_VERSION_EXTRA} STREQUAL "")
+    set(CURA_VERSION_EXTRA "-${CURA_VERSION_EXTRA}")
+endif()
 set(_default_cura_version "${CURA_VERSION_MAJOR}.${CURA_VERSION_MINOR}.${CURA_VERSION_PATCH}${CURA_VERSION_EXTRA}")
 if(${_default_cura_version} VERSION_GREATER 0.0.0)
     set(CURA_VERSION ${_default_cura_version})
@@ -173,12 +181,6 @@ GetFromEnvironmentOrCache(
         DESCRIPTION
             "Cura Extra Version Information"
         REQUIRED)
-
-GetFromEnvironmentOrCache(
-        NAME
-            CURA_EXTRA_PROJECTS_DIR
-        DESCRIPTION
-            "Directory where extra projects to build are located.")
 
 # Build projects step
 add_custom_target(projects ALL COMMENT "Building Projects...")
