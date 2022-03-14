@@ -93,33 +93,3 @@ endforeach()
 
 
 ProcessProjectDependencies(TARGET projects)
-
-# Create package step
-if(BUILD_PACKAGE)
-    add_custom_target(packaging ALL DEPENDS projects COMMENT "Packaging Projects...")
-
-    if(WIN32)
-        include(packaging/windows.cmake)
-    elseif(APPLE)
-        include(packaging/osx.cmake)
-    elseif(LINUX)
-        include(packaging/linux.cmake)
-    else()
-        message(STATUS "Do not know how to build an executable for the current platform! You will have to create it manually.")
-    endif()
-endif()
-
-# Sign packages step
-if(SIGN_PACKAGE)
-    add_custom_target(signing ALL DEPENDS packaging COMMENT "Signing Package...")
-
-    if(WIN32)
-        include(signing/windows.cmake)
-    elseif(APPLE)
-        include(signing/osx.cmake)
-    elseif(LINUX)
-        include(signing/linux.cmake)
-    else()
-        message(STATUS "Do not know how to sign the executable for the current platform! You will need to perform signing manually.")
-    endif()
-endif()
