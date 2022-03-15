@@ -42,7 +42,4 @@ foreach(extra_repository ${EXTRA_REPOSITORIES})
     )
 
     SetProjectDependencies(TARGET ${extra_repository_name} DEPENDS Cura)
-
-    add_dependencies(update ${extra_repository_name}-update)
-
 endforeach()

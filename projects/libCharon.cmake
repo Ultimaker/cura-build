@@ -20,5 +20,3 @@ ExternalProject_Add(libCharon
 )
 
 SetProjectDependencies(TARGET libCharon)
-
-add_dependencies(update libCharon-update)

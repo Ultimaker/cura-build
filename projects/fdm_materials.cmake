@@ -19,5 +19,3 @@ ExternalProject_Add(fdm_materials
 )
 
 SetProjectDependencies(TARGET fdm_materials DEPENDS Cura)
-
-add_dependencies(update fdm_materials-update)

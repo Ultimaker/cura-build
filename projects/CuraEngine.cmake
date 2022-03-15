@@ -24,7 +24,7 @@ GetFromEnvironmentOrCache(
 			"Whether to enable extra compiler optimization flags for CuraEngine"
 		BOOL)
 
-set(_mingw_args )
+set(_mingw_args )  # FIXME: This should be handled in CuraEngine repository, or even in libArcus
 if(WIN32)
 	file(TO_CMAKE_PATH ${CMAKE_PREFIX_PATH} normalized_prefix_path)
 	set(_mingw_args "-DArcus_DIR=${CMAKE_PREFIX_PATH}/lib-mingw/cmake/Arcus
@@ -49,5 +49,3 @@ ExternalProject_Add(CuraEngine
 				${_mingw_args})
 
 SetProjectDependencies(TARGET CuraEngine)
-
-add_dependencies(update CuraEngine-update)

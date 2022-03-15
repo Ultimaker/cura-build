@@ -18,5 +18,3 @@ ExternalProject_Add(cura-binary-data
 )
 
 SetProjectDependencies(TARGET cura-binary-data DEPENDS Cura)
-
-add_dependencies(update cura-binary-data-update)

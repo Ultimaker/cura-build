@@ -109,5 +109,3 @@ ExternalProject_Add(Cura
 )
 
 SetProjectDependencies(TARGET Cura DEPENDS Uranium CuraEngine)
-
-add_dependencies(update Cura-update)

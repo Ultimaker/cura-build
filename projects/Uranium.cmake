@@ -29,5 +29,3 @@ ExternalProject_Add(Uranium
         -DUM_NO_INSTALL_PLUGINS=${CURA_NO_INSTALL_PLUGINS})
 
 SetProjectDependencies(TARGET Uranium)
-
-add_dependencies(update Uranium-update)

@@ -29,45 +29,6 @@ if(BUILD_OFFLINE)
     set_property(DIRECTORY PROPERTY EP_UPDATE_DISCONNECTED 1)
 endif()
 
-GetFromEnvironmentOrCache(
-        NAME
-            BUILD_PACKAGE
-        DEFAULT
-            ON
-        DESCRIPTION
-            "Create a package with the build of Cura"
-        BOOL)
-GetFromEnvironmentOrCache(
-        NAME
-            SIGN_PACKAGE
-        DEFAULT
-            ON
-        DESCRIPTION
-            "Create a package with the build of Cura"
-        BOOL)
-
-if(SIGN_PACKAGE)
-    set(BUILD_PACKAGE ON)
-endif()
-
-if(WIN32)
-    if(BUILD_PACKAGE)
-        # Cura MSI product GUID and upgrade GUID
-        GetFromEnvironmentOrCache(
-                NAME
-                    CURA_MSI_PRODUCT_GUID
-                DESCRIPTION
-                    "MSI product GUID"
-                REQUIRED)
-        GetFromEnvironmentOrCache(
-                NAME
-                    CURA_MSI_UPGRADE_GUID
-                DESCRIPTION
-                    "MSI upgrade GUID"
-                REQUIRED)
-    endif()
-endif()
-
 # Build projects step
 add_custom_target(projects ALL COMMENT "Building Projects...")
 
@@ -80,8 +41,6 @@ set(_projects
         )
 include(${CMAKE_SOURCE_DIR}/projects/ExtraRepository.cmake)
 
-add_custom_target(update COMMENT "Updating Projects...")
-
 foreach(_project ${_projects})
     # Go through all files in projects/ and include them. The project files should define
     # targets for the actual projects. In addition, these files are expected to define any
@@ -90,6 +49,5 @@ foreach(_project ${_projects})
     # they should only define targets relevant for that project.
     include(${_project})
 endforeach()
-
 
 ProcessProjectDependencies(TARGET projects)
