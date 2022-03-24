@@ -26,6 +26,7 @@ ExternalProject_Add(Uranium
     CMAKE_ARGS
         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
         -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+        -DPython_SITELIB_LOCAL=${CMAKE_INSTALL_PREFIX}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/
         -DUM_NO_INSTALL_PLUGINS=${CURA_NO_INSTALL_PLUGINS})
 
 SetProjectDependencies(TARGET Uranium)
