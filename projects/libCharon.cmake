@@ -9,6 +9,8 @@ GetFromEnvironmentOrCache(
         DESCRIPTION
             "The name of the tag or branch to build for libCharon")
 
+include(${CMAKE_SOURCE_DIR}/cmake/Python.cmake)
+
 ExternalProject_Add(libCharon
     GIT_REPOSITORY https://github.com/Ultimaker/libCharon
     GIT_TAG origin/${LIBCHARON_BRANCH_OR_TAG}

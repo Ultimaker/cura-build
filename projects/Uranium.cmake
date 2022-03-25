@@ -18,6 +18,8 @@ GetFromEnvironmentOrCache(
         DESCRIPTION
             "A list of plugins to exclude from installation, should be separated by ','.")
 
+include(${CMAKE_SOURCE_DIR}/cmake/Python.cmake)
+
 ExternalProject_Add(Uranium
     GIT_REPOSITORY https://github.com/ultimaker/Uranium
     GIT_TAG origin/${URANIUM_BRANCH_OR_TAG}
