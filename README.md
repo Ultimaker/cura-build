@@ -1,4 +1,3 @@
 # DEPRECATED
 
-See https://github.com/Ultimaker/cura-build-environment how to build Cura
-and install the dependencies.
+See https://github.com/Ultimaker/Cura/wiki/Building-Cura-from-Source 
